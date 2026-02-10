@@ -1,0 +1,196 @@
+.playit.controls.jp-controls-holder {
+  font-size: 2.5em;
+}
+.tcenter {
+  text-align: center;
+}
+.table.canciones {
+  margin-top: 50px;
+}
+.table.canciones th,
+.table.canciones td {
+  vertical-align: middle;
+}
+.btn-orange {
+  background: #f06c40;
+  color: #fff;
+  transition: all 0.5s ease;
+}
+.btn-orange:hover {
+  background: #e14612;
+}
+.info-box{
+  margin: 0 auto;
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  line-height: 1; 
+  margin-bottom: 0;
+}
+.canciones tr {
+  position: relative;
+}
+.singleSong-jplayer {
+  font-size: 2.5em;
+}
+.canciones tr:nth-child(2n) .thumb_container img {
+  animation-delay: 1s;
+}
+.thumb_container {
+  cursor: pointer;
+  width: 75px;
+  display: block;
+  position: relative;
+}
+.thumb_container:after {
+  content: ' ';
+  display: block;
+  border-left: 24px solid #000;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -9px;
+  margin-top: -15px;
+}
+.thumb_container:before {
+  height: 45px;
+  content: ' ';
+  border-radius: 50%;
+  width: 25px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -23px;
+  margin-top: -22px;
+  border: 2px solid #000;
+  position: absolute;
+  width: 45px;
+}
+.thumb_container img {
+  animation-name: rotar;
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+}
+.curlink {
+  background: #f06c40;
+}
+.curlink a {
+  color: #fff !important;
+}
+.cart_discount {
+  background: #e4af07;
+  color: #000;
+}
+.cart_discount td {
+  vertical-align: middle !important;
+}
+.grid3 {
+  display: grid;
+  grid-template: auto/auto 1fr 1fr;
+  align-items: center;
+  grid-gap: 1em;
+}
+.grid3 .btn {
+  line-height: 1.428;
+  padding: 5px;
+}
+.grid3 input {
+  height: auto !important;
+  padding: 5px !important;
+}
+.table-no-table {
+  border: none;
+  width: 100%;
+  align-items: center;
+}
+.table-no-table td:first-child {
+  text-align: center;
+}
+.table-no-table td {
+  border: none !important;
+}
+.table-no-table td i {
+  background: #f00;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  cursor: pointer;
+}
+.table-no-table td i:before {
+  letter-spacing: -2px;
+}
+.table-no-table td i:hover {
+  transform: scale(1.1);
+}
+.jp-jplayer {
+  width: 100% !important;
+  height: auto;
+}
+.jp-jplayer video {
+  width: 100% !important;
+  height: auto;
+}
+.jp-video {
+  width: 100% !important;
+  background: #161616 !important;
+}
+.jp-video .jp-toggles {
+  display: none !important;
+}
+.jp-video .jp-interface {
+  background: #161616 !important;
+}
+.jp-video .jp-volume-controls {
+  top: 0 !important;
+}
+.jp-video .jp-play-bar {
+  background: #ffa500 !important;
+}
+@-moz-keyframes rotar {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotar {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotar {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotar {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

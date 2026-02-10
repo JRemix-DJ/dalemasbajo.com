@@ -1,0 +1,140 @@
+naranja = #f06c40
+
+.playit
+	&.controls
+		&.jp-controls-holder
+			font-size: 2.5em;
+.tcenter
+	text-align center
+
+.table
+	&.canciones
+		margin-top 50px
+		th, td
+			vertical-align middle
+
+.btn-orange
+	background naranja
+	color white
+	transition all 0.5s ease
+	&:hover
+		background naranja - 20%
+
+.canciones
+	tr
+		position relative
+
+		
+.singleSong-jplayer
+	font-size: 2.5em
+
+.canciones
+	tr
+		&:nth-child(2n)
+			.thumb_container
+				img
+					animation-delay 1s
+.thumb_container
+	cursor pointer
+	width 75px
+	display block
+	position relative
+	&:after
+		content ' '
+		display block
+		border-left 24px solid rgba(black, 1)
+		border-top 15px solid transparent
+		border-bottom 15px solid transparent
+		position absolute
+		top 50%
+		left 50%
+		margin-left -9px
+		margin-top -15px
+	&:before
+		height: 45px;
+		content: ' ';
+		border-radius: 50%;
+		width: 25px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -23px;
+		margin-top: -22px;
+		border: 2px solid black;
+		position: absolute;
+		width: 45px;
+	img
+		animation-name rotar
+		animation-duration 2.5s
+		animation-iteration-count infinite
+
+	
+@keyframes rotar
+	0%
+		transform rotate(0)
+	50%
+		transform rotate(180deg)
+	100%
+		transform rotate(360deg)
+
+.curlink
+	background naranja
+	a
+		color white !important
+
+.cart_discount
+	background #e4af07
+	color black
+	td
+		vertical-align: middle !important
+
+.grid3
+	display grid
+	grid-template auto / auto 1fr 1fr
+	align-items center
+	grid-gap 1em
+	.btn
+		line-height 1.428
+		padding 5px
+	input
+		height auto !important
+		padding 5px !important
+
+.table-no-table
+	border none 
+	width 100%
+	align-items center
+	td:first-child
+		text-align center
+	td
+		border none !important
+		i
+			background: red;
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;
+			text-align: center;
+			line-height: 25px;
+			cursor pointer
+			&:before
+				letter-spacing: -2px
+			&:hover
+				transform scale(1.1)
+
+.jp-jplayer
+	width 100% !important
+	height auto
+	video
+		width 100% !important
+		height auto
+.jp-video
+	width 100% !important
+	background #161616 !important
+	.jp-toggles
+		display none !important
+	.jp-interface
+		background #161616 !important
+	.jp-volume-controls
+		top 0 !important
+	.jp-play-bar
+		background orange !important

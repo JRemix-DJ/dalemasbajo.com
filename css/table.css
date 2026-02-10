@@ -1,0 +1,217 @@
+div#mc_embed_signup_scroll {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    width: 100%;
+    padding-top: 12rem;
+    padding-bottom: 12rem;
+    background-color: #3e6ced;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+div#mc_embed_signup_scroll h2{
+    color: white;
+    font-size: 3em;
+    margin-right: 19px;
+    width: 48%;
+    /* text-align: justify; */
+    font-weight: 700;
+}
+.fb_dialog.fb_dialog_advanced {
+    bottom: 100% !important;
+}
+input#mc-embedded-subscribe {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    width: 12.4rem;
+    height: 7.6rem;
+    color: #fff;
+    background-color: #000;
+    border: 0;
+    border-radius: 0;
+    border-top-right-radius: .6rem;
+    border-bottom-right-radius: .6rem;
+    outline: 0;
+    font-size: 1.8rem;
+    line-height: normal;
+    -webkit-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    transition: all .2s ease;
+    cursor: pointer;
+}
+input#mce-EMAIL {
+    webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -moz-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    width: 100%;
+    height: 7.6rem;
+    color: #272727;
+    background-color: #fff;
+    border: 0;
+    border-radius: 0;
+    border-top-left-radius: .6rem;
+    border-bottom-left-radius: .6rem;
+    outline: 0;
+    font-size: 1.8rem;
+    line-height: normal;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.contenedor{
+    width: 100%;
+    max-width: 95%;
+    margin: auto;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-bottom: 120px;  
+}
+.section_plan{
+    display: flex;
+    justify-content: center;
+}
+
+.tabla{
+    width: 25%;
+    height: 550px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid #343759; */
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px 0px black;
+    padding: 28px;
+    line-height: 35px;
+    text-align: center;
+    padding-top: 10px;
+    flex-grow: 1;
+    justify-content: flex-end;
+    align-items: center;
+    color: #343759;
+}
+.precio{
+    margin-right: .5rem;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    letter-spacing: -.01rem;
+    line-height: .82;
+}
+.tabla h2{
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 2.2em;
+}
+.tabla>h2{
+    font-size:35px;
+    margin-bottom:35px;
+}
+
+.tabla img{
+    width: 64px;
+    margin-bottom:35px;
+}
+
+.tabla > span{
+    font-size:30px;
+    margin-bottom: 20px;
+}
+
+.tabla > p{
+    display: block;
+    margin-bottom:20px;
+}
+
+.boton{
+    display:inline-block;
+    width: 150px;
+    padding:12px;
+    background: #a5f059;
+    text-decoration: none;
+    color: #343759;
+    border-radius: 100px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin: auto;
+}
+
+.tabla:hover{
+    background: #35619e ;
+    color: #f1f1f2;
+    transition: .5s all;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+.btn-default:hover{
+    background: #6da6f8 !important;
+    color: #f1f1f2;
+    transition: .5s all;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 1000px){
+    .tabla{
+        width: 45%;
+        max-width:none;
+        margin-bottom: 40px;
+        flex-grow: initial;
+      
+    }
+    .contenedor{
+        width: 100%;
+        max-width: 95%;
+        margin: auto;
+        height:auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding-bottom: 120px;  
+    }
+}
+
+@media screen and (max-width: 700px){
+    .tabla{
+        width: 45%;
+        padding:30px;
+    }
+    .tabla > h2{
+        margin-top:40px;
+    }
+}
+
+@media screen and (max-width:550px){
+    .contenedor{
+        width: 100%;
+        max-width: 95%;
+        margin: auto;
+        height:auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding-bottom: 120px;  
+    }
+    .tabla{
+        width: 85%;
+        padding: 20px;
+    }
+}
