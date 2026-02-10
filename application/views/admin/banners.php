@@ -3,7 +3,7 @@
           <h5><? echo $title; ?></h5>
           <p><? echo $description; ?></p>
         </div><!-- sl-page-title -->
-        <div class="top_btn"><a href="https://dalemasbajo.com/admin/nuevo_banner" class="btn btn-success">Añadir Nuevo</a></div>
+        <div class="top_btn"><a href="http://localhost/dalemasbajo.com/admin/nuevo_banner" class="btn btn-success">Añadir Nuevo</a></div>
         <div class="card pd-20 pd-sm-40">
           <div class="table-wrapper">
             <table id="datatable1" class="table display responsive nowrap text-center">

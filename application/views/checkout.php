@@ -86,10 +86,10 @@
                                 <input type='hidden' name='amount' id="amount" value='<? echo $cart_total; ?>'>
                                 <input type="hidden" name="lc" value="US">
                                 <input type='hidden' name='currency_code' value='USD'> 
-                                <input type='hidden' name='notify_url' value='https://dalemasbajo.com/payment/realizado/'>
-                                <input type='hidden' name='return' value='https://dalemasbajo.com/payment/finalizado/'>
+                                <input type='hidden' name='notify_url' value='http://localhost/dalemasbajo.com/payment/realizado/'>
+                                <input type='hidden' name='return' value='http://localhost/dalemasbajo.com/payment/finalizado/'>
                                 <input type="hidden" name="button_subtype" value="services">
-                                <input type="hidden" name="cancel_return" value="https://dalemasbajo.com/payment/cancelar/">
+                                <input type="hidden" name="cancel_return" value="http://localhost/dalemasbajo.com/payment/cancelar/">
                                 <input type="hidden" name="cmd" value="_xclick"> 
                                 <input type="hidden" name="order" value="<? echo $order_id; ?>">
                                 <input type="hidden" name="custom" id="custom" value="<? echo $order_id; ?>">

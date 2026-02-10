@@ -71,7 +71,7 @@ class Users_model extends CI_Model {
 	}
 
 	public function get_user_products($user_id){
-		$this->db->select('ANY_VALUE(user_id), product_id');
+		$this->db->select('user_id, product_id');
 		$this->db->where('user_id', $user_id);
 		$this->db->group_by('product_id');
 		$query = $this->db->get('user_files');

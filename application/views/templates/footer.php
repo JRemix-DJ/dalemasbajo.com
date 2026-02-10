@@ -294,7 +294,7 @@ if(isset($_SESSION['content_type'])){
 
       </div>
       <div class="modal-footer">
-        <a href="https://dalemasbajo.com/home/" class="btn btn-success btn-lg" data-dismiss="modal" id="accept-terms">ACEPTAR</a>
+        <a href="http://localhost/dalemasbajo.com/home/" class="btn btn-success btn-lg" data-dismiss="modal" id="accept-terms">ACEPTAR</a>
         
       </div>
     </div>

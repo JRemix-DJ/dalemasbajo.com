@@ -9,7 +9,7 @@
                 if($banners!=null){ 
                     foreach($banners as $banner){
                         ?>
-                         <li class="xv_slide" data-slidebg="url('https://dalemasbajo.com/images/banners/<? echo $banner->image; ?>')">
+                         <li class="xv_slide" data-slidebg="url('http://localhost/dalemasbajo.com/images/banners/<? echo $banner->image; ?>')">
                             <a href="<? echo $banner->url; ?>"></a>
                           </li>
                         <?
