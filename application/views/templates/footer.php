@@ -193,9 +193,6 @@
             });
         });
 
-        // --- LÓGICA AJAX (CONECTADA A LOS NUEVOS INPUTS) ---
-
-        // AJAX LOGIN
         $('#btn-ingresar-accion').click(function() {
             var btn = $(this);
             var originalText = btn.text();
@@ -210,24 +207,29 @@
                 data: { email: email, password: password },
                 dataType: 'json',
                 success: function(response) {
-                    if(response.status == 'success') {
+                    console.log("Respuesta Servidor:", response);
+
+                    if(response.success === true || response.status == 'success' || response.status === true || response == 1) {
                         window.location.reload();
                     } else {
-                        alert(response.message || 'Error al ingresar');
+                        var mensajeError = response.message || response.msg || response.error || 'Error desconocido al ingresar';
+                        alert(mensajeError);
                         btn.text(originalText).prop('disabled', false);
                     }
                 },
-                error: function() {
-                    alert('Error de conexión');
-                    btn.text(originalText).prop('disabled', false);
+                error: function(xhr, status, error) {
+                    console.error("Error AJAX:", error);
+                    if(xhr.status == 200) {
+                        window.location.reload();
+                    } else {
+                        alert('Error de conexión con el servidor.');
+                        btn.text(originalText).prop('disabled', false);
+                    }
                 }
             });
         });
 
-        // AJAX REGISTRO
         $('#btn-registrar-accion').click(function() {
-            // Aquí agregarías la lógica de registro similar a la de login
-            // Apuntando a los IDs: #reg-email, #reg-username, etc.
             alert('Función de registro pendiente de conectar al controlador');
         });
     });

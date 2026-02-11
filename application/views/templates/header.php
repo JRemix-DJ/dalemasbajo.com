@@ -65,7 +65,7 @@
             </div>
 
             <nav class="hidden lg:flex items-center gap-8">
-                <a href="<? echo base_url(); ?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Inicio</a>
+                <a href="<? echo base_url('audios');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Audios</a>
 
                 <div class="relative group h-20 flex items-center cursor-pointer">
                     <button class="text-sm font-semibold text-slate-600 group-hover:text-primary flex items-center gap-1 focus:outline-none">
