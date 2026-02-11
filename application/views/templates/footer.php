@@ -1,119 +1,89 @@
 <style>
     [x-cloak] { display: none !important; }
+    .modal-hidden { display: none !important; }
+    .modal-flex { display: flex !important; }
 </style>
 
-<div x-data="{ open: false }"
-     x-cloak
-     @keydown.escape.window="open = false"
-     class="relative z-[100]"
-     id="modal-login-container">
+<div id="modal-login" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
 
-    <button id="openLoginModalBtn" @click="open = true" style="display:none"></button>
-
-    <div x-show="open"
-         style="display: none;"
-         x-transition.opacity
-         class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-
-    <div x-show="open"
-         style="display: none;"
-         x-transition.scale.origin.center
-         class="fixed inset-0 flex items-center justify-center p-4">
-
-        <div @click.outside="open = false" class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h3 class="text-lg font-bold text-slate-900">Iniciar Sesión</h3>
-                <button @click="open = false" class="text-gray-400 hover:text-red-500 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-
-            <div class="p-6">
-                <form id="login-form" class="space-y-4">
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">Email</label>
-                        <input type="email" name="email" id="email" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="password">Contraseña</label>
-                        <input type="password" name="password" id="password" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                    </div>
-
-                    <div class="text-right">
-                        <a href="#" @click="open = false; document.getElementById('openRecoverModalBtn').click()" class="text-sm text-primary font-medium hover:underline">¿Olvidaste tu contraseña?</a>
-                    </div>
-
-                    <button type="button" id="login-btn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
-                        Ingresar
-                    </button>
-                </form>
-            </div>
-            <div class="p-4 bg-gray-50 text-center text-sm border-t border-gray-100">
-                ¿No tienes cuenta? <a href="#" @click="open = false; document.getElementById('openRegisterModalBtn').click()" class="text-primary font-bold hover:underline">Regístrate gratis</a>
-            </div>
+    <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100 transform transition-all">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 class="text-lg font-bold text-slate-900">Iniciar Sesión</h3>
+            <button class="close-modal-btn text-gray-400 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
         </div>
-    </div>
-</div>
-
-<div x-data="{ open: false }"
-     x-cloak
-     @keydown.escape.window="open = false"
-     class="relative z-[100]"
-     id="modal-register-container">
-
-    <button id="openRegisterModalBtn" @click="open = true" style="display:none"></button>
-
-    <div x-show="open" style="display: none;" x-transition.opacity class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-
-    <div x-show="open" style="display: none;" x-transition.scale.origin.center class="fixed inset-0 flex items-center justify-center p-4">
-        <div @click.outside="open = false" class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h3 class="text-lg font-bold text-slate-900">Crear Cuenta</h3>
-                <button @click="open = false" class="text-gray-400 hover:text-red-500 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+        <div class="p-6">
+            <form id="login-form-new" class="space-y-4">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-slate-700">Email</label>
+                    <input type="email" id="login-email" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-slate-700">Contraseña</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                </div>
+                <div class="text-right">
+                    <a href="#" class="trigger-recover text-sm text-primary font-medium hover:underline">¿Olvidaste tu contraseña?</a>
+                </div>
+                <button type="button" id="btn-ingresar-accion" class="w-full py-3 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-primary/20">
+                    Ingresar
                 </button>
-            </div>
-            <div class="p-6">
-                <form id="registrar-form" class="space-y-3">
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium" for="registro-email">Email</label>
-                        <input type="email" name="registro-email" id="registro-email" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium" for="registro-username">Usuario</label>
-                        <input type="text" name="registro-username" id="registro-username" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium" for="registro-password">Contraseña</label>
-                            <input type="password" name="registro-password" id="registro-password" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium" for="registro-repeatpassword">Repetir</label>
-                            <input type="password" name="registro-repeatpassword" id="registro-repeatpassword" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        </div>
-                    </div>
-                    <button type="button" id="registrar-btn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-slate-900 text-white hover:bg-slate-800 h-10 px-4 py-2 w-full mt-2">
-                        Registrarme
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div x-data="{ open: false }" x-cloak class="relative z-[100]" id="modal-recover-container">
-    <button id="openRecoverModalBtn" @click="open = true" style="display:none"></button>
-    <div x-show="open" style="display: none;" class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-    <div x-show="open" style="display: none;" class="fixed inset-0 flex items-center justify-center p-4">
-        <div @click.outside="open = false" class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 border border-gray-100">
-            <h3 class="text-lg font-bold mb-4">Recuperar Contraseña</h3>
-            <form id="recuperar-form" class="space-y-4">
-                <input type="email" name="email" id="recuperar-email" placeholder="Tu Email" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                <button type="button" id="recuperar-btn" class="w-full bg-primary text-primary-foreground h-10 px-4 py-2 rounded-md font-medium hover:bg-primary/90">Enviar</button>
             </form>
-            <button @click="open = false" class="mt-4 text-sm text-muted-foreground w-full text-center hover:text-foreground">Cancelar</button>
         </div>
+        <div class="p-4 bg-gray-50 text-center text-sm border-t border-gray-100">
+            ¿No tienes cuenta? <a href="#" class="trigger-register text-primary font-bold hover:underline">Regístrate gratis</a>
+        </div>
+    </div>
+</div>
+
+<div id="modal-register" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
+    <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 class="text-lg font-bold text-slate-900">Crear Cuenta</h3>
+            <button class="close-modal-btn text-gray-400 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <form id="register-form-new" class="space-y-3">
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-slate-700">Email</label>
+                    <input type="email" id="reg-email" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-slate-700">Usuario</label>
+                    <input type="text" id="reg-username" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-slate-700">Contraseña</label>
+                        <input type="password" id="reg-pass" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-slate-700">Repetir</label>
+                        <input type="password" id="reg-repass" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
+                    </div>
+                </div>
+                <button type="button" id="btn-registrar-accion" class="w-full py-3 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-800 transition-colors mt-2">
+                    Registrarme
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modal-recover" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
+    <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 border border-gray-100">
+        <h3 class="text-lg font-bold mb-4 text-slate-900">Recuperar Contraseña</h3>
+        <form class="space-y-4">
+            <input type="email" id="rec-email" placeholder="Tu Email" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
+            <button type="button" id="btn-recuperar-accion" class="w-full py-2 bg-primary text-white font-bold rounded-lg hover:bg-blue-600">Enviar</button>
+        </form>
+        <button class="close-modal-btn mt-4 text-sm text-gray-500 w-full text-center hover:text-slate-900">Cancelar</button>
     </div>
 </div>
 
@@ -167,12 +137,9 @@
             </div>
         </div>
 
-        <div class="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-sm text-muted-foreground">
+        <div class="border-t border-gray-200 mt-12 pt-8 flex justify-center text-center">
+            <p class="text-sm text-slate-500">
                 &copy; <? echo date('Y'); ?> Dale Más Bajo. Todos los derechos reservados.
-            </p>
-            <p class="text-xs text-muted-foreground flex items-center gap-1">
-                Desarrollado por <span class="font-semibold text-foreground">Chex</span>
             </p>
         </div>
     </div>
@@ -182,50 +149,86 @@
 <div id="jp_container_1" class="hidden"></div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script src="<? echo base_url(); ?>js/jplayer/jquery.jplayer.min.js"></script>
 <script src="<? echo base_url(); ?>js/jplayer/jplayer.playlist.min.js"></script>
 <script src="<? echo base_url(); ?>js/main.js?v=2.9.2021"></script>
 
 <script>
-    // Conector Header -> Modales Alpine
-    $(document).on('click', '[data-target="#myModal"]', function(e) {
-        e.preventDefault();
-        // Disparamos el click en el botón oculto dentro del componente Alpine
-        document.getElementById('openLoginModalBtn').click();
-    });
+    $(document).ready(function() {
 
-    $(document).on('click', '[data-target="#myModalRegistrarme"]', function(e) {
-        e.preventDefault();
-        document.getElementById('openRegisterModalBtn').click();
-    });
+        // --- FUNCIONES PARA ABRIR/CERRAR MODALES (Estilo jQuery) ---
 
-    // Lógica AJAX para el Login (Reemplazo de la lógica vieja de Bootstrap)
-    $('#login-btn').on('click', function() {
-        var btn = $(this);
-        var originalText = btn.text();
-        btn.text('Cargando...').prop('disabled', true);
+        function cerrarTodos() {
+            $('#modal-login, #modal-register, #modal-recover').addClass('modal-hidden').removeClass('modal-flex');
+        }
 
-        var email = $('#email').val();
-        var password = $('#password').val();
+        // 1. Abrir LOGIN (Interceptamos el clic viejo)
+        $(document).on('click', '[data-target="#myModal"]', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            cerrarTodos();
+            $('#modal-login').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+        });
 
-        $.ajax({
-            url: '<? echo base_url("login/front"); ?>',
-            type: 'POST',
-            data: { email: email, password: password },
-            dataType: 'json',
-            success: function(response) {
-                if(response.status == 'success') {
-                    window.location.reload();
-                } else {
-                    alert(response.message || 'Error al ingresar');
+        // 2. Abrir REGISTRO
+        $(document).on('click', '[data-target="#myModalRegistrarme"], .trigger-register', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            cerrarTodos();
+            $('#modal-register').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+        });
+
+        // 3. Abrir RECUPERAR
+        $(document).on('click', '.trigger-recover', function(e) {
+            e.preventDefault();
+            cerrarTodos();
+            $('#modal-recover').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+        });
+
+        // 4. CERRAR (Botón X o Clic Fondo)
+        $('.close-modal-btn, .close-modal-trigger').click(function(e) {
+            e.preventDefault();
+            $(this).closest('.modal-flex').fadeOut(200, function() {
+                $(this).addClass('modal-hidden').removeClass('modal-flex');
+            });
+        });
+
+        // --- LÓGICA AJAX (CONECTADA A LOS NUEVOS INPUTS) ---
+
+        // AJAX LOGIN
+        $('#btn-ingresar-accion').click(function() {
+            var btn = $(this);
+            var originalText = btn.text();
+            btn.text('Verificando...').prop('disabled', true);
+
+            var email = $('#login-email').val();
+            var password = $('#login-password').val();
+
+            $.ajax({
+                url: '<? echo base_url("login/front"); ?>',
+                type: 'POST',
+                data: { email: email, password: password },
+                dataType: 'json',
+                success: function(response) {
+                    if(response.status == 'success') {
+                        window.location.reload();
+                    } else {
+                        alert(response.message || 'Error al ingresar');
+                        btn.text(originalText).prop('disabled', false);
+                    }
+                },
+                error: function() {
+                    alert('Error de conexión');
                     btn.text(originalText).prop('disabled', false);
                 }
-            },
-            error: function() {
-                alert('Error de conexión con el servidor');
-                btn.text(originalText).prop('disabled', false);
-            }
+            });
+        });
+
+        // AJAX REGISTRO
+        $('#btn-registrar-accion').click(function() {
+            // Aquí agregarías la lógica de registro similar a la de login
+            // Apuntando a los IDs: #reg-email, #reg-username, etc.
+            alert('Función de registro pendiente de conectar al controlador');
         });
     });
 </script>
