@@ -35,22 +35,31 @@
                 </h2>
                 <a href="<? echo base_url('audios/trending'); ?>" class="text-sm text-primary font-medium hover:underline">See all</a>
             </div>
+
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 <?
+                // Lógica para obtener los audios
                 $loop_trending = isset($trending_audios) ? $trending_audios : (isset($products) ? array_slice($products, 0, 5) : []);
+
                 if(!empty($loop_trending)) {
                     foreach($loop_trending as $audio) {
-                        $img = base_url().'images/default_cover.jpg';
-                        if(isset($audio->featured_image) && $audio->featured_image != '') $img = base_url().'uploads/covers/'.$audio->featured_image;
-                        elseif(isset($audio->cover) && $audio->cover != '') $img = base_url().'uploads/covers/'.$audio->cover;
+
+                        // --- CAMBIO IMPORTANTE AQUÍ ---
+                        // En lugar de buscar en carpetas, apuntamos al controlador que extrae la imagen del MP3
+                        // Usamos cover_mp3/[id] para que el backend haga el trabajo sucio.
+                        $img = base_url('audios/cover_mp3/' . $audio->id);
 
                         $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
                         $artist = isset($audio->artist) ? $audio->artist : 'Unknown Artist';
                         $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
                         ?>
                         <div class="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border border-slate-100 group">
-                            <div class="relative aspect-square rounded-xl overflow-hidden mb-3">
-                                <img src="<? echo $img; ?>" alt="<? echo $title; ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="relative aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100">
+                                <img src="<? echo $img; ?>"
+                                     alt="<? echo $title; ?>"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                     onerror="this.onerror=null;this.src='<? echo base_url(); ?>images/default_cover.jpg';">
+
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                                     <a href="javascript:;" class="play_btn w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform"
                                        data-id="<? echo $audio->id; ?>"
@@ -95,7 +104,6 @@
 
                     <tbody id="table-body-content" class="divide-y divide-slate-100 text-sm text-slate-700 transition-opacity duration-200">
                     <?
-                    // Carga inicial normal
                     $this->load->view('table_products', ['products' => $products]);
                     ?>
                     </tbody>
@@ -113,7 +121,6 @@
 </div>
 
 <style>
-    /* Estilos de paginación */
     .pagination-modern ul.pagination {
         display: flex !important; flex-direction: row !important; gap: 8px; list-style: none; padding: 0; margin: 0; flex-wrap: wrap; justify-content: center;
     }
@@ -124,8 +131,6 @@
         background: white; border: 1px solid #e2e8f0; color: #64748b; font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s; cursor: pointer;
     }
     .pagination-modern ul.pagination li a:hover { background: #f1f5f9; color: #007bff; border-color: #007bff; }
-
-    /* ESTILO PÁGINA ACTIVA */
     .pagination-modern ul.pagination li.active span {
         background: #007bff !important; color: white !important; border-color: #007bff !important; pointer-events: none; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
     }
@@ -136,15 +141,12 @@
         $(document).ready(function() {
             $(document).on('click', '#pagination-container a', function(e) {
                 e.preventDefault();
-
                 var url = $(this).attr('href');
-
                 if(!url || url === '#' || url === '') return;
 
                 $('#table-loader').removeClass('hidden');
                 $('#table-body-content').addClass('opacity-50');
 
-                // Llamada AJAX
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -152,11 +154,8 @@
                     success: function(response) {
                         if(response.status === 'success') {
                             $('#table-body-content').html(response.html_table);
-
                             $('#pagination-container').html(response.html_pagination);
-
                             window.history.pushState({path: url}, '', url);
-
                             $('html, body').animate({
                                 scrollTop: $("#table-body-content").offset().top - 150
                             }, 500);

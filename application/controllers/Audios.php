@@ -142,4 +142,94 @@ class Audios extends CI_Controller {
             show_error('El archivo físico no existe en la ruta: ' . $path);
         }
     }
+
+    public function cover_mp3($id = null){
+        if ($id == null) {
+            $this->_output_default_image();
+            return;
+        }
+
+        $cache_folder = FCPATH . 'assets/products/covers/';
+
+        if (!is_dir($cache_folder)) {
+            @mkdir($cache_folder, 0777, true);
+        }
+
+        $cached_cover_path = $cache_folder . 'mp3_art_' . $id . '.jpg';
+
+        if (file_exists($cached_cover_path)) {
+            $this->_output_image_file($cached_cover_path);
+            return;
+        }
+
+        $product = $this->products_model->get_product_by_id($id);
+        if (empty($product)) {
+            $this->_output_default_image(); return;
+        }
+
+        $file_name = isset($product->descargable) ? $product->descargable : '';
+        $mp3_path = FCPATH . 'assets/products/descargables/' . $file_name;
+
+        if (!file_exists($mp3_path) || empty($file_name)) {
+            $this->_output_default_image(); return;
+        }
+
+        if (!class_exists('getID3')) {
+            if (file_exists(FCPATH . 'vendor/autoload.php')) {
+                require_once FCPATH . 'vendor/autoload.php';
+            } elseif (file_exists(APPPATH . 'libraries/getid3/getid3.php')) {
+                require_once(APPPATH . 'libraries/getid3/getid3.php');
+            } else {
+                $this->_output_default_image(); return;
+            }
+        }
+
+        try {
+            $getID3 = new getID3;
+            $getID3->option_tag_id3v2 = true;
+            $getID3->option_tag_apic  = true;
+
+            $file_info = $getID3->analyze($mp3_path);
+
+            $image_data = null;
+            $image_mime = 'image/jpeg';
+
+            if (isset($file_info['comments']['picture'][0]['data'])) {
+                $image_data = $file_info['comments']['picture'][0]['data'];
+                $image_mime = isset($file_info['comments']['picture'][0]['image_mime']) ? $file_info['comments']['picture'][0]['image_mime'] : 'image/jpeg';
+            }
+            elseif (isset($file_info['id3v2']['APIC'][0]['data'])) {
+                $image_data = $file_info['id3v2']['APIC'][0]['data'];
+                $image_mime = isset($file_info['id3v2']['APIC'][0]['mime']) ? $file_info['id3v2']['APIC'][0]['mime'] : 'image/jpeg';
+            }
+
+            if ($image_data) {
+                @file_put_contents($cached_cover_path, $image_data);
+
+                header('Content-Type: ' . $image_mime);
+                echo $image_data;
+                return;
+            }
+
+        } catch (Exception $e) {}
+
+        $this->_output_default_image();
+    }
+
+    private function _output_image_file($path) {
+        $mime = mime_content_type($path);
+        header('Content-Type: ' . $mime);
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+    }
+
+    private function _output_default_image() {
+        $path = FCPATH . 'images/default_cover.jpg';
+        if (file_exists($path)) {
+            $this->_output_image_file($path);
+        } else {
+            header('Content-Type: image/jpeg');
+            echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=');
+        }
+    }
 }
