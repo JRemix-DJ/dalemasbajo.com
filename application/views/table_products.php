@@ -65,7 +65,7 @@ if(isset($products) && !empty($products)) {
             </td>
 
             <td class="p-4">
-                <a href="<? echo base_url('remixers/'.$remixer_id); ?>" class="flex items-center gap-2 text-primary hover:text-blue-700 transition-colors font-semibold text-sm">
+                <a href="<? echo base_url('remixers/'.$remixer_id); ?>" class="flex items-center gap-2 hover:text-blue-700 transition-colors font-semibold text-sm">
                     <i class="fa-solid fa-user-music text-xs opacity-50"></i>
                     <? echo $remixer_name; ?>
                 </a>
@@ -82,15 +82,21 @@ if(isset($products) && !empty($products)) {
             </td>
 
             <td class="p-4 text-center">
-                <? if($this->session->userdata('logged_in')) { ?>
-                    <a href="<? echo base_url('audios/download/'.$audio->id); ?>" class="inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all" title="Descargar">
-                        <i class="fa fa-download"></i>
-                    </a>
-                <? } else { ?>
-                    <button class="trigger-register inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-400 hover:bg-slate-50 transition-colors">
-                        <i class="fa-lock"></i>
-                    </button>
-                <? } ?>
+                <?
+                $is_logged = $this->session->userdata('is_logued_in') ? 1 : 0;
+
+                $has_access = ($this->session->userdata('plan_id') > 0 || $this->session->userdata('credits') > 0) ? 1 : 0;
+
+                $download_url = base_url('audios/download/'.$audio->id);
+                ?>
+
+                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
+                        data-logged="<? echo $is_logged; ?>"
+                        data-access="<? echo $has_access; ?>"
+                        data-url="<? echo $download_url; ?>"
+                        title="Descargar">
+                    <i class="fa fa-download"></i>
+                </button>
             </td>
         </tr>
     <? }

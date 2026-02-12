@@ -1,11 +1,14 @@
 <style>
-    [x-cloak] { display: none !important; }
+    /* Clases utilitarias para los modales */
     .modal-hidden { display: none !important; }
     .modal-flex { display: flex !important; }
+
+    /* Animación suave para el backdrop */
+    .backdrop-blur-sm { backdrop-filter: blur(4px); }
 </style>
 
 <div id="modal-login" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
+    <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm close-modal-trigger"></div>
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100 transform transition-all">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-bold text-slate-900">Iniciar Sesión</h3>
@@ -38,7 +41,7 @@
 </div>
 
 <div id="modal-register" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
+    <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm close-modal-trigger"></div>
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-bold text-slate-900">Crear Cuenta</h3>
@@ -75,7 +78,7 @@
 </div>
 
 <div id="modal-recover" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
+    <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm close-modal-trigger"></div>
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 border border-gray-100">
         <h3 class="text-lg font-bold mb-4 text-slate-900">Recuperar Contraseña</h3>
         <form class="space-y-4">
@@ -83,6 +86,61 @@
             <button type="button" id="btn-recuperar-accion" class="w-full py-2 bg-primary text-white font-bold rounded-lg hover:bg-blue-600">Enviar</button>
         </form>
         <button class="close-modal-btn mt-4 text-sm text-gray-500 w-full text-center hover:text-slate-900">Cancelar</button>
+    </div>
+</div>
+
+<div id="modal-upsell" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm"></div>
+
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 transform transition-all">
+
+        <button type="button" class="close-modal-btn absolute top-4 right-4 text-slate-400 hover:text-slate-600 focus:outline-none z-10">
+            <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+
+        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="flex justify-center -space-x-4 mb-6 pt-2">
+                <div class="w-16 h-16 rounded-full border-4 border-white shadow-lg bg-cover bg-center bg-gray-200" style="background-image: url('<? echo base_url(); ?>images/default_cover.jpg');"></div>
+                <div class="w-20 h-20 rounded-full border-4 border-white shadow-xl bg-cover bg-center z-10 -mt-2 bg-primary flex items-center justify-center" style="background-color: #0066FF;">
+                    <i class="fa-solid fa-star text-white text-3xl"></i>
+                </div>
+                <div class="w-16 h-16 rounded-full border-4 border-white shadow-lg bg-cover bg-center bg-gray-200" style="background-image: url('<? echo base_url(); ?>images/default_cover.jpg');"></div>
+            </div>
+
+            <div class="text-center mt-2">
+                <h3 class="text-2xl font-black text-slate-900 mb-2 leading-tight">
+                    Lleva tus Sets al <br> <span class="text-primary">Siguiente Nivel</span>
+                </h3>
+                <p class="text-sm text-slate-500 mb-6 px-4">
+                    Deja de usar rips de baja calidad. Obtén acceso instantáneo a música lista para clubes, versiones exclusivas y descargas ilimitadas.
+                </p>
+
+                <div class="text-left bg-slate-50 rounded-xl p-4 space-y-3 mb-6 border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-check-circle text-primary text-lg"></i>
+                        <span class="text-sm font-semibold text-slate-700">Descargas High-Speed Directas</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bolt text-primary text-lg"></i>
+                        <span class="text-sm font-semibold text-slate-700">Versiones Intro & Outro Exclusivas</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-gem text-primary text-lg"></i>
+                        <span class="text-sm font-semibold text-slate-700">Calidad Premium (320kbps & WAV)</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-fire text-primary text-lg"></i>
+                        <span class="text-sm font-semibold text-slate-700">Actualizaciones Diarias</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6 border-t border-gray-100">
+            <a href="<? echo base_url('planes'); ?>" class="inline-flex w-full justify-center rounded-xl bg-primary px-3 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all hover:scale-[1.02] sm:ml-3">
+                Get Started - Desbloquear Acceso
+            </a>
+        </div>
     </div>
 </div>
 
@@ -143,8 +201,7 @@
     </div>
 </footer>
 
-</div>
-<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+</div> <div id="jquery_jplayer_1" class="jp-jplayer"></div>
 <div id="jp_container_1" class="hidden"></div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -155,37 +212,66 @@
 <script>
     $(document).ready(function() {
 
+        // ================= GESTIÓN CENTRALIZADA DE MODALES =================
         function cerrarTodos() {
-            $('#modal-login, #modal-register, #modal-recover').addClass('modal-hidden').removeClass('modal-flex');
+            // Cerramos todos incluyendo el upsell
+            $('#modal-login, #modal-register, #modal-recover, #modal-upsell').addClass('modal-hidden').removeClass('modal-flex');
         }
 
-        $(document).on('click', '[data-target="#myModal"]', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            cerrarTodos();
-            $('#modal-login').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
-        });
-
-        $(document).on('click', '[data-target="#myModalRegistrarme"], .trigger-register', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            cerrarTodos();
-            $('#modal-register').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
-        });
-
-        $(document).on('click', '.trigger-recover', function(e) {
-            e.preventDefault();
-            cerrarTodos();
-            $('#modal-recover').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
-        });
-
-        $('.close-modal-btn, .close-modal-trigger').click(function(e) {
+        // Clic en la X o en el fondo oscuro
+        $(document).on('click', '.close-modal-btn, .close-modal-trigger', function(e) {
             e.preventDefault();
             $(this).closest('.modal-flex').fadeOut(200, function() {
                 $(this).addClass('modal-hidden').removeClass('modal-flex');
             });
         });
 
+        // ================= ACTIVADORES (TRIGGERS) =================
+
+        // Abrir Login
+        $(document).on('click', '[data-target="#myModal"]', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            cerrarTodos();
+            $('#modal-login').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+        });
+
+        // Abrir Registro
+        $(document).on('click', '[data-target="#myModalRegistrarme"], .trigger-register', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            cerrarTodos();
+            $('#modal-register').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+        });
+
+        // Abrir Recuperar
+        $(document).on('click', '.trigger-recover', function(e) {
+            e.preventDefault();
+            cerrarTodos();
+            $('#modal-recover').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+        });
+
+        // ================= LÓGICA SMART DOWNLOAD =================
+        $(document).on('click', '.btn-smart-download', function(e) {
+            e.preventDefault();
+
+            var btn = $(this);
+            var isLogged = btn.data('logged'); // devuelve 1 o 0 (número)
+            var hasAccess = btn.data('access'); // devuelve 1 o 0 (número)
+            var url = btn.data('url');
+
+            // Caso 1: NO Logueado (0)  O  Caso 2: Sin Créditos (0)
+            // En ambos casos mostramos el modal de UPSELL (Venta)
+            if (isLogged === 0 || hasAccess === 0) {
+                cerrarTodos();
+                // Abrimos el modal #modal-upsell usando la misma técnica que el login
+                $('#modal-upsell').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+            }
+            else {
+                // Caso 3: Todo OK -> Descargar
+                window.location.href = url;
+            }
+        });
+
+        // ================= AJAX LOGIN =================
         $('#btn-ingresar-accion').click(function() {
             var btn = $(this);
             var originalText = btn.text();
@@ -200,22 +286,19 @@
                 data: { email: email, password: password },
                 dataType: 'json',
                 success: function(response) {
-                    console.log("Respuesta Servidor:", response);
-
                     if(response.success === true || response.status == 'success' || response.status === true || response == 1) {
                         window.location.reload();
                     } else {
-                        var mensajeError = response.message || response.msg || response.error || 'Error desconocido al ingresar';
+                        var mensajeError = response.message || response.msg || response.error || 'Error desconocido';
                         alert(mensajeError);
                         btn.text(originalText).prop('disabled', false);
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error AJAX:", error);
                     if(xhr.status == 200) {
                         window.location.reload();
                     } else {
-                        alert('Error de conexión con el servidor.');
+                        alert('Error de conexión.');
                         btn.text(originalText).prop('disabled', false);
                     }
                 }
@@ -227,6 +310,5 @@
         });
     });
 </script>
-
 </body>
 </html>
