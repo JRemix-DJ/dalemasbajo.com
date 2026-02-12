@@ -38,9 +38,12 @@ if(isset($products) && !empty($products)) {
             </td>
 
             <td class="p-4 text-center">
+                <? $img_cover = base_url('audios/cover_mp3/' . $audio->id); ?>
+
                 <a href="javascript:;" class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 group-hover:bg-primary group-hover:text-white transition-all shadow-sm"
                    data-id="<? echo $audio->id; ?>"
-                   data-preview="<? echo base_url().'uploads/previews/'.$preview; ?>"
+                   data-demo="<? echo base_url().'assets/products/demos/'.$preview; ?>"
+                   data-cover="<? echo $img_cover; ?>"
                    data-title="<? echo $title; ?>"
                    data-artist="<? echo $artist; ?>">
                     <i class="fa fa-play text-xs ml-0.5"></i>
