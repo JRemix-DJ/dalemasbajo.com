@@ -124,7 +124,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-gem text-primary text-lg"></i>
-                        <span class="text-sm font-semibold text-slate-700">Calidad Premium (320kbps & WAV)</span>
+                        <span class="text-sm font-semibold text-slate-700">Calidad Premium</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-fire text-primary text-lg"></i>

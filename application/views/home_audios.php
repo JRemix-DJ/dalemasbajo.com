@@ -33,17 +33,16 @@
                         <i class="fa fa-arrow-trend-up text-primary text-sm"></i>
                     </span> Trending Now
                 </h2>
-                <a href="<? echo base_url('audios/trending'); ?>" class="text-sm text-primary font-medium hover:underline">See all</a>
+                <a href="<? echo base_url('/search/?sname=&sgenero=&sremixers='); ?>" class="text-sm text-primary font-medium hover:underline">See all</a>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 <?
-                // Lógica para obtener los audios
                 $loop_trending = isset($trending_audios) ? $trending_audios : (isset($products) ? array_slice($products, 0, 5) : []);
 
                 if(!empty($loop_trending)) {
                     foreach($loop_trending as $audio) {
-
+                        // Imagen desde cover_mp3
                         $img = base_url('audios/cover_mp3/' . $audio->id);
 
                         $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
@@ -76,13 +75,57 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-between mb-6 mt-8">
+        <div class="flex items-center justify-between mb-4 mt-8">
             <h2 class="text-2xl font-bold text-slate-900">Latest Remixes</h2>
             <div id="table-loader" class="hidden text-primary">
                 <i class="fa fa-circle-o-notch fa-spin"></i> Cargando...
             </div>
         </div>
 
+        <form action="<? echo base_url('search/'); ?>" method="GET" class="mb-6">
+            <div class="flex flex-col md:flex-row gap-3">
+                <div class="relative flex-grow group">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fa fa-search text-slate-400 group-focus-within:text-primary transition-colors"></i>
+                    </div>
+                    <input type="text" name="sname" id="sname"
+                           class="block w-full p-3 pl-10 text-sm text-slate-900 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                           placeholder="Buscar remix, artista o título..." autocomplete="off">
+                </div>
+
+                <div class="w-full md:w-48">
+                    <div class="relative">
+                        <select name="sgenero" id="sgenero" class="block w-full p-3 text-sm text-slate-700 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                            <option value="">Género</option>
+                            <? if(isset($generos)){ foreach($generos as $g) { ?>
+                                <option value="<? echo $g->id; ?>"><? echo $g->name; ?></option>
+                            <? }} ?>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <i class="fa fa-angle-down text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-48">
+                    <div class="relative">
+                        <select name="sremixers" id="sremixers" class="block w-full p-3 text-sm text-slate-700 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                            <option value="">Remixer</option>
+                            <? if(isset($djs)){ foreach($djs as $dj) { ?>
+                                <option value="<? echo $dj->id; ?>"><? echo $dj->username; ?></option>
+                            <? }} ?>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <i class="fa fa-angle-down text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="p-3 px-6 text-white bg-primary hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center transition-all shadow-md shadow-blue-500/20">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
