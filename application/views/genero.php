@@ -37,6 +37,7 @@
                                 <th class="p-4 font-semibold w-16 text-center">Play</th>
                                 <th class="p-4 font-semibold">Song Title</th>
                                 <th class="p-4 font-semibold">Version</th>
+                                <th class="p-4 font-semibold">Artist</th>
                                 <th class="p-4 font-semibold">Remixer</th>
                                 <th class="p-4 font-semibold w-20">BPM</th>
                                 <th class="p-4 font-semibold w-32">Genre</th>

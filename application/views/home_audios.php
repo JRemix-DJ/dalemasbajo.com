@@ -30,7 +30,7 @@
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
                     <span class="bg-blue-100 p-2 rounded-full flex items-center justify-center w-8 h-8">
-                        <i class="fa fa-arrow-up text-primary text-sm"></i>
+                        <i class="fa fa-arrow-trend-up text-primary text-sm"></i>
                     </span> Trending Now
                 </h2>
                 <a href="<? echo base_url('audios/trending'); ?>" class="text-sm text-primary font-medium hover:underline">See all</a>
@@ -85,6 +85,7 @@
                         <th class="p-4 font-semibold w-16 text-center">Play</th>
                         <th class="p-4 font-semibold">Song Title</th>
                         <th class="p-4 font-semibold">Version</th>
+                        <th class="p-4 font-semibold">Artist</th>
                         <th class="p-4 font-semibold">Remixer</th>
                         <th class="p-4 font-semibold w-20">BPM</th>
                         <th class="p-4 font-semibold w-32">Genre</th>

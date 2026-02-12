@@ -6,7 +6,6 @@
 
 <div id="modal-login" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm close-modal-trigger"></div>
-
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100 transform transition-all">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
             <h3 class="text-lg font-bold text-slate-900">Iniciar Sesión</h3>
@@ -87,65 +86,65 @@
     </div>
 </div>
 
-<footer class="border-t border-gray-200 mt-auto" style="background-color: oklch(.985 .002 247.839);">
+<footer class="mt-auto border-t border-white/10" style="background-color: oklch(0.605 0.217 257.214);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
 
             <div class="col-span-1 md:col-span-1 flex flex-col gap-4">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2">
-                    <span class="text-xl font-bold tracking-tighter text-foreground">
+                    <span class="text-xl font-bold tracking-tighter text-white">
                         DALE MÁS BAJO
                     </span>
                 </a>
-                <p class="text-sm text-muted-foreground leading-relaxed">
+                <p class="text-sm text-blue-100 leading-relaxed">
                     Descubre nuevos remixes cada día en nuestro sitio web.
                 </p>
             </div>
 
             <div>
-                <h3 class="font-semibold text-foreground mb-4">Plataforma</h3>
-                <ul class="space-y-3 text-sm text-muted-foreground">
-                    <li><a href="<? echo base_url('drops'); ?>" class="hover:text-primary transition-colors">Drops Exclusivos</a></li>
-                    <li><a href="<? echo base_url('planes'); ?>" class="hover:text-primary transition-colors">Planes de Suscripción</a></li>
-                    <li><a href="<? echo base_url('search'); ?>" class="hover:text-primary transition-colors">Explorar Música</a></li>
+                <h3 class="font-semibold text-white mb-4">Plataforma</h3>
+                <ul class="space-y-3 text-sm text-blue-100">
+                    <li><a href="<? echo base_url('drops'); ?>" class="hover:text-gray-300 transition-colors">Drops Exclusivos</a></li>
+                    <li><a href="<? echo base_url('planes'); ?>" class="hover:text-gray-300 transition-colors">Planes de Suscripción</a></li>
+                    <li><a href="<? echo base_url('search'); ?>" class="hover:text-gray-300 transition-colors">Explorar Música</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="font-semibold text-foreground mb-4">Ayuda</h3>
-                <ul class="space-y-3 text-sm text-muted-foreground">
-                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-primary transition-colors">Preguntas Frecuentes</a></li>
-                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-primary transition-colors">Términos y Condiciones</a></li>
-                    <li><a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-primary transition-colors">Be a Remixer</a></li>
+                <h3 class="font-semibold text-white mb-4">Ayuda</h3>
+                <ul class="space-y-3 text-sm text-blue-100">
+                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors">Preguntas Frecuentes</a></li>
+                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors">Términos y Condiciones</a></li>
+                    <li><a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-gray-300 transition-colors">Be a Remixer</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="font-semibold text-foreground mb-4">Síguenos</h3>
-
-                <ul class="space-x-3">
-                    <a href="https://www.facebook.com/dalemasbajo/" target="_blank" class="text-muted-foreground hover:text-primary transition-colors">
+                <h3 class="font-semibold text-white mb-4">Síguenos</h3>
+                <ul class="space-x-3 text-blue-100">
+                    <a href="https://www.facebook.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
                         <i class="fa-brands fa-facebook-f text-lg"></i>
                     </a>
-                    <a href="https://www.instagram.com/dalemasbajo/" target="_blank" class="text-muted-foreground hover:text-primary transition-colors">
+                    <a href="https://www.instagram.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
                         <i class="fa-brands fa-instagram text-lg"></i>
                     </a>
-                    <a href="https://soundcloud.com/dalemasbajo" target="_blank" class="text-muted-foreground hover:text-primary transition-colors">
+                    <a href="https://soundcloud.com/dalemasbajo" target="_blank" class="hover:text-gray-300 transition-colors">
                         <i class="fa-brands fa-soundcloud text-lg"></i>
                     </a>
                 </ul>
             </div>
         </div>
 
-        <div class="border-t border-gray-200 mt-12 pt-8 flex justify-center text-center">
-            <p class="text-sm text-slate-500">
+        <div class="border-t border-white/10 mt-12 pt-8 flex justify-center text-center">
+            <p class="text-sm text-blue-200">
                 &copy; <? echo date('Y'); ?> Dale Más Bajo. Todos los derechos reservados.
             </p>
         </div>
     </div>
 </footer>
 
-</div> <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+</div>
+<div id="jquery_jplayer_1" class="jp-jplayer"></div>
 <div id="jp_container_1" class="hidden"></div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -156,13 +155,10 @@
 <script>
     $(document).ready(function() {
 
-        // --- FUNCIONES PARA ABRIR/CERRAR MODALES (Estilo jQuery) ---
-
         function cerrarTodos() {
             $('#modal-login, #modal-register, #modal-recover').addClass('modal-hidden').removeClass('modal-flex');
         }
 
-        // 1. Abrir LOGIN (Interceptamos el clic viejo)
         $(document).on('click', '[data-target="#myModal"]', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -170,7 +166,6 @@
             $('#modal-login').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
         });
 
-        // 2. Abrir REGISTRO
         $(document).on('click', '[data-target="#myModalRegistrarme"], .trigger-register', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -178,14 +173,12 @@
             $('#modal-register').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
         });
 
-        // 3. Abrir RECUPERAR
         $(document).on('click', '.trigger-recover', function(e) {
             e.preventDefault();
             cerrarTodos();
             $('#modal-recover').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
         });
 
-        // 4. CERRAR (Botón X o Clic Fondo)
         $('.close-modal-btn, .close-modal-trigger').click(function(e) {
             e.preventDefault();
             $(this).closest('.modal-flex').fadeOut(200, function() {

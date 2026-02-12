@@ -19,9 +19,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#0066FF",      /* Tu azul principal */
-                        secondary: "#020817",    /* Fondo oscuro casi negro */
-                        accent: "#F8FAFC",       /* Blanco humo para fondos claros */
+                        primary: "#0066FF",
+                        secondary: "#020817",
+                        accent: "#F8FAFC",
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -35,12 +35,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Estilos base */
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, .font-heading { font-family: 'Montserrat', sans-serif; }
-
-        /* Corrección para que el menú móvil no parpadee */
         [x-cloak] { display: none !important; }
+
+        /* Barra de scroll personalizada para los menús largos */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -71,12 +74,14 @@
                     <button class="text-sm font-semibold text-slate-600 group-hover:text-primary flex items-center gap-1 focus:outline-none">
                         Remixers <i class="fa-solid fa-chevron-down text-[10px] opacity-50 ml-1"></i>
                     </button>
-                    <div class="absolute top-16 left-0 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-2 z-50">
-                        <? foreach($djs as $dj) { ?>
-                            <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg">
-                                <? echo $dj->username; ?>
-                            </a>
-                        <? } ?>
+                    <div class="absolute top-16 -left-20 w-[600px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
+                        <div class="grid grid-cols-3 gap-x-4 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                            <? foreach($djs as $dj) { ?>
+                                <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
+                                    <i class="fa-solid fa-user-music text-xs opacity-40 mr-2"></i><? echo $dj->username; ?>
+                                </a>
+                            <? } ?>
+                        </div>
                     </div>
                 </div>
 
@@ -84,12 +89,14 @@
                     <button class="text-sm font-semibold text-slate-600 group-hover:text-primary flex items-center gap-1 focus:outline-none">
                         Géneros <i class="fa-solid fa-chevron-down text-[10px] opacity-50 ml-1"></i>
                     </button>
-                    <div class="absolute top-16 left-0 w-56 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-2 z-50 max-h-96 overflow-y-auto">
-                        <? foreach($generos as $genre){ ?>
-                            <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg">
-                                <? echo $genre->name; ?>
-                            </a>
-                        <? } ?>
+                    <div class="absolute top-16 -left-32 w-[700px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
+                        <div class="grid grid-cols-4 gap-x-2 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                            <? foreach($generos as $genre){ ?>
+                                <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300 inline-block mr-2"></span><? echo $genre->name; ?>
+                                </a>
+                            <? } ?>
+                        </div>
                     </div>
                 </div>
 
@@ -159,11 +166,20 @@
 
             <div class="h-px bg-gray-100 my-2"></div>
             <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Remixers</div>
-
             <div class="grid grid-cols-2 gap-2 mt-2">
                 <? foreach($djs as $dj) { ?>
                     <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">
                         <? echo $dj->username; ?>
+                    </a>
+                <? } ?>
+            </div>
+
+            <div class="h-px bg-gray-100 my-2"></div>
+            <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Géneros</div>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+                <? foreach($generos as $genre){ ?>
+                    <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">
+                        <? echo $genre->name; ?>
                     </a>
                 <? } ?>
             </div>
