@@ -5,7 +5,7 @@ class Audios extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
-        $this->load->helper(array('url', 'form'));
+        $this->load->helper(array('url', 'form', 'download'));
         $this->load->model(array('users_model', 'genero_model', 'products_model', 'banners_model', 'faq_model'));
         $this->load->library(array('session','form_validation','cart', 'pagination','dmbfunctions'));
         $this->dmbfunctions->loadGets();
@@ -60,11 +60,9 @@ class Audios extends CI_Controller {
         $data['djs'] = $this->users_model->get_djs_audios();
         $data['users'] = $this->users_model->get_all_users();
 
-        // Trending
         $data['trending_audios'] = array_slice($data['products'], 0, 5);
 
         if ($this->input->is_ajax_request()) {
-            // Ahora 'table_products' recibe $data que incluye 'generos'
             $html_rows = $this->load->view('table_products', $data, TRUE);
 
             echo json_encode([
@@ -85,5 +83,63 @@ class Audios extends CI_Controller {
 
     public function comingsoon() {
         $this->load->view('comingsoon');
+    }
+
+    public function download($id = null){
+        if (!$this->session->userdata('is_logued_in')) {
+            redirect('login');
+        }
+
+        if ($id == null) {
+            show_404();
+        }
+
+        $product = $this->products_model->get_product_by_id($id);
+
+        if (empty($product)) {
+            show_404();
+        }
+
+        $file_name = isset($product->descargable) ? $product->descargable : '';
+
+        if($file_name == ''){
+            show_error('Error: El producto no tiene archivo asignado en la base de datos.');
+            return;
+        }
+
+        $path = FCPATH . 'assets/products/descargables/' . $file_name;
+
+        if (file_exists($path)) {
+            $this->load->helper('download');
+
+            $remixer_obj = $this->users_model->load_user_info($product->owner_id);
+            $remixer_name = ($remixer_obj) ? $remixer_obj->username : 'DMB';
+
+            $genre_obj = $this->genero_model->load_genero_info($product->gender_id);
+            $genre_name = ($genre_obj) ? $genre_obj->name : 'General';
+
+            $clean_title   = str_replace(array('/', '\\', ':'), '-', $product->name);
+            $clean_artist  = str_replace(array('/', '\\', ':'), '-', $product->artist);
+            $clean_remixer = str_replace(array('/', '\\', ':'), '-', $remixer_name);
+            $clean_genre   = str_replace(array('/', '\\', ':'), '-', $genre_name);
+            $clean_version = str_replace(array('/', '\\', ':'), '-', $product->version);
+
+            if(empty($clean_version)) $clean_version = "Original";
+
+            $new_name_string = $clean_title . ' - ' .
+                $clean_artist . ' - ' .
+                $clean_remixer . ' - ' .
+                $clean_genre . ' - ' .
+                $clean_version . ' - ' .
+                $product->bpm . 'bpm - DMB';
+
+            $extension = pathinfo($file_name, PATHINFO_EXTENSION);
+            $final_name = $new_name_string . '.' . $extension;
+
+            force_download($final_name, file_get_contents($path));
+
+        } else {
+            show_error('El archivo físico no existe en la ruta: ' . $path);
+        }
     }
 }

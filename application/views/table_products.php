@@ -85,15 +85,15 @@ if(isset($products) && !empty($products)) {
                 <?
                 $is_logged = $this->session->userdata('is_logued_in') ? 1 : 0;
 
-                $has_access = ($this->session->userdata('plan_id') > 0 || $this->session->userdata('credits') > 0) ? 1 : 0;
-
-                $download_url = base_url('audios/download/'.$audio->id);
+                $is_unlimited = $this->session->userdata('is_user_unlimited');
+                $tokens = $this->session->userdata('tokens');
+                $has_access = ($is_unlimited || $tokens > 0) ? 1 : 0;
                 ?>
 
                 <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
                         data-logged="<? echo $is_logged; ?>"
                         data-access="<? echo $has_access; ?>"
-                        data-url="<? echo $download_url; ?>"
+                        data-id="<? echo $audio->id; ?>"
                         title="Descargar">
                     <i class="fa fa-download"></i>
                 </button>

@@ -1,9 +1,7 @@
 <style>
-    /* Clases utilitarias para los modales */
     .modal-hidden { display: none !important; }
     .modal-flex { display: flex !important; }
 
-    /* Animación suave para el backdrop */
     .backdrop-blur-sm { backdrop-filter: blur(4px); }
 </style>
 
@@ -214,11 +212,9 @@
 
         // ================= GESTIÓN CENTRALIZADA DE MODALES =================
         function cerrarTodos() {
-            // Cerramos todos incluyendo el upsell
             $('#modal-login, #modal-register, #modal-recover, #modal-upsell').addClass('modal-hidden').removeClass('modal-flex');
         }
 
-        // Clic en la X o en el fondo oscuro
         $(document).on('click', '.close-modal-btn, .close-modal-trigger', function(e) {
             e.preventDefault();
             $(this).closest('.modal-flex').fadeOut(200, function() {
@@ -226,7 +222,7 @@
             });
         });
 
-        // ================= ACTIVADORES (TRIGGERS) =================
+        // ================= ACTIVADORES =================
 
         // Abrir Login
         $(document).on('click', '[data-target="#myModal"]', function(e) {
@@ -254,21 +250,48 @@
             e.preventDefault();
 
             var btn = $(this);
-            var isLogged = btn.data('logged'); // devuelve 1 o 0 (número)
-            var hasAccess = btn.data('access'); // devuelve 1 o 0 (número)
-            var url = btn.data('url');
+            var isLogged = parseInt(btn.data('logged'));
+            var hasAccess = parseInt(btn.data('access'));
+            var productId = btn.data('id');
+            var baseUrl = '<? echo base_url(); ?>';
 
-            // Caso 1: NO Logueado (0)  O  Caso 2: Sin Créditos (0)
-            // En ambos casos mostramos el modal de UPSELL (Venta)
             if (isLogged === 0 || hasAccess === 0) {
                 cerrarTodos();
-                // Abrimos el modal #modal-upsell usando la misma técnica que el login
                 $('#modal-upsell').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+                return;
             }
-            else {
-                // Caso 3: Todo OK -> Descargar
-                window.location.href = url;
-            }
+
+            $.ajax({
+                url: baseUrl + "micuenta/descargar_producto/",
+                type: "POST",
+                dataType: "json",
+                data: { product_id: productId },
+                beforeSend: function() {
+                    btn.html('<i class="fa fa-spinner fa-spin"></i>');
+                },
+                success: function(data) {
+                    if(data.success) {
+                        window.location.href = baseUrl + 'audios/download/' + productId;
+
+                        if(!data.is_unlimited && data.total_tokens !== undefined){
+                            $('.token-count').text(data.total_tokens);
+                        }
+                    } else {
+                        if(data.message == "NOTOKENS" || data.message == "NOLOGGUEDIN") {
+                            cerrarTodos();
+                            $('#modal-upsell').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
+                        } else {
+                            alert(data.message || "Error al procesar la descarga");
+                        }
+                    }
+                },
+                error: function() {
+                    alert('Error de conexión al intentar descargar.');
+                },
+                complete: function() {
+                    btn.html('<i class="fa fa-download"></i>');
+                }
+            });
         });
 
         // ================= AJAX LOGIN =================
