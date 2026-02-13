@@ -148,9 +148,7 @@
 
             <div class="col-span-1 md:col-span-1 flex flex-col gap-4">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2">
-                    <span class="text-xl font-bold tracking-tighter text-white">
-                        DALE MÁS BAJO
-                    </span>
+                    <img src="<? echo base_url(); ?>images/white-logo.png" alt="dalemasbajowhite" class="h-12 w-auto object-contain">
                 </a>
                 <p class="text-sm text-blue-100 leading-relaxed">
                     Descubre nuevos remixes cada día en nuestro sitio web.
@@ -162,7 +160,7 @@
                 <ul class="space-y-3 text-sm text-blue-100">
                     <li><a href="<? echo base_url('drops'); ?>" class="hover:text-gray-300 transition-colors">Drops Exclusivos</a></li>
                     <li><a href="<? echo base_url('planes'); ?>" class="hover:text-gray-300 transition-colors">Planes de Suscripción</a></li>
-                    <li><a href="<? echo base_url('search'); ?>" class="hover:text-gray-300 transition-colors">Explorar Música</a></li>
+                    <li><a href="<? echo base_url('search/?sname=&sgenero=&sremixers='); ?>" class="hover:text-gray-300 transition-colors">Explorar Remixes</a></li>
                 </ul>
             </div>
 

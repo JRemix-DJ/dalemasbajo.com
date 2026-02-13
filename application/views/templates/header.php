@@ -61,9 +61,7 @@
 
             <div class="flex-shrink-0 flex items-center">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2 group decoration-0">
-                        <span class="text-2xl font-heading font-black tracking-tighter text-slate-900 group-hover:text-primary transition-colors">
-                            DALE MÁS BAJO
-                        </span>
+                    <img src="<? echo base_url(); ?>images/logo.png" alt="dalemasbajo" class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                 </a>
             </div>
 
