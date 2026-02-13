@@ -76,11 +76,11 @@
                     </button>
                     <div class="absolute top-16 -left-20 w-[600px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
                         <div class="grid grid-cols-3 gap-x-4 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                            <? foreach($djs as $dj) { ?>
+                            <? if(isset($djs) && !empty($djs)) { foreach($djs as $dj) { ?>
                                 <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
                                     <i class="fa-solid fa-user-music text-xs opacity-40 mr-2"></i><? echo $dj->username; ?>
                                 </a>
-                            <? } ?>
+                            <? } } ?>
                         </div>
                     </div>
                 </div>
@@ -91,11 +91,11 @@
                     </button>
                     <div class="absolute top-16 -left-32 w-[700px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
                         <div class="grid grid-cols-4 gap-x-2 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                            <? foreach($generos as $genre){ ?>
+                            <? if(isset($generos) && !empty($generos)) { foreach($generos as $genre){ ?>
                                 <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
                                     <span class="w-1.5 h-1.5 rounded-full bg-slate-300 inline-block mr-2"></span><? echo $genre->name; ?>
                                 </a>
-                            <? } ?>
+                            <? } } ?>
                         </div>
                     </div>
                 </div>
@@ -109,7 +109,27 @@
             <div class="flex items-center gap-4">
                 <div class="hidden md:block h-6 w-px bg-gray-200"></div>
 
-                <? if($this->session->userdata('is_logued_in')){ ?>
+                <? if($this->session->userdata('is_logued_in')){
+                    // Definimos variables para limpieza del código
+                    $tokens = (int)$this->session->userdata('tokens');
+                    $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
+                    ?>
+
+                    <? if($is_unlimited || $tokens > 0) { ?>
+                        <div class="hidden md:flex flex-col items-end mr-2">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Descargas</span>
+                            <? if($is_unlimited){ ?>
+                                <div class="flex items-center gap-1 text-primary font-bold text-sm">
+                                    <i class="fa-solid fa-infinity"></i> <span>PRO</span>
+                                </div>
+                            <? } else { ?>
+                                <div class="flex items-center gap-1 font-bold text-sm text-slate-700">
+                                    <span class="token-count"><? echo $tokens; ?></span>
+                                    <i class="fa-solid fa-bolt text-yellow-400 text-xs"></i>
+                                </div>
+                            <? } ?>
+                        </div>
+                    <? } ?>
                     <div class="relative group" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false" class="flex items-center gap-3 focus:outline-none">
                             <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/30">
@@ -158,6 +178,25 @@
          style="display: none;">
 
         <div class="p-4 space-y-2">
+
+            <? if($this->session->userdata('is_logued_in')){
+                // Reutilizamos la lógica para el móvil
+                $tokens = (int)$this->session->userdata('tokens');
+                $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
+
+                if($is_unlimited || $tokens > 0) {
+                    ?>
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg mb-2">
+                        <span class="text-sm font-bold text-slate-600">Mis Créditos:</span>
+                        <? if($is_unlimited){ ?>
+                            <span class="text-sm font-bold text-primary flex items-center gap-1"><i class="fa-solid fa-infinity"></i> ILIMITADO</span>
+                        <? } else { ?>
+                            <span class="text-sm font-bold text-slate-900"><? echo $tokens; ?> <i class="fa-solid fa-bolt text-yellow-500"></i></span>
+                        <? } ?>
+                    </div>
+                <?   }
+            } ?>
+
             <a href="<? echo base_url(); ?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Inicio</a>
             <a href="<? echo base_url('drops');?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Drops</a>
             <a href="<? echo base_url('planes');?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Planes</a>
@@ -167,21 +206,21 @@
             <div class="h-px bg-gray-100 my-2"></div>
             <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Remixers</div>
             <div class="grid grid-cols-2 gap-2 mt-2">
-                <? foreach($djs as $dj) { ?>
+                <? if(isset($djs) && !empty($djs)) { foreach($djs as $dj) { ?>
                     <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">
                         <? echo $dj->username; ?>
                     </a>
-                <? } ?>
+                <? } } ?>
             </div>
 
             <div class="h-px bg-gray-100 my-2"></div>
             <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Géneros</div>
             <div class="grid grid-cols-2 gap-2 mt-2">
-                <? foreach($generos as $genre){ ?>
+                <? if(isset($generos) && !empty($generos)) { foreach($generos as $genre){ ?>
                     <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">
                         <? echo $genre->name; ?>
                     </a>
-                <? } ?>
+                <? } } ?>
             </div>
 
             <? if(!$this->session->userdata('is_logued_in')){ ?>

@@ -89,87 +89,81 @@ class Products extends CI_Controller {
 		}
 	}
 
-	public function descargar(){
-		if($this->session->userdata('is_logued_in')){
-			$product_id=$this->uri->segment(3);
-			if($this->user_pay_for_it($this->session->userdata('id_usuario'), $product_id)){
-				$user_file = $this->orders_model->user_files($this->session->userdata('id_usuario'), $product_id);
-				$product = $this->products_model->load_product_info($product_id);
-				$genero = $this->genero_model->load_genero_info($product->gender_id);
-				$dj = $this->users_model->load_user_info($product->owner_id);
-				if($dj){
-					$djusername = $dj->username;
-				}else{
-					$djusername = 'Unavailable';
-				}
-				if($product->product_type_id==1){
-					$ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
-					$file=preg_replace('/[^a-zA-Z0-9]/', ' ',$product->name).' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB.mp3';
-				}else{
-					$ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
-					$file=$product->name.' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB .'.$ext;
-				}
-				if($product->product_type_id==3){
-					$tamano=@filesize('/var/www/dalemasbajo.com/assets/products/descargables/videos/'.$product->descargable);
-					$file_url='/var/www/dalemasbajo.com/assets/products/descargables/videos/'.$product->descargable;
-				}else{
-					$tamano=@filesize('/var/www/dalemasbajo.com/assets/products/descargables/'.$product->descargable);
-					$file_url='/var/www/dalemasbajo.com/assets/products/descargables/'.$product->descargable;
-				}
-				//echo $file_url;
-				$tamano=@filesize($file_url);
-				//echo $tamano;
-				//echo $file_url;
-				$new_downloads_left=$user_file[0]->downloads_left - 1;
-				$data = array(
-					'downloads_left' => $new_downloads_left
-				);
-				$this->orders_model->update_user_files_item($user_file[0]->id, $data);
-				if(file_exists($file_url)) {
-					header("Pragma: no-cache");
-					header('Expires: 0');
-					header('Access-Control-Allow-Origin: *');
-					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-					header("Last-Modified: " . gmdate("D, d M Y H:i:s T", filemtime($file_url))); 
-					header('Cache-Control: private',false);
-					header('Content-Type: application/octet-stream');
-					header('Content-Disposition: attachment; filename="'.$file.'"');
-					header('Content-Transfer-Encoding: binary');
-					header('Content-Length: '.$tamano);
-					// reason: it's unreliable to download whole file at once
-					$chunksize = 1 * (1024 * 1024);
-					$fp = fopen($file_url,'rb'); 
-					$buffer = ''; 
-					while (!feof($fp)) 
-						{ 
-						$buffer = fread($fp, $chunksize); 
-						echo $buffer; 
-						ob_flush(); 
-						flush(); 
-						} 
-					fclose($fp); 
-					// resume original code here:
-					if ( !$fp ) {
-					    echo "File Not Found";
-					    exit();
-					}
-					if ( !fpassthru($fp) ) {
-					    echo "There was an error!";
-					    exit();
-					}
-					
-					header("Connection: close");
-					exit();  
-				}else{
-					echo "File Not Found!!";	
-				}
-			}else{
-				echo 'No tienes acceso a este archivo';
-			}
-		}else{
-			redirect(base_url());
-		}
-	}
+    public function descargar(){
+        if($this->session->userdata('is_logued_in')){
+            $product_id = $this->uri->segment(3);
+            $user_id = $this->session->userdata('id_usuario');
+
+            // 1. VERIFICACIÓN DOBLE (Igual que en Micuenta)
+            // Verificamos en tabla de asignaciones (Tokens) O en tabla de ordenes (Compras)
+            $tiene_archivo = $this->users_model->isUserFile($user_id, $product_id);
+            $tiene_orden   = $this->orders_model->user_files($user_id, $product_id);
+
+            $has_file = ($tiene_archivo || $tiene_orden);
+
+            // 2. Verificar Ilimitado
+            $is_unlimited = ($this->session->userdata('is_user_unlimited') == true || $this->session->userdata('role') == 1);
+
+            if($has_file || $is_unlimited){
+
+                $product = $this->products_model->load_product_info($product_id);
+                $genero = $this->genero_model->load_genero_info($product->gender_id);
+                $dj = $this->users_model->load_user_info($product->owner_id);
+
+                $djusername = ($dj) ? $dj->username : 'Unavailable';
+
+                if($product->product_type_id==1){
+                    $ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
+                    $file=preg_replace('/[^a-zA-Z0-9]/', ' ',$product->name).' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB.mp3';
+                }else{
+                    $ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
+                    $file=$product->name.' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB .'.$ext;
+                }
+
+                if($product->product_type_id==3){
+                    $file_url='/var/www/dalemasbajo.com/assets/products/descargables/videos/'.$product->descargable;
+                }else{
+                    $file_url='/var/www/dalemasbajo.com/assets/products/descargables/'.$product->descargable;
+                }
+
+                if(!file_exists($file_url)){
+                    echo "File Not Found!!";
+                    return;
+                }
+
+                $tamano=@filesize($file_url);
+
+                if(file_exists($file_url)) {
+                    header("Pragma: no-cache");
+                    header('Expires: 0');
+                    header('Access-Control-Allow-Origin: *');
+                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                    header("Last-Modified: " . gmdate("D, d M Y H:i:s T", filemtime($file_url)));
+                    header('Cache-Control: private',false);
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.$file.'"');
+                    header('Content-Transfer-Encoding: binary');
+                    header('Content-Length: '.$tamano);
+
+                    $chunksize = 1 * (1024 * 1024);
+                    $fp = fopen($file_url,'rb');
+                    $buffer = '';
+                    while (!feof($fp)) {
+                        $buffer = fread($fp, $chunksize);
+                        echo $buffer;
+                        ob_flush();
+                        flush();
+                    }
+                    fclose($fp);
+                    exit();
+                }
+            }else{
+                echo 'No tienes permiso para descargar este archivo. Por favor recarga la página.';
+            }
+        }else{
+            redirect(base_url());
+        }
+    }
 
 	public function descargar_admin(){
 		if($this->session->userdata('is_logued_in')&&$this->session->userdata('role')=='is_admin'){
