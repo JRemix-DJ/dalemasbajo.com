@@ -1,134 +1,115 @@
-                <table class="table clearfix canciones">
-                    <thead> 
-                        <tr>
-                            <th class="">Fecha</th>
-                            <th class="">Escuchar</th>
-                            <th class="">Remixer</th>
-                            <th>Canción</th>
-                            <th class="">Artista</th>
-                            <th class="">Version</th>
-                            <th class="">BPM</th>
-                            <? if(isset($genero)){ ?>
-                             <? if(($genero->id!=45)){ ?>
-                                <th class="">Genero</th>
-                            <? } }else{ ?> 
-                                <th class="">Genero</th>
-                            <? } ?>
-                            <? if(isset($genero)){ ?>
-                                <? if($genero->id==45){ ?>
-                                    <th class="tcenter">Precio</th>
-                                <? }else{ ?>
-                                    <? if(MONEY_PAYMENTS){ ?>
-                                        <? if($this->session->userdata('is_user_tokens')==false||$this->session->userdata('tokens')==0){ ?>
-                                            <th class="tcenter">Comprar</th>
-                                        <? }else{ ?>
-                                            <th class="tcenter">Descargar</th>
-                                        <? } ?>
-                                    <? }else{ ?>
-                                        <th class="tcenter">Descargar</th>
-                                    <? } ?>
-                                <? } ?>
-                            <?  }else{ ?>
-                                <? if(MONEY_PAYMENTS){ ?>
-                                    <? if($this->session->userdata('is_user_tokens')==false||$this->session->userdata('tokens')==0){ ?>
-                                            <th class="tcenter">Comprar</th>
-                                        <? }else{ ?>
-                                            <th class="tcenter">Descargar</th>
-                                        <? } ?>
-                                <? }else{ ?>
-                                    <th class="tcenter">Descargar</th>
-                                <? } ?>
-                            <? } ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                         <?
-                        $i=0;
-                        if(!empty($products)){
-                        foreach($products as $producto){
-                            $i++;
-                            ?>
-                            <tr id="singleSongPlayer-<? echo $i; ?>" data-product="<? echo $producto->id; ?>"class="song-unit singleSongPlayer player-<? echo $producto->id; ?>" data-before="<? echo $i; ?>">
-                                <td class=""><? 
-                                $fecha = date_format(date_create($producto->time_approved), 'm/d/Y');
-                                echo $fecha; 
-                                ?></td>
-                                <td class="">
-                                    <span id="singleSong-jplayer-<? echo $i; ?>" class="singleSong-jplayer" data-title="<? echo $producto->name; ?>" data-mp3="<? echo base_url(); ?>assets/products/demos/<? echo $producto->demo; ?>"><i class="fa fa-play-circle-o boton-play" aria-hidden="true"></i></span>
-                                </td>
-                                <? if($producto->gender_id!=45){ ?>
-                                <td class="song-author">
-                                    <a href="<? echo base_url('remixers/').$producto->owner_id; ?>">
-                                    <? 
+<?php
+if(isset($products) && !empty($products)) {
+    foreach($products as $audio) {
+        $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
+        $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
+        $artist = isset($audio->artist) ? $audio->artist : 'Unknown Artist';
+        $date = isset($audio->created_on) ? $audio->created_on : (isset($audio->created_at) ? $audio->created_at : '');
+        $version = (isset($audio->version) && $audio->version != '') ? $audio->version : 'Intro';
+        $bpm = isset($audio->bpm) ? $audio->bpm : '--';
 
-                                        $key = array_search($producto->owner_id, array_column($users, 'id'));
+        $remixer_id = isset($audio->owner_id) ? $audio->owner_id : 0;
+        $remixer_name = 'DJ Member';
 
-                                        echo $users[$key]->username;
-                                    ?>
-                                    </a>
-                                </td>
-                                <? } ?>
-                                <td class="song-title jp-title"><? echo $producto->name; ?></td>
+        if(isset($djs) && !empty($djs)) {
+            foreach($djs as $dj_obj) {
+                if($dj_obj->id == $remixer_id) {
+                    $remixer_name = $dj_obj->username;
+                    break;
+                }
+            }
+        }
 
-                                <td class="">
-                                    <? echo $producto->artist; ?>
-                                </td>
-                                <td class="">
-                                    <? if($producto->version!=null){ ?>
-                                        <? echo $producto->version; ?>
-                                    <? } ?>
-                                </td>
-                                <td class="song-bpm ">
-                                    <? 
-                                       echo $producto->bpm;
-                                    ?>
+        $genre_name = 'General';
+        $genre_id = isset($audio->gender_id) ? $audio->gender_id : 0;
+        if(isset($generos) && !empty($generos)){
+            foreach($generos as $g){
+                if($g->id == $genre_id){
+                    $genre_name = $g->name;
+                    break;
+                }
+            }
+        }
+        ?>
+        <tr class="hover:bg-blue-50/50 transition-colors group border-b border-slate-50 last:border-0">
 
-                                </td>
-                                <td class="song-genero jp-genero ">
-                                     <? 
+            <td class="p-4 text-slate-400 whitespace-nowrap text-xs">
+                <? echo ($date != '') ? date('d M', strtotime($date)) : '-'; ?>
+            </td>
 
-                                        $key = array_search($producto->gender_id, array_column($generos, 'id'));
-                                        echo '<a href="'.base_url().'genero/'.$generos[$key]->id.'">'.$generos[$key]->name.'</a>';
-                                    ?>
-                                </td>
-                                <? 
-                                    // if(isset($this->session->userdata('is_user_tokens')==false)){   
-                                    //     $userdata=array(
-                                    //         'is_user_tokens'=>false,
-                                    //     );      
-                                    //     $this->session->set_userdata($userdata);
-                                    // }    
-                                ?>
-                                <? //if($this->session->userdata('is_user_tokens')==false&&$this->session->userdata('role')!='is_admin'){ ?>
-                                <? if($producto->gender_id==45){ ?>
-                                    <td>
-                                    <button class="song-btn addToCart btn btn-orange" data-id="<? echo $producto->id; ?>"> $<? echo $producto->price; ?></button>
-                                                <button class="btn btn-green anadido"><i class="fa fa-check"></i>Añadido - Ver Carrito</button>
-                                    </td>
-                                <? }else{ ?>
-                                    <? if(MONEY_PAYMENTS){ ?>
-                                        <? if($this->session->userdata('is_user_tokens')==false){ ?>
-                                            <td class="tcenter">    
-                                                <button class="song-btn addToCart btn btn-orange" data-id="<? echo $producto->id; ?>">$<? echo $producto->price; ?></button>
-                                                <button class="btn btn-green anadido"><i class="fa fa-check"></i>Añadido</button>
-                                            </td>
-                                        <? }else{ ?>
-                                            <td class="tcenter">    
-                                                <button class="song-btn downloadButton btn btn-orange" data-id="<? echo $producto->id; ?>"><i class="fa fa-download"></i></button>
-                                            </td>
-                                        <? } ?>
-                                    <? }else{ ?>
-                                        <td class="tcenter">    
-                                            <button class="song-btn downloadButton btn btn-orange" data-id="<? echo $producto->id; ?>"><i class="fa fa-download"></i></button>
-                                        </td>
-                                    <? } ?>
-                                <? } ?>
-                            </tr> 
-                            <?
-                            }
-                        }else{
-                            echo '<tr><td>No hemos encontrado productos.</td></tr>';
-                        }
-                    ?>
-                    </tbody>
-                </table>
+            <td class="p-4 text-center">
+                <? $img_cover = base_url('audios/cover_mp3/' . $audio->id); ?>
+
+                <a href="javascript:;" class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 group-hover:bg-primary group-hover:text-white transition-all shadow-sm"
+                   data-id="<? echo $audio->id; ?>"
+                   data-demo="<? echo base_url().'assets/products/demos/'.$preview; ?>"
+                   data-cover="<? echo $img_cover; ?>"
+                   data-title="<? echo $title; ?>"
+                   data-artist="<? echo $artist; ?>">
+                    <i class="fa fa-play text-xs ml-0.5"></i>
+                </a>
+            </td>
+
+            <td class="p-4 font-bold text-slate-900 text-sm">
+                <? echo $title; ?>
+                <? if(isset($audio->is_new) && $audio->is_new == 1) { ?>
+                    <span class="ml-2 px-1.5 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold uppercase rounded tracking-wide">NEW</span>
+                <? } ?>
+            </td>
+
+            <td class="p-4 text-slate-500 text-sm">
+                <span class="bg-slate-50 text-slate-600 px-2 py-1 rounded border border-slate-100 text-xs">
+                    <? echo $version; ?>
+                </span>
+            </td>
+
+            <td class="p-4 text-slate-600 text-sm font-medium">
+                <? echo $artist; ?>
+            </td>
+
+            <td class="p-4">
+                <a href="<? echo base_url('remixers/'.$remixer_id); ?>" class="flex items-center gap-2 hover:text-blue-700 transition-colors font-semibold text-sm">
+                    <i class="fa-solid fa-user-music text-xs opacity-50"></i>
+                    <? echo $remixer_name; ?>
+                </a>
+            </td>
+
+            <td class="p-4 text-slate-400 font-mono text-xs">
+                <? echo $bpm; ?>
+            </td>
+
+            <td class="p-4">
+                <a href="<? echo base_url('genero/'.$genre_id); ?>" class="text-slate-500 hover:text-primary transition-colors text-xs font-medium">
+                    <? echo $genre_name; ?>
+                </a>
+            </td>
+
+            <td class="p-4 text-center">
+                <?
+                $is_logged = $this->session->userdata('is_logued_in') ? 1 : 0;
+
+                $is_unlimited = $this->session->userdata('is_user_unlimited');
+                $tokens = $this->session->userdata('tokens');
+                $has_access = ($is_unlimited || $tokens > 0) ? 1 : 0;
+                ?>
+
+                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
+                        data-logged="<? echo $is_logged; ?>"
+                        data-access="<? echo $has_access; ?>"
+                        data-id="<? echo $audio->id; ?>"
+                        title="Descargar">
+                    <i class="fa fa-download"></i>
+                </button>
+            </td>
+        </tr>
+    <? }
+} else { ?>
+    <tr>
+        <td colspan="9" class="p-12 text-center text-slate-400">
+            <div class="flex flex-col items-center justify-center">
+                <i class="fa-solid fa-music text-3xl mb-2 opacity-30"></i>
+                <p>No remixes found.</p>
+            </div>
+        </td>
+    </tr>
+<? } ?>
