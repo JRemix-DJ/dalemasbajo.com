@@ -386,6 +386,177 @@
         });
 
     });
+
+    var audio = document.getElementById('main-audio-element');
+    var playBtn = $('#player-play-btn');
+    var icon = playBtn.find('i');
+
+    // Variables de Progreso
+    var progressBar = $('#progress-bar');
+    var progressThumb = $('#progress-thumb');
+    var progressContainer = $('#progress-container');
+    var currentTimeEl = $('#current-time');
+    var totalTimeEl = $('#total-time');
+
+    // Variables Volumen
+    var volumeSlider = $('#volume-slider');
+
+    // Helper: Formato mm:ss
+    function formatTime(seconds) {
+        if(isNaN(seconds)) return "0:00";
+        var min = Math.floor(seconds / 60);
+        var sec = Math.floor(seconds % 60);
+        return min + ":" + (sec < 10 ? "0" + sec : sec);
+    }
+
+    // 1. CLICK EN CUALQUIER BOTÓN PLAY DE LA WEB (Inicio)
+    $(document).on('click', '.play_btn', function(e) {
+        e.preventDefault();
+
+        var btn = $(this);
+        var demoUrl = btn.data('demo');
+        var title = btn.data('title');
+        var artist = btn.data('artist');
+        var cover = btn.data('cover');
+        var id = btn.data('id');
+
+        // Buscar datos de descarga (Smart Download)
+        var originalDownloadBtn;
+        if(btn.closest('tr').length > 0) {
+            originalDownloadBtn = btn.closest('tr').find('.btn-smart-download');
+        } else if(btn.closest('.group').length > 0) {
+            // Lógica para cards (si aplica)
+        }
+
+        // UI Updates
+        $('#player-title').text(title);
+        $('#player-artist').text(artist);
+        $('#player-cover').attr('src', cover);
+
+        // Configurar botón descarga del player
+        var playerDlBtn = $('#player-download-btn');
+        playerDlBtn.data('id', id);
+
+        if(originalDownloadBtn && originalDownloadBtn.length) {
+            playerDlBtn.data('logged', originalDownloadBtn.data('logged'));
+            playerDlBtn.data('access', originalDownloadBtn.data('access'));
+        } else {
+            // Fallbacks globales PHP
+            playerDlBtn.data('logged', '<? echo $this->session->userdata("is_logued_in") ? 1 : 0; ?>');
+            playerDlBtn.data('access', '<? echo ($this->session->userdata("is_user_unlimited") || $this->session->userdata("tokens") > 0) ? 1 : 0; ?>');
+        }
+
+        // Cargar Audio
+        if(audio.src !== demoUrl) {
+            audio.src = demoUrl;
+            audio.load();
+            // Reset UI
+            progressBar.css('width', '0%');
+            progressThumb.css('left', '0%');
+            currentTimeEl.text("0:00");
+            totalTimeEl.text("0:00");
+        }
+
+        playAudio();
+        $('#music-player-bar').removeClass('translate-y-full');
+    });
+
+    // 2. CONTROLES DE REPRODUCCIÓN
+    playBtn.click(function() {
+        if (audio.paused) playAudio();
+        else pauseAudio();
+    });
+
+    function playAudio() {
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                icon.removeClass('fa-play pl-1').addClass('fa-pause');
+            }).catch(error => console.log(error));
+        }
+    }
+
+    function pauseAudio() {
+        audio.pause();
+        icon.removeClass('fa-pause').addClass('fa-play pl-1');
+    }
+
+    // 3. SALTOS DE TIEMPO (+10s / -10s)
+    $('#skip-back-btn').click(function() {
+        audio.currentTime = Math.max(0, audio.currentTime - 10);
+    });
+
+    $('#skip-fwd-btn').click(function() {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+    });
+
+    // 4. BARRA DE PROGRESO Y TIEMPOS
+    audio.addEventListener('loadedmetadata', function() {
+        totalTimeEl.text(formatTime(audio.duration));
+    });
+
+    audio.addEventListener('timeupdate', function() {
+        if (!isNaN(audio.duration)) {
+            var percent = (audio.currentTime / audio.duration) * 100;
+            progressBar.css('width', percent + '%');
+            progressThumb.css('left', percent + '%');
+            currentTimeEl.text(formatTime(audio.currentTime));
+        }
+    });
+
+    audio.addEventListener('ended', function() {
+        pauseAudio();
+        progressBar.css('width', '0%');
+        progressThumb.css('left', '0%');
+        icon.removeClass('fa-pause').addClass('fa-play pl-1');
+    });
+
+    // Click en la barra para buscar
+    progressContainer.click(function(e) {
+        var width = $(this).width();
+        var clickX = e.offsetX;
+        var duration = audio.duration;
+        if(!isNaN(duration)){
+            audio.currentTime = (clickX / width) * duration;
+        }
+    });
+
+    // 5. VOLUMEN CON COLOR VISUAL
+    function updateVolumeVisual(val) {
+        // Truco CSS: Actualiza el background gradient basado en el porcentaje
+        var percentage = val * 100;
+        volumeSlider.css('background', `linear-gradient(to right, #2563EB ${percentage}%, #e2e8f0 ${percentage}%)`);
+
+        // Iconos
+        var iconVol = $('#mute-btn i');
+        iconVol.removeClass('fa-volume-high fa-volume-low fa-volume-off fa-volume-xmark');
+        if(val == 0) iconVol.addClass('fa-volume-xmark');
+        else if(val < 0.5) iconVol.addClass('fa-volume-low');
+        else iconVol.addClass('fa-volume-high');
+    }
+
+    // Inicializar visualmente al cargar
+    updateVolumeVisual(1);
+
+    volumeSlider.on('input', function() {
+        var val = $(this).val();
+        audio.volume = val;
+        updateVolumeVisual(val);
+    });
+
+    $('#mute-btn').click(function() {
+        if(audio.volume > 0) {
+            $(this).data('prev-vol', audio.volume);
+            audio.volume = 0;
+            volumeSlider.val(0);
+            updateVolumeVisual(0);
+        } else {
+            var prev = $(this).data('prev-vol') || 1;
+            audio.volume = prev;
+            volumeSlider.val(prev);
+            updateVolumeVisual(prev);
+        }
+    });
 </script>
 </body>
 </html>
