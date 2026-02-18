@@ -7,13 +7,13 @@
         <div class="container relative z-10 flex flex-col items-center">
             <div class="clearfix text-uppercase">
                 <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2 drop-shadow-md">
-                    Buscador
+                    Searcher
                 </h1>
                 <cite class="text-blue-200 font-medium not-italic">DALE MAS BAJO</cite>
 
                 <? if(isset($_GET['sname']) && !empty($_GET['sname'])) { ?>
                     <div class="mt-4 bg-white/10 backdrop-blur-sm px-4 py-1 rounded-full border border-white/20">
-                        <span class="text-white text-sm">Resultados para: <b class="text-primary-300">"<? echo $_GET['sname']; ?>"</b></span>
+                        <span class="text-white text-sm">Results for: <b class="text-primary-300">"<? echo $_GET['sname']; ?>"</b></span>
                     </div>
                 <? } ?>
             </div>
@@ -179,16 +179,13 @@
 </style>
 
 <script>
-    // Usamos $(function() {}) que es el shorthand seguro de document.ready
     $(function() {
         console.log("--- INICIANDO SISTEMA DE AUDIO DEBUG ---");
 
-        // 1. REFERENCIAS AL DOM
         var audio = document.getElementById('main-audio-element');
         var playBtn = $('#player-play-btn');
-        var icon = playBtn.find('i'); // El icono dentro del botón flotante
+        var icon = playBtn.find('i');
 
-        // Controles de barra y tiempo
         var progressBar = $('#progress-bar');
         var progressThumb = $('#progress-thumb');
         var progressContainer = $('#progress-container');
@@ -207,11 +204,6 @@
             return min + ":" + (sec < 10 ? "0" + sec : sec);
         }
 
-        // ==========================================
-        // A. EVENTOS NATIVOS DEL AUDIO (LA VERDAD ABSOLUTA)
-        // ==========================================
-        // Los iconos SOLO cambian aquí. No en los clicks.
-
         audio.addEventListener('play', function() {
             console.log("EVENTO: El audio comenzó a sonar -> Cambiando icono a PAUSE");
             icon.removeClass('fa-play pl-1').addClass('fa-pause');
@@ -224,7 +216,6 @@
 
         audio.addEventListener('ended', function() {
             console.log("EVENTO: Canción terminada");
-            // No necesitamos llamar a pause(), el evento 'pause' salta solo al terminar
             progressBar.css('width', '0%');
             progressThumb.css('left', '0%');
             currentTimeEl.text("0:00");
@@ -248,11 +239,8 @@
             console.error("ERROR DE AUDIO:", e);
         });
 
-        // ==========================================
-        // B. CONTROL DEL BOTÓN PLAY/PAUSE (STICKY)
-        // ==========================================
         playBtn.off('click').on('click', function(e) {
-            e.preventDefault(); // IMPORTANTE: Evita comportamiento de form submit
+            e.preventDefault();
             console.log("CLICK: Botón flotante presionado");
 
             if (audio.paused) {
@@ -269,9 +257,6 @@
             }
         });
 
-        // ==========================================
-        // C. CLICS EN LA TABLA DE CANCIONES (PLAYLIST)
-        // ==========================================
         $(document).on('click', '.play_btn', function(e) {
             e.preventDefault();
             var btn = $(this);
@@ -284,16 +269,13 @@
             var cover = btn.data('cover');
             var id = btn.data('id');
 
-            // Actualizar Info Visual
             $('#player-title').text(title);
             $('#player-artist').text(artist);
             $('#player-cover').attr('src', cover);
 
-            // Gestionar botón de descarga asociado
             var playerDlBtn = $('#player-download-btn');
             playerDlBtn.data('id', id);
 
-            // Buscar si hay botón de descarga en la fila para copiar sus permisos
             var originalDownloadBtn = btn.closest('tr').find('.btn-smart-download');
             if(originalDownloadBtn.length) {
                 playerDlBtn.data('logged', originalDownloadBtn.data('logged'));
@@ -304,13 +286,9 @@
                 playerDlBtn.data('access', '<? echo ($this->session->userdata("is_user_unlimited") || $this->session->userdata("tokens") > 0) ? 1 : 0; ?>');
             }
 
-            // LÓGICA CRÍTICA: ¿Es la misma canción o una nueva?
-
-            // Decodificamos URLs para comparar correctamente (por si hay espacios o %20)
             var currentSrc = decodeURIComponent(audio.src);
             var newSrc = decodeURIComponent(demoUrl);
 
-            // Si la URL es la misma (está sonando la misma canción)
             if (currentSrc === newSrc || audio.src.indexOf(demoUrl) !== -1) {
                 console.log("LOGICA TABLA: Es la misma canción.");
                 if (audio.paused) {
@@ -335,10 +313,6 @@
             $('#music-player-bar').removeClass('translate-y-full');
         });
 
-        // ==========================================
-        // D. LÓGICA DE VOLUMEN Y MUTE (CORREGIDA)
-        // ==========================================
-
         function updateVolumeVisual(val) {
             var percentage = val * 100;
             volumeSlider.css('background', `linear-gradient(to right, #2563EB ${percentage}%, #e2e8f0 ${percentage}%)`);
@@ -355,13 +329,12 @@
             }
         }
 
-        // Inicializar
         updateVolumeVisual(1);
 
         volumeSlider.on('input', function() {
             var val = parseFloat($(this).val());
             audio.volume = val;
-            audio.muted = (val === 0); // Si es 0, activar muted nativo
+            audio.muted = (val === 0);
             updateVolumeVisual(val);
         });
 
@@ -378,17 +351,14 @@
                 updateVolumeVisual(prevVol);
             } else {
                 // MUTEAR
-                $(this).data('prev-vol', audio.volume); // Guardar volumen actual
-                audio.muted = true; // PROPIEDAD NATIVA (Esto asegura silencio total)
+                $(this).data('prev-vol', audio.volume);
+                audio.muted = true;
                 audio.volume = 0;
                 volumeSlider.val(0);
                 updateVolumeVisual(0);
             }
         });
 
-        // ==========================================
-        // E. PAGINACIÓN AJAX
-        // ==========================================
         $(document).on('click', '#pagination-container a', function(e) {
             e.preventDefault();
             var url = $(this).attr('href');

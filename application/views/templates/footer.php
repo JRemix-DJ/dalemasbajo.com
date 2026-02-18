@@ -9,7 +9,7 @@
     <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm close-modal-trigger"></div>
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100 transform transition-all">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <h3 class="text-lg font-bold text-slate-900">Iniciar Sesión</h3>
+            <h3 class="text-lg font-bold text-slate-900">Sign In</h3>
             <button class="close-modal-btn text-gray-400 hover:text-red-500 transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
@@ -21,19 +21,19 @@
                     <input type="email" id="login-email" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-slate-700">Contraseña</label>
+                    <label class="text-sm font-medium text-slate-700">Password</label>
                     <input type="password" id="login-password" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
                 </div>
                 <div class="text-right">
-                    <a href="#" class="trigger-recover text-sm text-primary font-medium hover:underline">¿Olvidaste tu contraseña?</a>
+                    <a href="#" class="trigger-recover text-sm text-primary font-medium hover:underline">Forgot your password?</a>
                 </div>
                 <button type="button" id="btn-ingresar-accion" class="w-full py-3 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-primary/20">
-                    Ingresar
+                    Log in
                 </button>
             </form>
         </div>
         <div class="p-4 bg-gray-50 text-center text-sm border-t border-gray-100">
-            ¿No tienes cuenta? <a href="#" class="trigger-register text-primary font-bold hover:underline">Regístrate gratis</a>
+            Don't have an account? <a href="#" class="trigger-register text-primary font-bold hover:underline">Sign up for free</a>
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
     <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm close-modal-trigger"></div>
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <h3 class="text-lg font-bold text-slate-900">Crear Cuenta</h3>
+            <h3 class="text-lg font-bold text-slate-900">Create Account</h3>
             <button class="close-modal-btn text-gray-400 hover:text-red-500 transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
@@ -54,21 +54,21 @@
                     <input type="email" id="reg-email" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium text-slate-700">Usuario</label>
+                    <label class="text-sm font-medium text-slate-700">User</label>
                     <input type="text" id="reg-username" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div class="space-y-2">
-                        <label class="text-sm font-medium text-slate-700">Contraseña</label>
+                        <label class="text-sm font-medium text-slate-700">Password</label>
                         <input type="password" id="reg-pass" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium text-slate-700">Repetir</label>
+                        <label class="text-sm font-medium text-slate-700">Repeat Password</label>
                         <input type="password" id="reg-repass" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
                     </div>
                 </div>
-                <button type="button" id="btn-registrar-accion" class="w-full py-3 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-800 transition-colors mt-2">
-                    Registrarme
+                <button type="button" id="btn-registrar-accion" class="w-full py-3 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-primary/20">
+                    Sign Up
                 </button>
             </form>
         </div>
@@ -78,12 +78,12 @@
 <div id="modal-recover" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
     <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm close-modal-trigger"></div>
     <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 border border-gray-100">
-        <h3 class="text-lg font-bold mb-4 text-slate-900">Recuperar Contraseña</h3>
+        <h3 class="text-lg font-bold mb-4 text-slate-900">Recover Password</h3>
         <form class="space-y-4">
-            <input type="email" id="rec-email" placeholder="Tu Email" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
-            <button type="button" id="btn-recuperar-accion" class="w-full py-2 bg-primary text-white font-bold rounded-lg hover:bg-blue-600">Enviar</button>
+            <input type="email" id="rec-email" placeholder="Your e-mail" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary">
+            <button type="button" id="btn-recuperar-accion" class="w-full py-2 bg-primary text-white font-bold rounded-lg hover:bg-blue-600">Send</button>
         </form>
-        <button class="close-modal-btn mt-4 text-sm text-gray-500 w-full text-center hover:text-slate-900">Cancelar</button>
+        <button class="close-modal-btn mt-4 text-sm text-gray-500 w-full text-center hover:text-slate-900">Cancel</button>
     </div>
 </div>
 
@@ -107,36 +107,39 @@
 
             <div class="text-center mt-2">
                 <h3 class="text-2xl font-black text-slate-900 mb-2 leading-tight">
-                    Lleva tus Sets al <br> <span class="text-primary">Siguiente Nivel</span>
+                    Take your sets <br> <span class="text-primary">To the next level</span>
                 </h3>
                 <p class="text-sm text-slate-500 mb-6 px-4">
-                    Deja de usar rips de baja calidad. Obtén acceso instantáneo a música lista para clubes, versiones exclusivas y descargas ilimitadas.
+                    Stop using low-quality music. Get instant access to club-ready remixes, exclusive versions, and high-speed downloads.
                 </p>
 
                 <div class="text-left bg-slate-50 rounded-xl p-4 space-y-3 mb-6 border border-slate-100">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-check-circle text-primary text-lg"></i>
-                        <span class="text-sm font-semibold text-slate-700">Descargas High-Speed Directas</span>
+                        <span class="text-sm font-semibold text-slate-700">High download speed</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-bolt text-primary text-lg"></i>
-                        <span class="text-sm font-semibold text-slate-700">Versiones Intro & Outro Exclusivas</span>
+                        <span class="text-sm font-semibold text-slate-700">Intro, extended, remix, breakdown, transition, and more...</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-gem text-primary text-lg"></i>
-                        <span class="text-sm font-semibold text-slate-700">Calidad Premium</span>
+                        <span class="text-sm font-semibold text-slate-700">High-quality audio</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-fire text-primary text-lg"></i>
-                        <span class="text-sm font-semibold text-slate-700">Actualizaciones Diarias</span>
+                        <span class="text-sm font-semibold text-slate-700">Daily updates</span>
                     </div>
                 </div>
+                <p class="text-sm text-slate-500 mb-6 px-4">
+                    Our audio files are 100% compatible with the most popular DJ software in the world
+                </p>
             </div>
         </div>
 
         <div class="bg-gray-50 px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6 border-t border-gray-100">
             <a href="<? echo base_url('planes'); ?>" class="inline-flex w-full justify-center rounded-xl bg-primary px-3 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all hover:scale-[1.02] sm:ml-3">
-                Get Started - Desbloquear Acceso
+                Get Started
             </a>
         </div>
     </div>
@@ -148,33 +151,33 @@
 
             <div class="col-span-1 md:col-span-1 flex flex-col gap-4">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2">
-                    <img src="<? echo base_url(); ?>images/white-logo.png" alt="dalemasbajowhite" class="h-12 w-auto object-contain">
+                    <img src="<? echo base_url(); ?>images/HORIZONTAL--video.png" alt="dalemasbajowhite" class="h-12 w-auto object-contain">
                 </a>
                 <p class="text-sm text-blue-100 leading-relaxed">
-                    Descubre nuevos remixes cada día en nuestro sitio web.
+                    Discover new remixes every day on our website.
                 </p>
             </div>
 
             <div>
-                <h3 class="font-semibold text-white mb-4">Plataforma</h3>
+                <h3 class="font-semibold text-white mb-4"></h3>
                 <ul class="space-y-3 text-sm text-blue-100">
-                    <li><a href="<? echo base_url('drops'); ?>" class="hover:text-gray-300 transition-colors">Drops Exclusivos</a></li>
-                    <li><a href="<? echo base_url('planes'); ?>" class="hover:text-gray-300 transition-colors">Planes de Suscripción</a></li>
-                    <li><a href="<? echo base_url('search/?sname=&sgenero=&sremixers='); ?>" class="hover:text-gray-300 transition-colors">Explorar Remixes</a></li>
+                    <li><a href="<? echo base_url('drops'); ?>" class="hover:text-gray-300 transition-colors">Exclusive Drops</a></li>
+                    <li><a href="<? echo base_url('planes'); ?>" class="hover:text-gray-300 transition-colors">Subscription Plans</a></li>
+                    <li><a href="<? echo base_url('search/?sname=&sgenero=&sremixers='); ?>" class="hover:text-gray-300 transition-colors">Explore Remixes</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="font-semibold text-white mb-4">Ayuda</h3>
+                <h3 class="font-semibold text-white mb-4"></h3>
                 <ul class="space-y-3 text-sm text-blue-100">
-                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors">Preguntas Frecuentes</a></li>
-                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors">Términos y Condiciones</a></li>
+                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors">FAQ</a></li>
+                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors">Terms and Conditions</a></li>
                     <li><a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-gray-300 transition-colors">Be a Remixer</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="font-semibold text-white mb-4">Síguenos</h3>
+                <h3 class="font-semibold text-white mb-4">Follow Us</h3>
                 <ul class="space-x-3 text-blue-100">
                     <a href="https://www.facebook.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
                         <i class="fa-brands fa-facebook-f text-lg"></i>
@@ -191,7 +194,7 @@
 
         <div class="border-t border-white/10 mt-12 pt-8 flex justify-center text-center">
             <p class="text-sm text-blue-200">
-                &copy; <? echo date('Y'); ?> Dale Más Bajo. Todos los derechos reservados.
+                &copy; <? echo date('Y'); ?> Dale Mas Bajo. All rights reserved.
             </p>
         </div>
     </div>
@@ -208,7 +211,6 @@
 <script>
     $(document).ready(function() {
 
-        // ================= GESTIÓN CENTRALIZADA DE MODALES =================
         function cerrarTodos() {
             $('#modal-login, #modal-register, #modal-recover, #modal-upsell').addClass('modal-hidden').removeClass('modal-flex');
         }
@@ -220,7 +222,6 @@
             });
         });
 
-        // ================= ACTIVADORES =================
         // Abrir Login
         $(document).on('click', '[data-target="#myModal"]', function(e) {
             e.preventDefault(); e.stopPropagation();
@@ -242,7 +243,6 @@
             $('#modal-recover').removeClass('modal-hidden').addClass('modal-flex').hide().fadeIn(200);
         });
 
-        // ================= LÓGICA SMART DOWNLOAD (CORREGIDA FINAL) =================
         $(document).on('click', '.btn-smart-download', function(e) {
             e.preventDefault();
 
@@ -272,10 +272,8 @@
                             $('.token-count').text(data.total_tokens);
                         }
 
-                        // 2. INICIAR LA DESCARGA
                         window.location.href = baseUrl + 'audios/download/' + productId;
 
-                        // 3. RECARGAR PÁGINA (Para asegurar sincronización total)
                         setTimeout(function() {
                             window.location.reload();
                         }, 1500);
@@ -298,7 +296,6 @@
             });
         });
 
-        // ================= AJAX LOGIN =================
         $('#btn-ingresar-accion').click(function() {
             var btn = $(this);
             var originalText = btn.text();
@@ -327,7 +324,6 @@
             });
         });
 
-        // ================= AJAX REGISTRO =================
         $('#btn-registrar-accion').click(function() {
             var btn = $(this);
             var originalText = btn.text();
@@ -407,7 +403,6 @@
         return min + ":" + (sec < 10 ? "0" + sec : sec);
     }
 
-    // 1. CLICK EN CUALQUIER BOTÓN PLAY DE LA WEB (Inicio)
     $(document).on('click', '.play_btn', function(e) {
         e.preventDefault();
 
@@ -418,12 +413,12 @@
         var cover = btn.data('cover');
         var id = btn.data('id');
 
-        // Buscar datos de descarga (Smart Download)
+        // Buscar datos de descarga
         var originalDownloadBtn;
         if(btn.closest('tr').length > 0) {
             originalDownloadBtn = btn.closest('tr').find('.btn-smart-download');
         } else if(btn.closest('.group').length > 0) {
-            // Lógica para cards (si aplica)
+            // Lógica para cards
         }
 
         // UI Updates
@@ -459,7 +454,6 @@
         $('#music-player-bar').removeClass('translate-y-full');
     });
 
-    // 2. CONTROLES DE REPRODUCCIÓN
     playBtn.click(function() {
         if (audio.paused) playAudio();
         else pauseAudio();
@@ -479,7 +473,6 @@
         icon.removeClass('fa-pause').addClass('fa-play pl-1');
     }
 
-    // 3. SALTOS DE TIEMPO (+10s / -10s)
     $('#skip-back-btn').click(function() {
         audio.currentTime = Math.max(0, audio.currentTime - 10);
     });
@@ -488,7 +481,6 @@
         audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
     });
 
-    // 4. BARRA DE PROGRESO Y TIEMPOS
     audio.addEventListener('loadedmetadata', function() {
         totalTimeEl.text(formatTime(audio.duration));
     });
@@ -519,9 +511,7 @@
         }
     });
 
-    // 5. VOLUMEN CON COLOR VISUAL
     function updateVolumeVisual(val) {
-        // Truco CSS: Actualiza el background gradient basado en el porcentaje
         var percentage = val * 100;
         volumeSlider.css('background', `linear-gradient(to right, #2563EB ${percentage}%, #e2e8f0 ${percentage}%)`);
 
@@ -533,7 +523,6 @@
         else iconVol.addClass('fa-volume-high');
     }
 
-    // Inicializar visualmente al cargar
     updateVolumeVisual(1);
 
     volumeSlider.on('input', function() {

@@ -56,16 +56,14 @@
         :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'"
         class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-gray-100">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
-
-            <div class="flex-shrink-0 flex items-center">
+    <div class="w-full px-4 sm:px-6 lg:px-10">
+        <div class="flex items-center h-20"> <div class="flex-shrink-0 flex items-center">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2 group decoration-0">
-                    <img src="<? echo base_url(); ?>images/logo.png" alt="dalemasbajo" class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    <img src="<? echo base_url(); ?>images/aza.png" alt="dalemasbajo" class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                 </a>
             </div>
 
-            <nav class="hidden lg:flex items-center gap-8">
+            <nav class="hidden lg:flex flex-1 items-center justify-center gap-8">
                 <a href="<? echo base_url('audios');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Audios</a>
 
                 <div class="relative group h-20 flex items-center cursor-pointer">
@@ -85,13 +83,13 @@
 
                 <div class="relative group h-20 flex items-center cursor-pointer">
                     <button class="text-sm font-semibold text-slate-600 group-hover:text-primary flex items-center gap-1 focus:outline-none">
-                        Géneros <i class="fa-solid fa-chevron-down text-[10px] opacity-50 ml-1"></i>
+                        Genre <i class="fa-solid fa-chevron-down text-[10px] opacity-50 ml-1"></i>
                     </button>
                     <div class="absolute top-16 -left-32 w-[700px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
                         <div class="grid grid-cols-4 gap-x-2 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
                             <? if(isset($generos) && !empty($generos)) { foreach($generos as $genre){ ?>
                                 <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300 inline-block mr-2"></span><? echo $genre->name; ?>
+                                    <span class="bg-slate-300 inline-block mr-2"></span><? echo $genre->name; ?>
                                 </a>
                             <? } } ?>
                         </div>
@@ -102,33 +100,9 @@
                 <a href="<? echo base_url('planes');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Plans</a>
                 <a href="<? echo base_url('pages/become_a_member');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Be a remixer</a>
                 <a href="<? echo base_url('pages/request_remix');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Request Your Remix</a>
-            </nav>
 
-            <div class="flex items-center gap-4">
-                <div class="hidden md:block h-6 w-px bg-gray-200"></div>
-
-                <? if($this->session->userdata('is_logued_in')){
-                    // Definimos variables para limpieza del código
-                    $tokens = (int)$this->session->userdata('tokens');
-                    $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
-                    ?>
-
-                    <? if($is_unlimited || $tokens > 0) { ?>
-                        <div class="hidden md:flex flex-col items-end mr-2">
-                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Descargas</span>
-                            <? if($is_unlimited){ ?>
-                                <div class="flex items-center gap-1 text-primary font-bold text-sm">
-                                    <i class="fa-solid fa-infinity"></i> <span>PRO</span>
-                                </div>
-                            <? } else { ?>
-                                <div class="flex items-center gap-1 font-bold text-sm text-slate-700">
-                                    <span class="token-count"><? echo $tokens; ?></span>
-                                    <i class="fa-solid fa-bolt text-yellow-400 text-xs"></i>
-                                </div>
-                            <? } ?>
-                        </div>
-                    <? } ?>
-                    <div class="relative group" x-data="{ open: false }">
+                <? if($this->session->userdata('is_logued_in')){ ?>
+                    <div class="relative group ml-4" x-data="{ open: false }">
                         <button @click="open = !open" @click.outside="open = false" class="flex items-center gap-3 focus:outline-none">
                             <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/30">
                                 <? echo substr($this->session->userdata('username'), 0, 1); ?>
@@ -142,26 +116,50 @@
                              x-transition:enter-end="transform opacity-100 scale-100"
                              class="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl p-1 z-50"
                              style="display: none;">
-                            <a href="<? echo base_url(); ?>micuenta" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">Mi Cuenta</a>
+                            <a href="<? echo base_url(); ?>micuenta" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">My Account</a>
                             <div class="h-px bg-gray-100 my-1"></div>
-                            <a href="<? echo base_url(); ?>login/logout/" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">Cerrar Sesión</a>
+                            <a href="<? echo base_url(); ?>login/logout/" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">Log out</a>
                         </div>
                     </div>
                 <? }else{ ?>
-                    <div class="hidden md:flex items-center gap-2">
+                    <div class="hidden md:flex items-center gap-2 ml-4">
                         <a href="#" data-toggle="modal" data-target="#myModal" class="px-4 py-2 text-sm font-bold text-slate-600 hover:text-primary transition-colors">
-                            Ingresar
+                            Sign in
                         </a>
                         <a href="#" data-toggle="modal" data-target="#myModalRegistrarme" class="px-5 py-2.5 text-sm font-bold text-white bg-primary rounded-full hover:bg-blue-700 shadow-lg shadow-primary/30 transition-all hover:scale-105">
-                            Registrarse
+                            Sign Up
                         </a>
                     </div>
                 <? } ?>
+            </nav>
 
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 text-slate-700 hover:text-primary focus:outline-none">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
+            <div class="hidden md:flex items-center justify-end">
+                <? if($this->session->userdata('is_logued_in')){
+                    $tokens = (int)$this->session->userdata('tokens');
+                    $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
+
+                    if($is_unlimited || $tokens > 0) { ?>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Downloads</span>
+                            <? if($is_unlimited){ ?>
+                                <div class="flex items-center gap-1 text-primary font-bold text-sm">
+                                    <i class="fa-solid fa-infinity"></i> <span>UNLIMITED</span>
+                                </div>
+                            <? } else { ?>
+                                <div class="flex items-center gap-1 font-bold text-sm text-slate-700">
+                                    <span class="token-count"><? echo $tokens; ?></span>
+                                    <i class="fa-solid fa-bolt text-yellow-400 text-xs"></i>
+                                </div>
+                            <? } ?>
+                        </div>
+                    <? }
+                } ?>
             </div>
+
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 text-slate-700 hover:text-primary focus:outline-none ml-auto">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+
         </div>
     </div>
 
@@ -178,16 +176,15 @@
         <div class="p-4 space-y-2">
 
             <? if($this->session->userdata('is_logued_in')){
-                // Reutilizamos la lógica para el móvil
                 $tokens = (int)$this->session->userdata('tokens');
                 $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
 
                 if($is_unlimited || $tokens > 0) {
                     ?>
                     <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg mb-2">
-                        <span class="text-sm font-bold text-slate-600">Mis Créditos:</span>
+                        <span class="text-sm font-bold text-slate-600">My Credits:</span>
                         <? if($is_unlimited){ ?>
-                            <span class="text-sm font-bold text-primary flex items-center gap-1"><i class="fa-solid fa-infinity"></i> ILIMITADO</span>
+                            <span class="text-sm font-bold text-primary flex items-center gap-1"><i class="fa-solid fa-infinity"></i> UNLIMITED</span>
                         <? } else { ?>
                             <span class="text-sm font-bold text-slate-900"><? echo $tokens; ?> <i class="fa-solid fa-bolt text-yellow-500"></i></span>
                         <? } ?>
@@ -212,7 +209,7 @@
             </div>
 
             <div class="h-px bg-gray-100 my-2"></div>
-            <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Géneros</div>
+            <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Genre</div>
             <div class="grid grid-cols-2 gap-2 mt-2">
                 <? if(isset($generos) && !empty($generos)) { foreach($generos as $genre){ ?>
                     <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">

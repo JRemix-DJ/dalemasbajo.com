@@ -9,13 +9,13 @@
                 <input type="text" name="sname" id="sname"
                        value="<? echo isset($_GET['sname']) ? $_GET['sname'] : ''; ?>"
                        class="block w-full p-3 pl-10 text-sm text-slate-900 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
-                       placeholder="Buscar remix, artista o título..." autocomplete="off">
+                       placeholder="Search for remix, artist or title..." autocomplete="off">
             </div>
 
             <div class="w-full md:w-48">
                 <div class="relative">
                     <select name="sgenero" id="sgenero" class="block w-full p-3 text-sm text-slate-700 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
-                        <option value="">Género</option>
+                        <option value="">Genre</option>
                         <? if(isset($generos)){ foreach($generos as $g) {
                             $selected = (isset($_GET['sgenero']) && $_GET['sgenero'] == $g->id) ? 'selected' : '';
                             ?>
