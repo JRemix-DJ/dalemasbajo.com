@@ -61,6 +61,4 @@ class Checkout extends CI_Controller {
 		}
 		return $total;
 	}
-
-
 }

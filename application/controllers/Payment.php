@@ -75,47 +75,137 @@ class Payment extends CI_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 
+    public function done_tukuy(){
+        $post = file_get_contents('php://input');
+        $data = json_decode($post);
 
-	public function done_tukuy(){
-		$post  = file_get_contents('php://input');
-		$data = json_decode($post);
-		$plan = $this->plan_model->load_plan_info_by_amount($data->amount);
-		$where = [
-			'email'=> $data->client_email
-		];
-		$user = $this->users_model->get_user_where_array($where);
-		if(!$plan||!$user){
-			$title = "DMB - NUEVO PAGO DE ".$data->client_name." - No se ha podido aplicar";
-			$mensaje = "
-			Detalles de la transacción:<br>
-			Monto: ".$data->amount."<br>
-			Email: ".$data->client_email."<br>
-			Nombre: ".$data->client_name."<br>
-			Fecha: ".$data->date."<br>
-			Transaction Details: ".$data->transaction_details."<br>
-			Plan: ".$data->plan."<br>
-			Success: ".$data->success."<br>
-			";
-			$this->send_received_message($title, $mensaje);
-			return;
-		}
-		if($data->success=="done"){
-			$data_order = array(
-				'user_id'		=>	$user->id,
-				'date_order'	=> 	date("Y-m-d H:i:s"),
-				'total_price'	=> 	$plan->price,
-				'status'		=> 	1,
-				'is_plan'		=>	1,
-				'plan_id'		=>	$plan->id,
-				'txn_id'		=> 	$data->transaction_details
-			);
-			$order_id = $this->orders_model->create_order_plan($data_order);
-			$this->add_tokens_to_user($order_id);
-			$this->send_notification_mail($order_id, $renovacion = 0);
-			$this->send_received_message("DMB - SE PROCESO EL PAGO", json_encode($post));
-		}
+        if(isset($data->success) && $data->success == true){
 
-	}
+            $where = [
+                'email'=> $data->client_email
+            ];
+            $user = $this->users_model->get_user_where_array($where);
+
+            $plan = $this->plan_model->load_plan_info_by_amount($data->amount);
+
+            if(!$plan || !$user){
+                $title = "DMB - ERROR PAGO TUKUY - Usuario o Plan no encontrado";
+                $mensaje = "
+				Datos recibidos:<br>
+				Email Cliente: " . ($data->client_email ?? 'N/A') . "<br>
+				Monto: " . ($data->amount ?? '0') . "<br>
+				Detalle Error: El usuario no existe en BD o el monto no coincide con ningún plan.<br>
+				JSON Completo: " . $post;
+
+                $this->send_received_message($title, $mensaje);
+                http_response_code(400);
+                return;
+            }
+
+            $existing_order = $this->orders_model->get_by_txn_id($data->transaction_details);
+
+            if(!$existing_order){
+                $data_order = array(
+                    'user_id'		=>	$user->id,
+                    'date_order'	=> 	date("Y-m-d H:i:s"),
+                    'total_price'	=> 	$plan->price,
+                    'status'		=> 	1,
+                    'is_plan'		=>	1,
+                    'plan_id'		=>	$plan->id,
+                    'txn_id'		=> 	$data->transaction_details
+                );
+
+                $order_id = $this->orders_model->create_order_plan($data_order);
+
+                $this->add_tokens_to_user($order_id, 1);
+
+                $this->send_notification_mail($order_id, $renovacion = 0);
+
+
+                http_response_code(200); // OK para Tukuy
+                echo json_encode(['status' => 'success']);
+            } else {
+                http_response_code(200);
+                echo json_encode(['status' => 'already_processed']);
+            }
+
+        } else {
+            http_response_code(200);
+        }
+    }
+
+    public function send_notification_mail($order_id, $renovacion){
+
+        $config['protocol']    = 'smtp';
+        $config['smtp_host']    = SMTP_URL;
+        $config['smtp_port']    = SMTP_PORT;
+        $config['smtp_timeout'] = '7';
+        $config['smtp_user']    = SMTP_USER;
+        $config['smtp_pass']    = SMTP_KEY;
+        $config['charset']    = 'utf-8';
+        $config['newline']    = "\r\n";
+        $config['mailtype'] = 'html';
+        $config['validation'] = TRUE;
+
+        $this->email->initialize($config);
+
+        $this->email->from('admin@dalemasbajo.com', 'DALE MÁS BAJO');
+
+        $orden = $this->orders_model->load_order_info($order_id);
+
+        if($orden->cupon_id != null){
+            $cupon = $this->products_model->get_cupon_by_id($orden->cupon_id);
+        }
+
+        $user = $this->users_model->load_user_info($orden->user_id);
+
+        if($orden->is_plan){
+            $plan = $this->plan_model->load_plan_info($orden->plan_id);
+            $items[0]= (object) array(
+                'name' => $plan->name,
+                'tokens' => $plan->tokens,
+                'tokens_video' => $plan->tokens_video,
+                'duration' => $plan->duration,
+                'description' => $plan->description,
+                'ilimitado_activo' => $plan->ilimitado_activo
+            );
+        } else {
+            $items = $this->orders_model->load_order_items($order_id);
+        }
+
+        $this->email->to($user->email);
+
+        // Se envía a dalemasbajo y a sevelasquezro
+        $admin_emails = array('dalemasbajo@gmail.com', 'sevelasquezro@gmail.com');
+        $this->email->bcc($admin_emails);
+
+        // Asunto
+        if ($renovacion == 1) {
+            $mensaje_asunto = 'Gracias por renovar tu plan - Dale Más Bajo';
+        } else {
+            $mensaje_asunto = 'Confirmación de Compra - Dale Más Bajo';
+        }
+
+        $this->email->subject($mensaje_asunto);
+
+        // Datos para la vista
+        $data['items'] = $items;
+        $data['renovacion'] = $renovacion;
+        $data['user'] = $user;
+        $data['is_plan'] = $orden->is_plan;
+        $data['orden'] = $orden;
+        if($cupon){
+            $data['cupon'] = $cupon;
+        }
+
+        // Cargar vista de correo
+        $mail = $this->load->view('emails/payment', $data, TRUE);
+
+        $this->email->message($mail);
+
+        // Enviar
+        if($this->email->send()){} else {}
+    }
 
 	public function realizado(){
 		$this->session->unset_userdata('cart');
@@ -447,78 +537,6 @@ class Payment extends CI_Controller {
 		$this->email->message($data);
 		$this->email->send();
 	}
-
-	public function send_notification_mail($order_id=3742, $renovacion){
-
-		$config['protocol']    = 'smtp';
-		$config['smtp_host']    = SMTP_URL;
-		$config['smtp_port']    = SMTP_PORT;
-		$config['smtp_timeout'] = '7';
-		$config['smtp_user']    = SMTP_USER;
-		$config['smtp_pass']    = SMTP_KEY;
-		$config['charset']    = 'utf-8';
-		$config['newline']    = "\r\n";
-		$config['mailtype'] = 'html'; // or html
-		$config['validation'] = TRUE; // bool whether to validate email or not      
-
-		$this->email->initialize($config);
-
-		$this->email->from('admin@dalemasbajo.com', 'DALE MÁS BAJO');
-
-		$orden = $this->orders_model->load_order_info($order_id);
-		if($orden->cupon_id!=null){
-			$cupon = $this->products_model->get_cupon_by_id()($orden->cupon_id);
-		}
-
-		$user= $this->users_model->load_user_info($orden->user_id);
-		// print_r($user);
-		if($orden->is_plan){
-			$plan = $this->plan_model->load_plan_info($orden->plan_id);
-			// print_r($plan->id);
-			$items[0]= (object) array(
-				'name'=>$plan->name,
-				'tokens'=>$plan->tokens,
-				'tokens_video'=>$plan->tokens_video,
-				'duration'=>$plan->duration,
-				'description'=>$plan->description,
-				'ilimitado_activo' => $plan->ilimitado_activo
-			);
-		}else{
-			$items = $this->orders_model->load_order_items($order_id);
-		}
-
-		//print_r($items);
-		$this->email->to($user->email);
-		if ($user->email != "mauricio@shiftandcontrol.com") {
-			$this->email->bcc('dalemasbajo@gmail.com');
-		}if ($renovacion == 1) {
-			$mensaje = 'Gracias por renovar tu plan';
-		}else {
-			$mensaje = 'Gracias por su Compra';
-		}
-
-		$this->email->subject($mensaje);
-
-		$data['items']=$items;
-		$data['renovacion'] = $renovacion;
-		$data['user']=$user;
-		$data['is_plan']=$orden->is_plan;
-		$data['orden']=$orden;
-		if($orden->cupon_id!=null){
-			$data['cupon']=$cupon;
-		}
-		//echo '<pre>';
-		//print_r($plan);
-		//print_r($data);
-		//echo '</pre>';
-		$mail = $this->load->view('emails/payment', $data, TRUE);
-		
-		$this->email->message($mail);
-		echo $mail;
-		$this->email->send();
-	}
-
-
 
 	public function send_test(){
 		$order_id=$_GET['orden'];

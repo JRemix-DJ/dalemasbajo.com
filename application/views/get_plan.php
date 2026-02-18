@@ -12,19 +12,19 @@
                                 <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-primary">
                                     <i class="fa fa-user"></i>
                                 </div>
-                                <h3 class="text-xl font-bold text-slate-900">INFORMACIÓN DE FACTURACIÓN</h3>
+                                <h3 class="text-xl font-bold text-slate-900">BILLING INFORMATION</h3>
                             </div>
 
                             <div class="space-y-4">
                                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                                    <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">Código de Cliente</span>
+                                    <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">Customer Code</span>
                                     <span class="text-slate-900 font-bold font-mono bg-slate-100 px-2 py-1 rounded text-sm"><? echo $this->session->userdata('id_usuario'); ?></span>
                                 </div>
 
                                 <div class="h-px bg-slate-100 w-full"></div>
 
                                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                                    <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">Usuario</span>
+                                    <span class="text-sm text-slate-500 font-medium uppercase tracking-wider">User</span>
                                     <span class="text-slate-900 font-semibold text-lg"><? echo $this->session->userdata('username'); ?></span>
                                 </div>
 
@@ -46,10 +46,10 @@
                                     <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-primary">
                                         <i class="fa fa-shopping-cart"></i>
                                     </div>
-                                    <h3 class="text-xl font-bold text-slate-900">TU PEDIDO</h3>
+                                    <h3 class="text-xl font-bold text-slate-900">YOUR ORDER</h3>
                                 </div>
                                 <a href="<? echo base_url(); ?>planes" class="text-sm font-medium text-primary hover:text-blue-700 hover:underline transition-colors">
-                                    <i class="fa fa-pencil-alt mr-1"></i> Editar
+                                    <i class="fa fa-pencil-alt mr-1"></i> Edit
                                 </a>
                             </div>
 
@@ -61,11 +61,11 @@
                                                 <h4 class="font-bold text-slate-900 text-lg"><? echo $plan->name; ?></h4>
                                                 <div class="text-sm text-slate-500 mt-1 space-y-1">
                                                     <? if ($plan->ilimitado_activo == 1) { ?>
-                                                        <p class="flex items-center gap-2"><i class="fa fa-check text-green-500 text-xs"></i> Descargas Ilimitadas de Audio</p>
+                                                        <p class="flex items-center gap-2"><i class="fa fa-check text-green-500 text-xs"></i> Unlimited Audio Downloads</p>
                                                     <? }else{ if($plan->tokens!=NULL||$plan->tokens!=0){ ?>
-                                                        <p class="flex items-center gap-2"><i class="fa fa-check text-green-500 text-xs"></i> <? echo $plan->tokens; ?> Descargas de Audio</p>
+                                                        <p class="flex items-center gap-2"><i class="fa fa-check text-green-500 text-xs"></i> <? echo $plan->tokens; ?> Audio Downloads</p>
                                                     <? } } ?>
-                                                    <p class="flex items-center gap-2"><i class="fa fa-clock text-slate-400 text-xs"></i> Duración <? echo $plan->duration; ?> días</p>
+                                                    <p class="flex items-center gap-2"><i class="fa fa-clock text-slate-400 text-xs"></i> Duration <? echo $plan->duration; ?> days</p>
                                                 </div>
                                             </div>
                                             <div class="text-right">
@@ -88,7 +88,7 @@
                                 <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-primary">
                                     <i class="fa fa-credit-card"></i>
                                 </div>
-                                <h3 class="text-xl font-bold text-slate-900">MÉTODO DE PAGO</h3>
+                                <h3 class="text-xl font-bold text-slate-900">PAYMENT METHOD</h3>
                             </div>
 
                             <div class="space-y-6">
@@ -152,7 +152,7 @@
                                            data-plan_id="<? echo $plan->id; ?>"
                                            data-email="<? echo $this->session->userdata('email'); ?>"
                                            data-monto="<? echo $plan->price; ?>">
-                                            PAGAR CON TARJETA DE CRÉDITO / DÉBITO
+                                            PAY BY CREDIT/DEBIT CARD
                                         </a>
 
                                         <div class="flex justify-center gap-3 text-2xl text-slate-400 grayscale opacity-70">
