@@ -5,10 +5,10 @@
             <!-- Header -->
             <div class="mb-10">
                 <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900">
-                    Hola <? echo $this->session->userdata('username'); ?>
+                    Hi <? echo $this->session->userdata('username'); ?>
                 </h1>
                 <p class="mt-2 text-slate-500 text-base">
-                    Bienvenido a tu cuenta personal
+                    Welcome to your personal account
                 </p>
             </div>
 
@@ -19,7 +19,7 @@
                 <div class="lg:col-span-1">
                     <div class="bg-white border border-slate-200 rounded-3xl shadow-sm p-6 md:p-8">
                         <h2 class="text-xl font-heading font-bold text-slate-900 mb-6">
-                            Mi Información
+                            My Information
                         </h2>
 
                         <!-- Username item -->
@@ -59,7 +59,7 @@
                                 <i class="fa-solid fa-credit-card text-lg"></i>
                             </div>
                             <h2 class="text-xl font-heading font-bold text-slate-900 uppercase tracking-wide">
-                                MIS ÚLTIMAS COMPRAS
+                                MY LATEST PURCHASES
                             </h2>
                         </div>
 
@@ -67,9 +67,9 @@
                             <table class="w-full text-left border-separate border-spacing-0">
                                 <thead>
                                 <tr class="text-sm text-slate-700">
-                                    <th class="py-4 px-4 border-b border-slate-200 font-bold">Fecha</th>
-                                    <th class="py-4 px-4 border-b border-slate-200 font-bold">Orden ID</th>
-                                    <th class="py-4 px-4 border-b border-slate-200 font-bold text-right">Precio Total</th>
+                                    <th class="py-4 px-4 border-b border-slate-200 font-bold">Date</th>
+                                    <th class="py-4 px-4 border-b border-slate-200 font-bold">Order ID</th>
+                                    <th class="py-4 px-4 border-b border-slate-200 font-bold text-right">Total Price</th>
                                 </tr>
                                 </thead>
 
@@ -98,7 +98,7 @@
                                 <? } else { ?>
                                     <tr>
                                         <td colspan="3" class="py-10 text-center text-slate-500">
-                                            No hay compras registradas.
+                                            No purchases recorded.
                                         </td>
                                     </tr>
                                 <? } ?>
