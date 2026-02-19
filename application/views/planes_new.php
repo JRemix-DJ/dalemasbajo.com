@@ -173,7 +173,7 @@
                 Need a custom plan?
             </p>
             <p class="text-slate-500 text-sm">
-                <a href="<? echo base_url('request_remix'); ?>" class="text-primary hover:underline font-bold flex items-center justify-center gap-1">
+                <a href="<? echo base_url('/pages/request_remix'); ?>" class="text-primary hover:underline font-bold flex items-center justify-center gap-1">
                     Contact us for custom solutions <i class="fa fa-arrow-right text-xs"></i>
                 </a>
             </p>
