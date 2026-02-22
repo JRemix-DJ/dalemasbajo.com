@@ -58,6 +58,8 @@
                             demo = data_[i]['demo'];
                         }
                         if(demo!=='' && data_[i]['descargable']!==''){
+                            console.log('COVER VALUE =>', data_[i]['cover']);
+                            console.log('TYPE =>', data_[i]['type'], 'NAME =>', data_[i]['video_name']);
                             $.ajax({
                                 url:url_return,
                                 type:"POST",
@@ -69,7 +71,7 @@
                                     video_name: data_[i]['video_name'], 
                                     video_artist: data_[i]['video_artist'], 
 
-                                    //cover: data_[i]['cover'], 
+                                    cover: data_[i]['cover'],
                                     version: data_[i]['version'], 
                                     gender_id: data_[i]['gender_id'], 
                                     descargable: data_[i]['descargable'], 
@@ -227,6 +229,35 @@
                                     */
                                 }else{
                                     alert('ERROR: '+resp);
+                                }
+                            }
+                        });
+                        // Create cover upload (image)
+                        $("#cover"+i).uploadFile({
+                            url:"<? echo site_url().'admin/subir/'; ?>",
+                            fileName:"files",
+                            multiple:false,
+                            autoSubmit:true,
+                            uploadButtonClass:"submit",
+                            allowedTypes:"jpg,jpeg,png,webp",
+                            dragDropStr: "<span><b>Arrastra y Suelta portada</b></span>",
+                            formData:{
+                                'action':'cover_upload',
+                                'file':'cover_'+final_name
+                            },
+                            dragdropWidth: 300, statusBarWidth: 300,
+                            onError: function(files,status,errMsg,pd){
+                                alert('ERROR uploading cover');
+                            },
+                            onSuccess:function(files,resp,xhr){
+                                // resp debe devolverte el path o filename
+                                if(resp && resp !== 'false'){
+                                    // resp ideal: "assets/products/covers/xxx.jpg"
+                                    $('#hide_cover'+i).val(resp);
+                                    data_[i]['cover'] = resp;
+                                    console.log('COVER SAVED =>', data_[i]['cover']);
+                                }else{
+                                    alert('Cover upload failed');
                                 }
                             }
                         });
@@ -392,6 +423,14 @@
                                     <td>Preview File (only on mp3)</td>\
                                     <td><div id="preview'+data_indice+'"></div></td>\
                                 </tr>';
+                        html = html + '<tr>\
+                        <td>Cover (image)</td>\
+                        <td>\
+                        <div id="cover'+data_indice+'"></div>\
+                        <input type="hidden" id="hide_cover'+data_indice+'" value="">\
+                        <small style="display:block;margin-top:6px;color:#666;">JPG/PNG/WebP</small>\
+                        </td>\
+                        </tr>';
                     }
                     html=html+'</table>\
                     <input type="button" class="btn btn-danger" style="width:120px !important;" value="DELETE" onclick="remove_video('+data_indice+')" /></article></div>';

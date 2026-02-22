@@ -16,6 +16,40 @@ class Products extends CI_Controller {
 	// 	$data['products']=$this->products_model->get_products();
 	// }
 
+    private function _upload_featured_image($field = 'featured_image'){
+        if(empty($_FILES[$field]['name'])) return null;
+
+        $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+        if(!in_array($ext, ['jpg','jpeg','png','webp'])) return false;
+
+        $dir = FCPATH.'assets/products/covers/';
+        if(!is_dir($dir)) @mkdir($dir, 0755, true);
+
+        $filename = 'cover_'.date('YmdHis').'_'.mt_rand(1000,9999).'.'.$ext;
+        $dest = $dir.$filename;
+
+        if(!move_uploaded_file($_FILES[$field]['tmp_name'], $dest)){
+            return false;
+        }
+
+        try{
+            $this->load->library('image_lib');
+            $config = [
+                'image_library'  => 'gd2',
+                'source_image'   => $dest,
+                'maintain_ratio' => true,
+                'width'          => 1400,
+                'height'         => 1400,
+                'quality'        => '85%',
+            ];
+            $this->image_lib->initialize($config);
+            $this->image_lib->resize();
+            $this->image_lib->clear();
+        }catch(\Throwable $e){}
+
+        return 'assets/products/covers/'.$filename;
+    }
+
 	public function edit_product(){
 		$this->load->model('users_model');
 		$user_role= $this->session->userdata('role');
@@ -45,6 +79,14 @@ class Products extends CI_Controller {
 				'owner_id'=>$owner_id,
 				'bpm'=>$bpm,
 			);
+
+            $cover_path = $this->_upload_featured_image('featured_image');
+            if($cover_path === false){
+            } elseif($cover_path !== null){
+                $data['featured_image'] = $cover_path;
+            }
+
+            $this->products_model->update_product($product_id, $data);
 
 			if(($_FILES["demo"]["name"]!="")){
 				$demo_folder = 'assets/products/demos/';
@@ -76,7 +118,7 @@ class Products extends CI_Controller {
 				redirect(base_url().'admin/listar_productos/'.$paginationnumber.$aprobacion);
 			}
 
-		}else{
+		} else{
 			redirect(base_url().'admin/login/');
 		}
 
