@@ -131,6 +131,76 @@ class Drops extends CI_Controller {
 		}
 	}
 
+    public function checkout_drop(){
+        $data['title'] = "Checkout - Dale Mas Bajo";
+        $data['description'] = "Finalize your drop purchase";
+        $data['generos'] = $this->genero_model->get_generos();
+        $data['djs'] = $this->users_model->get_djs();
+        $data['plans'] = $this->plan_model->get_plans();
+
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url('drops'));
+            return;
+        }
+
+        $drop_id = (int)$this->input->get('drop_id');
+        if(!$drop_id){
+            redirect(base_url('drops'));
+            return;
+        }
+
+        $producto = $this->products_model->load_product_info($drop_id);
+        if(!$producto || (int)$producto->product_type_id !== 5){
+            redirect(base_url('drops'));
+            return;
+        }
+
+        if(empty($producto->payment_link)){
+            $data['error'] = "This drop does not have a payment link configured.";
+            $data['producto'] = $producto;
+            $this->load->view('templates/header', $data);
+            $this->load->view('checkout_drop', $data);
+            $this->load->view('templates/footer', $data);
+            return;
+        }
+
+        $user_id = (int)$this->session->userdata('id_usuario');
+
+        $order = $this->orders_model->find_pending_drop_order_by_drop($user_id, $drop_id);
+        if(!$order){
+            $data_order = array(
+                'user_id'      => $user_id,
+                'date_order'   => date("Y-m-d H:i:s"),
+                'total_price'  => $producto->price,
+                'status'       => 0,
+                'is_plan'      => 0,
+                'plan_id'      => 0,
+                'is_drop'      => 1,
+                'drop_id'      => $producto->id,
+                'txn_id'       => null
+            );
+
+            $order_id = $this->orders_model->create_order_drop($data_order);
+
+            $data_items = array(
+                'product_id' => $producto->id,
+                'quantity'   => 1,
+                'order_id'   => $order_id
+            );
+
+            $this->orders_model->add_items_to_order_drop($data_items);
+
+            $order = $this->orders_model->load_order_info($order_id);
+        }
+
+        $data['producto'] = $producto;
+        $data['orden'] = $order;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('checkout', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
 	public function test()
 	{
 		$this->load->view('comingsoon');

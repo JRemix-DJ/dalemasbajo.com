@@ -82,6 +82,7 @@
                                     size: data_[i]['size'],
                                     price: data_[i]['price'],
                                     type: data_[i]['type'],
+                                    payment_link: data_[i]['payment_link'],
                                 }
 
                                 }).fail(function(e){
@@ -233,34 +234,36 @@
                             }
                         });
                         // Create cover upload (image)
-                        $("#cover"+i).uploadFile({
-                            url:"<? echo site_url().'admin/subir/'; ?>",
-                            fileName:"files",
-                            multiple:false,
-                            autoSubmit:true,
-                            uploadButtonClass:"submit",
-                            allowedTypes:"jpg,jpeg,png,webp",
-                            dragDropStr: "<span><b>Arrastra y Suelta portada</b></span>",
-                            formData:{
-                                'action':'cover_upload',
-                                'file':'cover_'+final_name
-                            },
-                            dragdropWidth: 300, statusBarWidth: 300,
-                            onError: function(files,status,errMsg,pd){
-                                alert('ERROR uploading cover');
-                            },
-                            onSuccess:function(files,resp,xhr){
-                                // resp debe devolverte el path o filename
-                                if(resp && resp !== 'false'){
-                                    // resp ideal: "assets/products/covers/xxx.jpg"
-                                    $('#hide_cover'+i).val(resp);
-                                    data_[i]['cover'] = resp;
-                                    console.log('COVER SAVED =>', data_[i]['cover']);
-                                }else{
-                                    alert('Cover upload failed');
+                        if(String(data_[i]['type']) === '5'){
+                            $("#cover"+i).uploadFile({
+                                url:"<? echo site_url().'admin/subir/'; ?>",
+                                fileName:"files",
+                                multiple:false,
+                                autoSubmit:true,
+                                uploadButtonClass:"submit",
+                                allowedTypes:"jpg,jpeg,png,webp",
+                                dragDropStr: "<span><b>Arrastra y Suelta portada</b></span>",
+                                formData:{
+                                    'action':'cover_upload',
+                                    'file':'cover_'+final_name
+                                },
+                                dragdropWidth: 300, statusBarWidth: 300,
+                                onError: function(files,status,errMsg,pd){
+                                    alert('ERROR uploading cover');
+                                },
+                                onSuccess:function(files,resp,xhr){
+                                    // resp debe devolverte el path o filename
+                                    if(resp && resp !== 'false'){
+                                        // resp ideal: "assets/products/covers/xxx.jpg"
+                                        $('#hide_cover'+i).val(resp);
+                                        data_[i]['cover'] = resp;
+                                        console.log('COVER SAVED =>', data_[i]['cover']);
+                                    }else{
+                                        alert('Cover upload failed');
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                     //Use default cover or upload a new cover
                     function set_cover(obj,data_indice)
@@ -331,115 +334,85 @@
                 $('#title'+i).remove();
             }
             function queue(nGenres){
-                genre_list(nGenres);
-                if(genre==''){ 
-                    return alert('Choose at least one genre'); 
-                }
-                var _generos = $('#format input');
-                _generos.each(function(){
-                    if($(this).is(':checked')){
-                        gender_id=$(this).val();
-                        console.log(gender_id);
+                type = $('#setPack').val();
+                var isDrop = (String(type) === '5');
+
+                if(isDrop){
+                    gender_id = 45;
+                    name_genre = 'Drops';
+                } else {
+                    genre_list(nGenres);
+                    if(genre==''){
+                        return alert('Choose at least one genre');
                     }
-                });
+                    var _generos = $('#format input');
+                    _generos.each(function(){
+                        if($(this).is(':checked')){
+                            gender_id = $(this).val();
+                        }
+                    });
+                }
+
                 if(empty($('#video_name'))==false){
                     return false;
                 }
-                video_name=$('#video_name').val();
-                // if(empty($('#video_artist'))==false){
-                //     return false;
-                // }
-                video_artist=$('#video_artist').val();
+
+                video_name = $('#video_name').val();
+                video_artist = isDrop ? 'Dale Más Bajo' : $('#video_artist').val();
+
                 if(empty($('#precio'))==false){
                     return false;
                 }
-                price=$('#precio').val();
-                // if(empty($('#description'))==false){
-                //     return false;
-                // }
-                description=$('#description').val();
-                // if(empty($('#bpm'))==false){
-                //     return false;
-                // }
-                bpm=$('#bpm').val();
+
+                price = $('#precio').val();
+                description = $('#description').val();
+                bpm = $('#bpm').val();
                 if(empty($('#version'))==false){
                     return false;
                 }
-                version=$('#version').val();
-                // if(empty($('#quality'))==false){
-                //     return false;
-                // }
-                //calidad=$('#quality').val();
-                type = $('#setPack').val(); 
-                //GENERAR ARRAY, FILEUPLOADER Y HTML
-                data_[data_indice]=[];
-                /*
-                    'name',
-                    'price',
-                    'featured_image',
-                    'gender_id',
-                    'description',
-                    'bpm',
-                    'demo',
-                    'descargable',
-                */
-                data_[data_indice]['video_name']=video_name;
-                data_[data_indice]['video_artist']=video_artist;
-                data_[data_indice]['price']=price;
-                data_[data_indice]['name_genre']=name_genre;
-                data_[data_indice]['description']=description;
-                data_[data_indice]['bpm']=bpm;
-                data_[data_indice]['demo']=demo;
-                //data_[data_indice]['calidad']=calidad;
-                data_[data_indice]['version']=version;
-                data_[data_indice]['descargable']=descargable;
-                data_[data_indice]['type']=type;
-                data_[data_indice]['gender_id']= gender_id;
+                version = $('#version').val();
 
-                var html='<div class="item"><h6 class="card-body-title tx-12 mg-b-5" id="title'+data_indice+'" onclick="$(\'#upload'+data_indice+'\').slideToggle(400); " style="cursor:pointer"> '+data_[data_indice]['video_name']+'</h1>\
-                    <article class="toggle" id="upload'+data_indice+'">\
-                    <table>\
-                        <tr>\
-                            <td>Bpm: </td><td>'+data_[data_indice]['bpm']+'</td>\
-                        </tr>\
-                        <tr>\
-                            <td>Price: </td><td>'+data_[data_indice]['price']+'</td>\
-                        </tr>\
-                        <tr>\
-                            <td>Artist: </td><td>'+data_[data_indice]['video_artist']+'</td>\
-                        </tr>\
-                        <tr>\
-                            <td>Version: </td><td>'+data_[data_indice]['version']+'</td>\
-                        </tr>\
-                        <tr>\
-                            <td>Genre: </td><td>'+name_genre+'</td>\
-                        </td>\
-                        <tr>\
-                            <td>File</td>\
-                            <td><div id="mp34'+data_indice+'"></div></td>\
-                        </tr>';
+                data_[data_indice] = [];
+                data_[data_indice]['video_name'] = video_name;
+                data_[data_indice]['video_artist'] = video_artist;
+                data_[data_indice]['price'] = price;
+                data_[data_indice]['name_genre'] = name_genre;
+                data_[data_indice]['description'] = description;
+                data_[data_indice]['bpm'] = bpm;
+                data_[data_indice]['demo'] = demo;
+                data_[data_indice]['version'] = version;
+                data_[data_indice]['descargable'] = descargable;
+                data_[data_indice]['type'] = type;
+                data_[data_indice]['gender_id'] = gender_id;
+                data_[data_indice]['payment_link'] = $('#payment_link').val();
+                data_[data_indice]['cover'] = '';
+
+                var html = '<div class="item"><h6 class="card-body-title tx-12 mg-b-5" id="title'+data_indice+'" onclick="$(\'#upload'+data_indice+'\').slideToggle(400);" style="cursor:pointer">'+data_[data_indice]['video_name']+'</h6>\
+    <article class="toggle" id="upload'+data_indice+'">\
+    <table>\
+      <tr><td>Price:</td><td>'+data_[data_indice]['price']+'</td></tr>\
+      <tr><td>Artist:</td><td>'+data_[data_indice]['video_artist']+'</td></tr>\
+      <tr><td>Description:</td><td>'+(data_[data_indice]['description'] || '-')+'</td></tr>\
+      <tr><td>Payment Link:</td><td>'+(data_[data_indice]['payment_link'] || '-')+'</td></tr>\
+      <tr><td>File</td><td><div id="mp34'+data_indice+'"></div></td></tr>';
+
+                if(isDrop){
+                    html += '<tr><td>Cover</td><td><div id="cover'+data_indice+'"></div><input type="hidden" id="hide_cover'+data_indice+'" value=""></td></tr>';
+                    html += '<tr><td>Preview</td><td><div id="preview'+data_indice+'"></div></td></tr>';
+                } else {
                     if(data_[data_indice]['type']!=3){
-                        html = html+ '<tr>\
-                                    <td>Preview File (only on mp3)</td>\
-                                    <td><div id="preview'+data_indice+'"></div></td>\
-                                </tr>';
-                        html = html + '<tr>\
-                        <td>Cover (image)</td>\
-                        <td>\
-                        <div id="cover'+data_indice+'"></div>\
-                        <input type="hidden" id="hide_cover'+data_indice+'" value="">\
-                        <small style="display:block;margin-top:6px;color:#666;">JPG/PNG/WebP</small>\
-                        </td>\
-                        </tr>';
+                        html += '<tr><td>Preview File (only on mp3)</td><td><div id="preview'+data_indice+'"></div></td></tr>';
                     }
-                    html=html+'</table>\
-                    <input type="button" class="btn btn-danger" style="width:120px !important;" value="DELETE" onclick="remove_video('+data_indice+')" /></article></div>';
+                }
+
+                html += '</table>\
+    <input type="button" class="btn btn-danger" style="width:120px !important;" value="DELETE" onclick="remove_video('+data_indice+')" />\
+    </article></div>';
+
                 $('.content_upload').append(html);
                 create_upload(data_indice,server_id);
-                state[data_indice]=0; //DEFINO ESTADOS DE UPLOAD
-                //LUEGO DE GENERAR ARRAY
+                state[data_indice]=0;
                 data_indice++;
-                //CHANGE
             }
 
             function empty(e){

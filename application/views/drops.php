@@ -32,7 +32,9 @@
                                 ? $producto->description
                                 : 'Limited edition drop pack ready for your sets.';
 
-                        $buy_url = base_url('drops/get_drop?drop_id='.$producto->id);
+                        $buy_url = !empty($producto->payment_link)
+                                ? $producto->payment_link
+                                : base_url('drops/get_drop?drop_id='.$producto->id);
 
                         $tags = ['Exclusive', 'Drops'];
                         if(!empty($producto->version)) $tags[] = $producto->version;
@@ -94,12 +96,18 @@
                                     <?php } ?>
                                 </div>
 
-                                <a
-                                        href="<?php echo $buy_url; ?>"
-                                        class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-200"
-                                >
-                                    Buy Now
-                                </a>
+                                <?php if(!$this->session->userdata('is_logued_in')){ ?>
+                                    <a href="#"
+                                       data-target="#myModal"
+                                       class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-200">
+                                        Buy Now
+                                    </a>
+                                <?php } else { ?>
+                                    <a href="<?php echo base_url('drops/checkout_drop?drop_id='.(int)$producto->id); ?>"
+                                       class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-200">
+                                        Buy Now
+                                    </a>
+                                <?php } ?>
                             </div>
                         </div>
 

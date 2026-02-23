@@ -79,59 +79,99 @@ class Payment extends CI_Controller {
         $post = file_get_contents('php://input');
         $data = json_decode($post);
 
-        if(isset($data->success) && $data->success == true){
-
-            $where = [
-                'email'=> $data->client_email
-            ];
-            $user = $this->users_model->get_user_where_array($where);
-
-            $plan = $this->plan_model->load_plan_info_by_amount($data->amount);
-
-            if(!$plan || !$user){
-                $title = "DMB - ERROR PAGO TUKUY - Usuario o Plan no encontrado";
-                $mensaje = "
-				Datos recibidos:<br>
-				Email Cliente: " . ($data->client_email ?? 'N/A') . "<br>
-				Monto: " . ($data->amount ?? '0') . "<br>
-				Detalle Error: El usuario no existe en BD o el monto no coincide con ningún plan.<br>
-				JSON Completo: " . $post;
-
-                $this->send_received_message($title, $mensaje);
-                http_response_code(400);
-                return;
-            }
-
-            $existing_order = $this->orders_model->get_by_txn_id($data->transaction_details);
-
-            if(!$existing_order){
-                $data_order = array(
-                    'user_id'		=>	$user->id,
-                    'date_order'	=> 	date("Y-m-d H:i:s"),
-                    'total_price'	=> 	$plan->price,
-                    'status'		=> 	1,
-                    'is_plan'		=>	1,
-                    'plan_id'		=>	$plan->id,
-                    'txn_id'		=> 	$data->transaction_details
-                );
-
-                $order_id = $this->orders_model->create_order_plan($data_order);
-
-                $this->add_tokens_to_user($order_id, 1);
-
-                $this->send_notification_mail($order_id, $renovacion = 0);
-
-
-                http_response_code(200); // OK para Tukuy
-                echo json_encode(['status' => 'success']);
-            } else {
-                http_response_code(200);
-                echo json_encode(['status' => 'already_processed']);
-            }
-
-        } else {
+        if(!isset($data->success) || $data->success != true){
             http_response_code(200);
+            echo json_encode(['status' => 'ignored']);
+            return;
         }
+
+        $client_email = isset($data->client_email) ? trim($data->client_email) : '';
+        $amount = isset($data->amount) ? (float)$data->amount : 0;
+        $txn = isset($data->transaction_details) ? trim($data->transaction_details) : '';
+
+        if($client_email === '' || $amount <= 0 || $txn === ''){
+            $title = "DMB - ERROR PAGO TUKUY - Datos incompletos";
+            $mensaje = "JSON Completo: ".$post;
+            $this->send_received_message($title, $mensaje);
+            http_response_code(200);
+            echo json_encode(['status' => 'bad_payload']);
+            return;
+        }
+
+        $user = $this->users_model->get_user_where_array(['email' => $client_email]);
+
+        if(!$user){
+            $title = "DMB - ERROR PAGO TUKUY - Usuario no encontrado";
+            $mensaje = "
+            Datos recibidos:<br>
+            Email Cliente: {$client_email}<br>
+            Monto: {$amount}<br>
+            Txn: {$txn}<br>
+            JSON Completo: {$post}
+        ";
+            $this->send_received_message($title, $mensaje);
+            http_response_code(200);
+            echo json_encode(['status' => 'user_not_found']);
+            return;
+        }
+
+        $existing_order = $this->orders_model->get_by_txn_id($txn);
+        if($existing_order){
+            http_response_code(200);
+            echo json_encode(['status' => 'already_processed']);
+            return;
+        }
+
+        $plan = $this->plan_model->load_plan_info_by_amount($amount);
+
+        if($plan){
+            $data_order = array(
+                'user_id'      => $user->id,
+                'date_order'   => date("Y-m-d H:i:s"),
+                'total_price'  => $plan->price,
+                'status'       => 1,
+                'is_plan'      => 1,
+                'plan_id'      => $plan->id,
+                'txn_id'       => $txn
+            );
+
+            $order_id = $this->orders_model->create_order_plan($data_order);
+
+            $this->add_tokens_to_user($order_id, 1);
+            $this->send_notification_mail($order_id, 0);
+
+            http_response_code(200);
+            echo json_encode(['status' => 'success_plan']);
+            return;
+        }
+
+        $drop_order = $this->orders_model->find_pending_drop_order_by_email_amount($user->id, $amount);
+
+        if(!$drop_order){
+            $title = "DMB - ERROR PAGO TUKUY - Orden Drop no encontrada";
+            $mensaje = "
+            Datos recibidos:<br>
+            Email Cliente: {$client_email}<br>
+            Monto: {$amount}<br>
+            Txn: {$txn}<br>
+            Detalle Error: No se encontró una orden DROP pendiente (status=0) con ese monto.<br>
+            JSON Completo: {$post}
+        ";
+            $this->send_received_message($title, $mensaje);
+            http_response_code(200);
+            echo json_encode(['status' => 'drop_order_not_found']);
+            return;
+        }
+
+        $this->orders_model->update_order($drop_order->id, [
+            'status' => 1,
+            'txn_id' => $txn
+        ]);
+
+        $this->send_notification_mail($drop_order->id, 0);
+
+        http_response_code(200);
+        echo json_encode(['status' => 'success_drop']);
     }
 
     public function send_notification_mail($order_id, $renovacion){

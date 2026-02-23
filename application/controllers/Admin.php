@@ -2254,7 +2254,8 @@ class Admin extends CI_Controller {
 			'descargable'		=>	$_POST['descargable'],
 			'format'			=>	'video',
 			'duration'			=>	$duration,
-            'featured_image' => isset($_POST['cover']) ? $_POST['cover'] : null
+            'featured_image' => isset($_POST['cover']) ? $_POST['cover'] : null,
+            'payment_link' => isset($_POST['payment_link']) ? $_POST['payment_link'] : null
 		);
 		if($this->session->userdata('role')=='is_admin'||$this->session->userdata('role')=='is_subadmin'){
 			$productos_data['approved']=1;
@@ -2382,7 +2383,8 @@ class Admin extends CI_Controller {
 			'descargable'		=>	$_POST['descargable'],
 			'format'			=> 'audio',
 			'duration'			=> $duration,
-            'featured_image' => isset($_POST['cover']) ? $_POST['cover'] : null
+            'featured_image' => isset($_POST['cover']) ? $_POST['cover'] : null,
+            'payment_link' => isset($_POST['payment_link']) ? $_POST['payment_link'] : null
 		);
 		if($this->session->userdata('role')=='is_admin'||$this->session->userdata('role')=='is_subadmin'){
 			$productos_data['approved']=1;
