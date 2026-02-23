@@ -40,7 +40,8 @@ if(isset($products) && !empty($products)) {
             <td class="p-4 text-center">
                 <? $img_cover = base_url('audios/cover_mp3/' . $audio->id); ?>
 
-                <a href="javascript:;" class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 group-hover:bg-primary group-hover:text-white transition-all shadow-sm"
+                <a href="javascript:;"
+                   class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-transparent text-primary hover:bg-slate-200 hover:text-primary transition-colors duration-150"
                    data-id="<? echo $audio->id; ?>"
                    data-demo="<? echo base_url().'assets/products/demos/'.$preview; ?>"
                    data-cover="<? echo $img_cover; ?>"
@@ -79,7 +80,8 @@ if(isset($products) && !empty($products)) {
             </td>
 
             <td class="p-4">
-                <a href="<? echo base_url('genero/'.$genre_id); ?>" class="text-slate-500 hover:text-primary transition-colors text-xs font-medium">
+                <a href="<? echo base_url('genero/'.$genre_id); ?>"
+                   class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100/70 border border-slate-200 text-[rgb(0,102,255)] text-xs font-semibold hover:bg-slate-200 hover:text-blue-700 transition-colors">
                     <? echo $genre_name; ?>
                 </a>
             </td>
@@ -93,12 +95,12 @@ if(isset($products) && !empty($products)) {
                 $has_access = ($is_unlimited || $tokens > 0) ? 1 : 0;
                 ?>
 
-                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
+                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded-full border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
                         data-logged="<? echo $is_logged; ?>"
                         data-access="<? echo $has_access; ?>"
                         data-id="<? echo $audio->id; ?>"
                         title="Descargar">
-                    <i class="fa fa-download"></i>
+                    <i class="fa-solid fa-download"></i>
                 </button>
             </td>
         </tr>

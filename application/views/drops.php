@@ -36,7 +36,6 @@
                                 ? $producto->payment_link
                                 : base_url('drops/get_drop?drop_id='.$producto->id);
 
-                        $tags = ['Exclusive', 'Drops'];
                         if(!empty($producto->version)) $tags[] = $producto->version;
 
                         $is_logged = $this->session->userdata('is_logued_in') ? 1 : 0;
@@ -88,23 +87,15 @@
                                     <?php echo htmlspecialchars($desc, ENT_QUOTES); ?>
                                 </p>
 
-                                <div class="flex flex-wrap gap-2 mb-6">
-                                    <?php foreach($tags as $t){ ?>
-                                        <span class="text-xs bg-slate-100 text-slate-700 px-3 py-1 rounded-full">
-                                            <?php echo htmlspecialchars($t, ENT_QUOTES); ?>
-                                        </span>
-                                    <?php } ?>
-                                </div>
-
                                 <?php if(!$this->session->userdata('is_logued_in')){ ?>
                                     <a href="#"
                                        data-target="#myModal"
-                                       class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-200">
+                                       class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-[rgb(0,102,255)] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.99]">
                                         Buy Now
                                     </a>
                                 <?php } else { ?>
                                     <a href="<?php echo base_url('drops/checkout_drop?drop_id='.(int)$producto->id); ?>"
-                                       class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-200">
+                                       class="block text-center w-full py-4 rounded-2xl font-bold text-white bg-[rgb(0,102,255)] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.99]">
                                         Buy Now
                                     </a>
                                 <?php } ?>

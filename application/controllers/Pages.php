@@ -164,7 +164,6 @@ class Pages extends CI_Controller {
         // Inputs
         $email = $this->session->userdata('email'); // email desde sesión
         $song_link = trim($this->input->post('song_link'));
-        $bpm = trim($this->input->post('bpm'));
         $instructions = trim($this->input->post('instructions'));
 
         // Validar link
@@ -173,28 +172,13 @@ class Pages extends CI_Controller {
             return;
         }
 
-        // BPM opcional, pero si viene debe ser número
-        if($bpm !== ''){
-            if(!ctype_digit($bpm)){
-                echo json_encode(['success' => false, 'message' => 'BPM must be a number.']);
-                return;
-            }
-            $bpm_int = (int)$bpm;
-            // Rango razonable (puedes cambiarlo)
-            if($bpm_int < 40 || $bpm_int > 250){
-                echo json_encode(['success' => false, 'message' => 'BPM seems out of range.']);
-                return;
-            }
-        }
-
         // Enviar email (igual estilo que tu ser_miembro_mail)
         $mensaje = "
         <table width='100%' cellpadding='6' cellspacing='0' style='border-collapse:collapse;'>
             <tr><td><strong>User ID:</strong></td><td>{$user_id}</td></tr>
             <tr><td><strong>Email:</strong></td><td>{$email}</td></tr>
             <tr><td><strong>Song Link:</strong></td><td><a href='{$song_link}' target='_blank'>Open link</a></td></tr>
-            <tr><td><strong>Target BPM:</strong></td><td>".htmlspecialchars($bpm)."</td></tr>
-            <tr><td><strong>Instructions:</strong></td><td>".nl2br(htmlspecialchars($instructions))."</td></tr>
+            <tr><td><strong>Message:</strong></td><td>".nl2br(htmlspecialchars($instructions))."</td></tr>
         </table>
     ";
 

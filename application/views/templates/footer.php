@@ -145,37 +145,9 @@
     </div>
 </div>
 
-<footer class="mt-auto border-t border-white/10" style="background-color: oklch(0.605 0.217 257.214);">
+<footer class="mt-auto border-t border-white/10" style="background-color: #3E6CED;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
-
-            <div class="col-span-1 md:col-span-1 flex flex-col gap-4">
-                <a href="<? echo base_url(); ?>" class="flex items-center gap-2">
-                    <img src="<? echo base_url(); ?>images/HORIZONTAL--video.png" alt="dalemasbajowhite" class="h-12 w-auto object-contain">
-                </a>
-                <p class="text-sm text-blue-100 leading-relaxed">
-                    Discover new remixes every day on our website.
-                </p>
-            </div>
-
-            <div>
-                <h3 class="font-semibold text-white mb-4"></h3>
-                <ul class="space-y-3 text-sm text-blue-100">
-                    <li><a href="<? echo base_url('drops'); ?>" class="hover:text-gray-300 transition-colors">Exclusive Drops</a></li>
-                    <li><a href="<? echo base_url('planes'); ?>" class="hover:text-gray-300 transition-colors">Subscription Plans</a></li>
-                    <li><a href="<? echo base_url('search/?sname=&sgenero=&sremixers='); ?>" class="hover:text-gray-300 transition-colors">Explore Remixes</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="font-semibold text-white mb-4"></h3>
-                <ul class="space-y-3 text-sm text-blue-100">
-                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors">FAQ</a></li>
-                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors">Terms and Conditions</a></li>
-                    <li><a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-gray-300 transition-colors">Be a Remixer</a></li>
-                </ul>
-            </div>
-
             <div>
                 <h3 class="font-semibold text-white mb-4">Follow Us</h3>
                 <ul class="space-x-3 text-blue-100">
@@ -188,6 +160,15 @@
                     <a href="https://soundcloud.com/dalemasbajo" target="_blank" class="hover:text-gray-300 transition-colors">
                         <i class="fa-brands fa-soundcloud text-lg"></i>
                     </a>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="font-semibold text-white mb-4"></h3>
+                <ul class="space-y-3 text-sm text-blue-100">
+                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors">FAQ</a></li>
+                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors">Terms and Conditions</a></li>
+                    <li><a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-gray-300 transition-colors">Be a Remixer</a></li>
                 </ul>
             </div>
         </div>

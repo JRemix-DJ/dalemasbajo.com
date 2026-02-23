@@ -129,21 +129,8 @@ else if(empty($eligible)) $state = 'upgrade';
                                 <div class="flex-1">
                                     <h3 class="text-xl font-bold text-slate-900">Remix Preferences</h3>
 
-                                    <div class="mt-4">
-                                        <label class="block text-sm font-bold text-slate-700 mb-2">Target BPM (Optional)</label>
-                                        <input
-                                                type="number"
-                                                name="bpm"
-                                                min="40"
-                                                max="250"
-                                                step="1"
-                                                placeholder="128"
-                                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
-                                        />
-                                    </div>
-
                                     <div class="mt-6">
-                                        <label class="block text-sm font-bold text-slate-700 mb-2">Specific Instructions (Optional)</label>
+                                        <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
                                         <textarea
                                                 name="instructions"
                                                 rows="5"
@@ -168,7 +155,7 @@ else if(empty($eligible)) $state = 'upgrade';
 
                         <div class="pt-8">
                             <button type="submit"
-                                    class="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-slate-900 shadow-xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all">
+                                    class="w-full py-4 rounded-2xl font-bold text-white bg-[rgb(0,102,255)] shadow-xl shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.99]">
                                 Submit Your Request
                             </button>
                             <p class="text-center text-xs text-slate-400 mt-4">

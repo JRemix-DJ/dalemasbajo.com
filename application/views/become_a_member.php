@@ -23,7 +23,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php
                 $benefits = [
-                        ["icon" => "fa-dollar-sign", "title" => "Earn Revenue", "desc" => "Get paid for every download and stream of your remixes"],
+                        ["icon" => "fa-dollar-sign", "title" => "Earn Revenue", "desc" => "Get paid for every download of your remixes"],
                         ["icon" => "fa-users", "title" => "Global Audience", "desc" => "Reach thousands of DJs and music lovers worldwide"],
                         ["icon" => "fa-arrow-trend-up", "title" => "Grow Your Brand", "desc" => "Build your reputation in the DJ community"],
                         ["icon" => "fa-music", "title" => "Creative Freedom", "desc" => "Choose the tracks you want to remix"],
@@ -162,7 +162,7 @@
 
                             <div>
                                 <label class="block text-sm font-semibold text-slate-900 mb-2">
-                                    Social Media Links <span class="text-red-500">*</span>
+                                    Works Done <span class="text-red-500">*</span>
                                 </label>
                                 <input id="social" type="url"
                                        class="w-full h-12 rounded-xl border border-slate-200 bg-slate-100 px-4 outline-none focus:bg-white focus:border-[#0066FF] focus:ring-4 focus:ring-blue-500/10"
@@ -187,12 +187,12 @@
                             </button>
 
                             <button id="nextBtn" type="button"
-                                    class="w-full sm:flex-1 h-12 rounded-full font-bold text-white bg-gradient-to-r from-[#0066FF] to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 hover:scale-[1.01] transition-all">
+                                    class="w-full sm:flex-1 h-12 rounded-full font-bold text-white bg-[rgb(0,102,255)] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.99]">
                                 Next Step
                             </button>
 
                             <button id="submitBtn" type="button"
-                                    class="w-full sm:flex-1 h-12 rounded-full font-bold text-white bg-gradient-to-r from-[#0066FF] to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 hover:scale-[1.01] transition-all hidden">
+                                    class="w-full sm:flex-1 h-12 rounded-full font-bold text-white bg-[rgb(0,102,255)] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.99] hidden">
                                 Submit Application
                             </button>
                         </div>

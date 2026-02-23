@@ -99,7 +99,10 @@
                 <a href="<? echo base_url('drops');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Drops</a>
                 <a href="<? echo base_url('planes');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Plans</a>
                 <a href="<? echo base_url('pages/become_a_member');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Be a remixer</a>
-                <a href="<? echo base_url('pages/request_remix');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Request Your Remix</a>
+                <a href="<? echo base_url('pages/request_remix'); ?>"
+                   class="inline-flex items-center px-5 py-3 rounded-full bg-[rgb(0,102,255)] text-white text-sm font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:scale-[1.03] transition-all">
+                    Request Your Remix
+                </a>
 
                 <? if($this->session->userdata('is_logued_in')){ ?>
                     <div class="relative group ml-4" x-data="{ open: false }">
@@ -139,20 +142,22 @@
                     $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
 
                     if($is_unlimited || $tokens > 0) { ?>
-                        <div class="flex flex-col items-end">
-                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Downloads</span>
+                        <div class="ml-4 inline-flex items-center rounded-full bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/30 px-4 py-2">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-white/80 mr-3">Downloads</span>
+
                             <? if($is_unlimited){ ?>
-                                <div class="flex items-center gap-1 text-primary font-bold text-sm">
-                                    <i class="fa-solid fa-infinity"></i> <span>UNLIMITED</span>
+                                <div class="flex items-center gap-2 font-bold text-sm">
+                                    <i class="fa-solid fa-infinity"></i>
+                                    <span>UNLIMITED</span>
                                 </div>
                             <? } else { ?>
-                                <div class="flex items-center gap-1 font-bold text-sm text-slate-700">
+                                <div class="flex items-center gap-2 font-bold text-sm">
                                     <span class="token-count"><? echo $tokens; ?></span>
-                                    <i class="fa-solid fa-bolt text-yellow-400 text-xs"></i>
+                                    <i class="fa-solid fa-cloud-arrow-down"></i>
                                 </div>
                             <? } ?>
                         </div>
-                    <? }
+                    <?  }
                 } ?>
             </div>
 

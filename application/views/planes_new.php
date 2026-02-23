@@ -17,27 +17,26 @@
             <? if(isset($plans) && !empty($plans)){
                 foreach($plans as $plan){
 
-                    $es_premium_nombre = (stripos($plan->name, 'Premium') !== false);
+                    $es_premium_nombre  = (stripos($plan->name, 'Premium') !== false);
+                    $es_standard_nombre = (stripos($plan->name, 'Standard') !== false);
                     $es_ilimitado = ($plan->ilimitado_activo == 1);
-                    $is_highlighted = ($es_ilimitado || $es_premium_nombre);
+
+                    $is_highlighted = ($es_ilimitado || $es_premium_nombre || $es_standard_nombre);
 
                     if ($is_highlighted) {
-                        $container_classes = 'relative w-full rounded-2xl p-[2px] bg-gradient-to-b from-[#0066FF] to-slate-900 shadow-xl z-10';
+                        $container_classes = 'relative w-full h-full rounded-2xl p-[2px] bg-gradient-to-b from-[#0066FF] to-slate-900 shadow-xl z-10';
                         $inner_classes = 'bg-white rounded-[14px] h-full p-6 md:p-8 flex flex-col';
                     } else {
-                        $container_classes = 'relative w-full rounded-2xl border border-slate-200 bg-white hover:border-slate-300 shadow-sm transition-all duration-300';
+                        $container_classes = 'relative w-full h-full rounded-2xl border border-slate-200 bg-white hover:border-slate-300 shadow-sm transition-all duration-300';
                         $inner_classes = 'h-full p-6 md:p-8 flex flex-col';
                     }
 
-                    // ESTILOS DEL BOTÓN
                     if ($is_highlighted) {
-                        $btn_class = 'bg-gradient-to-r from-[#0066FF] to-slate-900 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-600 hover:to-black';
+                        $btn_class = 'bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:bg-blue-700';
                     } else {
-                        $btn_class = 'bg-slate-900 text-white hover:bg-slate-800';
+                        $btn_class = 'bg-[rgb(0,102,255)] text-white hover:bg-blue-700';
                     }
 
-                    // LÓGICA DE ACCESO (NUEVO CÓDIGO AQUÍ)
-                    // Si está logueado, va a pagar. Si no, abre modal.
                     if($this->session->userdata('is_logued_in')){
                         $btn_href = base_url()."getplan/?plan_id=".$plan->id."&currency=USD";
                         $btn_attrs = ""; // Sin atributos extra
@@ -113,6 +112,16 @@
                                     </div>
                                     <span class="ml-3 text-slate-600 text-sm">Advanced Search</span>
                                 </li>
+                                <? if($is_highlighted){ ?>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                            <i class="fa fa-check text-primary text-xs"></i>
+                                        </div>
+                                        <span class="ml-3 text-slate-700 font-semibold">
+                                            Access to <span class="text-primary font-extrabold">Request Your Remix</span>
+                                        </span>
+                                    </li>
+                                <? } ?>
                             </ul>
 
                             <a href="<? echo $btn_href; ?>" <? echo $btn_attrs; ?>
@@ -143,7 +152,7 @@
                 </div>
                 <h3 class="font-bold text-slate-900 mb-2">1-Click Download</h3>
                 <p class="text-sm text-slate-500 leading-relaxed">
-                    Instantly download your favorite remixes in high quality
+                    INSTANTLY DOWNLOAD YOUR FAVORITE REMIXES IN HIGH QUALITY
                 </p>
             </div>
 
@@ -151,9 +160,9 @@
                 <div class="w-12 h-12 bg-gradient-to-r from-[#0066FF] to-slate-900 text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
                     <i class="fa fa-headphones text-xl"></i>
                 </div>
-                <h3 class="font-bold text-slate-900 mb-2">Extended Versions</h3>
+                <h3 class="font-bold text-slate-900 mb-2">HQ Audio</h3>
                 <p class="text-sm text-slate-500 leading-relaxed">
-                    Intro, extended, remix, breakdown, transition and more
+                    CRYSTAL CLEAR 320KBPS AUDIO QUALITY FOR PROFESSIONAL USE
                 </p>
             </div>
 
@@ -163,7 +172,7 @@
                 </div>
                 <h3 class="font-bold text-slate-900 mb-2">Instant Access</h3>
                 <p class="text-sm text-slate-500 leading-relaxed">
-                    Get immediate access to our entire library of remixes
+                    GET IMMEDIATE ACCESS TO OUR ENTIRE LIBRARY OF REMIXES
                 </p>
             </div>
         </div>
