@@ -156,6 +156,22 @@
                 </div>
             </div>
 
+            <?php if((int)$producto->product_type_id === 5){ ?>
+                <div class="row mg-t-20">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="form-control-label">Payment Link: <span class="tx-danger">*</span></label>
+                            <input type="url"
+                                   class="form-control"
+                                   name="payment_link"
+                                   value="<?php echo isset($producto->payment_link) ? htmlspecialchars($producto->payment_link, ENT_QUOTES) : ''; ?>"
+                                   placeholder="https://..."
+                                   required>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+
             <div class="form-layout-footer">
                 <button class="btn btn-info mg-r-5">Actualizar</button>
                 <? if ($producto->approved == 0) {

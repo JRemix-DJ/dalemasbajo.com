@@ -159,7 +159,7 @@ class Drops extends CI_Controller {
             $data['error'] = "This drop does not have a payment link configured.";
             $data['producto'] = $producto;
             $this->load->view('templates/header', $data);
-            $this->load->view('checkout_drop', $data);
+            $this->load->view('checkout', $data);
             $this->load->view('templates/footer', $data);
             return;
         }

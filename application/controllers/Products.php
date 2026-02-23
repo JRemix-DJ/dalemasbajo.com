@@ -50,79 +50,75 @@ class Products extends CI_Controller {
         return 'assets/products/covers/'.$filename;
     }
 
-	public function edit_product(){
-		$this->load->model('users_model');
-		$user_role= $this->session->userdata('role');
-		if($this->session->userdata('is_logued_in')){
-			$name = $this->input->post('name');
-			$price = $this->input->post('price');
-			$description = $this->input->post('description');
-			$bpm = $this->input->post('bpm');
-			$version = $this->input->post('version');
-			$artist = $this->input->post('artist');
-			$gender_id = $this->input->post('gender_id');
-			$product_type_id = $this->input->post('product_type_id');
-			$owner_id = $this->input->post('user_id');
-			$product_id = $this->input->post('product_id');
-			$paginationnumber = $this->input->post('paginationnumber');
-			$data=[];
-			$where = array();
+    public function edit_product(){
+        $this->load->model('users_model');
 
-			$data = array(
-				'name'=>$name,
-				'artist'=>$artist,
-				'price'=>$price,
-				'version'=>$version,
-				'description'=>$description,
-				'gender_id'=>$gender_id,
-				'product_type_id'=>$product_type_id,
-				'owner_id'=>$owner_id,
-				'bpm'=>$bpm,
-			);
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url().'admin/login/');
+            return;
+        }
 
-            $cover_path = $this->_upload_featured_image('featured_image');
-            if($cover_path === false){
-            } elseif($cover_path !== null){
-                $data['featured_image'] = $cover_path;
-            }
+        $name = $this->input->post('name');
+        $price = $this->input->post('price');
+        $description = $this->input->post('description');
+        $bpm = $this->input->post('bpm');
+        $version = $this->input->post('version');
+        $artist = $this->input->post('artist');
+        $gender_id = $this->input->post('gender_id');
+        $product_type_id = (int)$this->input->post('product_type_id');
+        $owner_id = $this->input->post('user_id');
+        $product_id = (int)$this->input->post('product_id');
+        $paginationnumber = $this->input->post('paginationnumber');
 
-            $this->products_model->update_product($product_id, $data);
+        $data = array(
+            'name' => $name,
+            'artist' => $artist,
+            'price' => $price,
+            'version' => $version,
+            'description' => $description,
+            'gender_id' => $gender_id,
+            'product_type_id' => $product_type_id,
+            'owner_id' => $owner_id,
+            'bpm' => $bpm
+        );
 
-			if(($_FILES["demo"]["name"]!="")){
-				$demo_folder = 'assets/products/demos/';
-				$temp = explode(".", $_FILES["demo"]["name"]);
-				$newdemoname = round(microtime(true)) . '.' . end($temp);
-				$demo_file=$demo_folder.basename($_FILES['demo']['name']);
-				move_uploaded_file($_FILES['demo']['tmp_name'], $demo_folder.$newdemoname);
-				$data['demo']=$newdemoname;
-			}
-			if(($_FILES["descargable"]["name"]!="")){
-				$file_folder = 'assets/products/descargables/';
-				$temp = explode(".", $_FILES["descargable"]["name"]);
-				$newdescargablename = round(microtime(true)) . '.' . end($temp);
-				$descagable=$file_folder.basename($_FILES['descargable']['name']);
-				move_uploaded_file($_FILES['descargable']['tmp_name'], $file_folder.$newdescargablename);
-				$data['descargable']=$newdescargablename;
-			}
-			
-			$this->products_model->update_product($product_id, $data);
-			$producto = $this->products_model->load_product_info($product_id);
-			if($producto->approved==0){
-				$aprobacion="?aprobacion=1";
-			}else{
-				$aprobacion="";
-			}
-			if($producto->product_type_id==3){
-				redirect(base_url().'admin/listar_videos/'.$paginationnumber.$aprobacion);
-			}else{
-				redirect(base_url().'admin/listar_productos/'.$paginationnumber.$aprobacion);
-			}
+        if($product_type_id === 5){
+            $data['payment_link'] = $this->input->post('payment_link');
+        }
 
-		} else{
-			redirect(base_url().'admin/login/');
-		}
+        $cover_path = $this->_upload_featured_image('featured_image');
+        if($cover_path !== false && $cover_path !== null){
+            $data['featured_image'] = $cover_path;
+        }
 
-	}
+        if(!empty($_FILES['demo']['name'])){
+            $demo_folder = 'assets/products/demos/';
+            $temp = explode(".", $_FILES["demo"]["name"]);
+            $newdemoname = round(microtime(true)) . '.' . end($temp);
+            move_uploaded_file($_FILES['demo']['tmp_name'], $demo_folder.$newdemoname);
+            $data['demo'] = $newdemoname;
+        }
+
+        if(!empty($_FILES['descargable']['name'])){
+            $file_folder = 'assets/products/descargables/';
+            $temp = explode(".", $_FILES["descargable"]["name"]);
+            $newdescargablename = round(microtime(true)) . '.' . end($temp);
+            move_uploaded_file($_FILES['descargable']['tmp_name'], $file_folder.$newdescargablename);
+            $data['descargable'] = $newdescargablename;
+        }
+
+        $this->products_model->update_product($product_id, $data);
+
+        $producto = $this->products_model->load_product_info($product_id);
+        $aprobacion = ($producto && (int)$producto->approved === 0) ? "?aprobacion=1" : "";
+
+        if($producto && (int)$producto->product_type_id === 3){
+            redirect(base_url().'admin/listar_videos/'.$paginationnumber.$aprobacion);
+            return;
+        }
+
+        redirect(base_url().'admin/listar_productos/'.$paginationnumber.$aprobacion);
+    }
 	public function user_pay_for_it($user_id, $product_id){
 		if($this->orders_model->user_files($user_id, $product_id)){
 			return true;
