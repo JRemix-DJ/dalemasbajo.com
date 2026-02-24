@@ -1,26 +1,38 @@
 <div id="ajaxArea" class="bg-slate-50 min-h-screen">
 
-    <section class="album-header relative h-[250px] w-full overflow-hidden flex items-center justify-center text-center bg-gradient-to-r from-slate-900 to-slate-800">
+    <section class="pt-10 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="relative w-full overflow-hidden rounded-[28px] bg-[#3E6CED] shadow-xl border border-white/10">
 
-        <figure class="album-cover-wrap absolute inset-0 z-0 opacity-20 mix-blend-multiply bg-[url('<? echo base_url(); ?>images/default_cover.jpg')] bg-cover bg-center"></figure>
+                <!-- contenido centrado -->
+                <div class="relative z-10 flex min-h-[320px] md:min-h-[300px] items-center justify-center text-center">
+                    <div class="w-full max-w-3xl">
 
-        <div class="container relative z-10 flex flex-col items-center">
-            <div class="clearfix text-uppercase">
-                <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2 drop-shadow-md">
-                    Searcher
-                </h1>
-                <cite class="text-blue-200 font-medium not-italic">DALE MAS BAJO</cite>
+                        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                            Searcher
+                        </h1>
 
-                <? if(isset($_GET['sname']) && !empty($_GET['sname'])) { ?>
-                    <div class="mt-4 bg-white/10 backdrop-blur-sm px-4 py-1 rounded-full border border-white/20">
-                        <span class="text-white text-sm">Results for: <b class="text-primary-300">"<? echo $_GET['sname']; ?>"</b></span>
+                        <cite class="mt-2 block text-white/80 font-semibold not-italic tracking-[0.25em] uppercase">
+                            DALE MAS BAJO
+                        </cite>
+
+                        <? if(isset($_GET['sname']) && !empty($_GET['sname'])) { ?>
+                            <div class="mt-6 inline-flex items-center justify-center bg-white/10 backdrop-blur-xl px-5 py-2 rounded-full border border-white/20">
+              <span class="text-white text-sm md:text-base">
+                Results for:
+                <b class="text-white font-extrabold">"<? echo $_GET['sname']; ?>"</b>
+              </span>
+                            </div>
+                        <? } ?>
+
                     </div>
-                <? } ?>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <section class="py-12" <? if($this->session->userdata('content_type') == 'videos'){ ?>id="cuerpo"<? } ?>>
+    <section class="py-10" <? if($this->session->userdata('content_type') == 'videos'){ ?>id="cuerpo"<? } ?>>
 
         <div class="container mx-auto px-4 pb-24">
             <div class="mb-8">
