@@ -1,26 +1,40 @@
 <div class="bg-slate-50 min-h-screen font-sans">
 
-    <section class="relative h-[500px] w-full overflow-hidden mb-12 group">
-        <div class="absolute inset-0 z-0">
-            <video class="w-full h-full object-cover" autoplay muted loop playsinline>
-                <source src="<? echo base_url('assets/new_video.mp4'); ?>" type="video/mp4">
-            </video>
-            <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
-        </div>
+    <section class="py-10 md:py-14">
+        <div class="container mx-auto px-4">
+            <div id="heroBanner"
+                 class="relative w-full overflow-hidden rounded-[28px] border border-slate-200 bg-slate-900 shadow-xl"
+                 data-base="<?php echo base_url('assets/banners/'); ?>"
+                 data-banners='<?php echo json_encode($banners ?? [], JSON_UNESCAPED_SLASHES); ?>'>
 
-        <div class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
-            <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4 drop-shadow-lg">
-                Premium Monthly<br>
-                <span class="text-primary text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                    Subscription
-                </span>
-            </h1>
-            <p class="text-lg text-slate-200 mb-8 max-w-2xl font-light">
-                Unlimited access to exclusive DJ Remixes
-            </p>
-            <a href="<? echo base_url('planes'); ?>" class="px-8 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.5)] flex items-center gap-2">
-                JOIN NOW <i class="fa fa-arrow-right"></i>
-            </a>
+                <!-- VIDEO LAYER (JS inyecta el <video> aquí) -->
+                <div class="absolute inset-0" data-video-layer></div>
+
+                <!-- overlays -->
+                <div class="absolute inset-0 bg-slate-900/50 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),rgba(0,0,0,0.65))] pointer-events-none"></div>
+
+                <!-- CONTENIDO -->
+                <div class="relative z-10 flex min-h-[420px] md:min-h-[520px] items-center justify-center px-6 py-12">
+                    <div class="w-full max-w-3xl rounded-2xl bg-white/10 backdrop-blur-xl shadow-2xl px-6 py-10 md:px-12 md:py-12 text-center">
+                        <h1 class="text-3xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                            Premium Monthly Subscription
+                        </h1>
+
+                        <p class="mt-3 text-sm md:text-lg text-white/80 font-medium">
+                            Unlimited access to exclusive DJ remixes
+                        </p>
+
+                        <a href="<?php echo base_url('planes'); ?>"
+                           class="mt-8 inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-primary text-white font-bold transition-all duration-200 hover:scale-[1.03] hover:bg-blue-600 shadow-lg shadow-blue-500/30">
+                            JOIN NOW <i class="fa fa-arrow-right text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- DOTS -->
+                <div class="absolute bottom-4 left-0 right-0 z-20 flex items-center justify-center gap-2" data-dots></div>
+            </div>
         </div>
     </section>
 
@@ -239,4 +253,90 @@
             });
         });
     });
+    (function () {
+        const root = document.getElementById('heroBanner');
+        if (!root) return;
+
+        const basePath = (root.dataset.base || '').replace(/\/?$/, '/');
+        let banners = [];
+        try {
+            banners = JSON.parse(root.dataset.banners || '[]') || [];
+        } catch (e) {
+            banners = [];
+        }
+
+        const videoLayer = root.querySelector('[data-video-layer]');
+        const dotsWrap = root.querySelector('[data-dots]');
+        let idx = 0;
+        let currentVideo = null;
+
+        function makeDot(active) {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'h-2.5 w-2.5 rounded-full transition-all ' + (active ? 'bg-white w-6' : 'bg-white/40 hover:bg-white/70');
+            return b;
+        }
+
+        function renderDots() {
+            if (!dotsWrap) return;
+            dotsWrap.innerHTML = '';
+            if (banners.length <= 1) return;
+
+            banners.forEach((_, i) => {
+                const dot = makeDot(i === idx);
+                dot.addEventListener('click', () => go(i));
+                dotsWrap.appendChild(dot);
+            });
+        }
+
+        function mountVideo() {
+            if (!videoLayer) return;
+
+            videoLayer.innerHTML = '';
+            const b = banners[idx];
+
+            // fallback si no hay banners
+            const src = b && b.image ? (basePath + b.image) : "<?php echo base_url('assets/new_video.mp4'); ?>";
+
+            const v = document.createElement('video');
+            v.className = 'h-full w-full object-cover';
+            v.autoplay = true;
+            v.muted = true;
+            v.playsInline = true;
+            v.loop = (banners.length <= 1);
+
+            const s = document.createElement('source');
+            s.src = src;
+            s.type = 'video/mp4';
+
+            v.appendChild(s);
+
+            v.addEventListener('ended', () => next());
+
+            v.addEventListener('canplay', () => {
+                v.play().catch(() => {});
+            });
+
+            videoLayer.appendChild(v);
+            currentVideo = v;
+        }
+
+        function next() {
+            if (!banners.length) return;
+            idx = (idx + 1) % banners.length;
+            mountVideo();
+            renderDots();
+        }
+
+        function go(i) {
+            if (!banners.length) return;
+            idx = i;
+            mountVideo();
+            renderDots();
+        }
+
+        // init
+        mountVideo();
+        renderDots();
+    })();
 </script>

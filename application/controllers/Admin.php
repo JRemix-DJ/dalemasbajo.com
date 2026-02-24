@@ -2600,54 +2600,57 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	public function add_banner(){
-		if($this->session->userdata('is_logued_in')){
-			$name = $this->input->post('name');
-			$url = $this->input->post('url');
-			//$id = $this->input->post('id');
-			if(!file_exists($_FILES['image']['tmp_name']) || !is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$data = array(
-					'name'=>$name,
-					'url'=>$url,
-				);
-				$id=$this->banners_model->create_banner($data);
+    public function add_banner(){
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url().'admin/login/');
+            return;
+        }
 
-				$banner = $this->banners_model->load_banner_info($id);
-				//print gender updated
-				$this->print_edit_banner($id, $banner);
-			}else{
-				$image_folder='images/banners/';
-				$temp = explode(".", $_FILES["image"]["name"]);
-				$newfilename = round(microtime(true)) . '.' . end($temp);
-				$image_file=$image_folder.basename($_FILES['image']['name']);
+        $name = $this->input->post('name');
 
-				if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-					die("Upload failed with error code " . $_FILES['image']['error']);
-				}
+        // validar nombre
+        if(empty($name)){
+            show_error('Nombre requerido', 400);
+            return;
+        }
 
-				$info = getimagesize($_FILES['image']['tmp_name']);
-				if ($info === FALSE) {
-					die("Unable to determine image type of uploaded file");
-				}
+        // validar archivo
+        if(!isset($_FILES['video']) || $_FILES['video']['error'] !== UPLOAD_ERR_OK){
+            show_error('Debes subir un video', 400);
+            return;
+        }
 
-				if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
-					die("Not a gif/jpeg/png");
-				}
-				if(move_uploaded_file($_FILES['image']['tmp_name'], $image_folder.$newfilename)){
-					$data = array(
-						'name'=>$name,
-						'url'=>$url,
-						'image'=>$newfilename,
-					);
-					$id=$this->banners_model->create_banner($data);
-					$banner = $this->banners_model->load_banner_info($id);
-					$this->print_edit_banner($id, $banner);
-				}
-			}
-		}else{
-			redirect(base_url().'admin/login/');
-		}
-	}
+        $video_folder = FCPATH.'assets/banners/';
+        if(!is_dir($video_folder)) mkdir($video_folder, 0755, true);
+
+        $temp = explode(".", $_FILES["video"]["name"]);
+        $ext = strtolower(end($temp));
+        $allowed = ['mp4','webm','ogg'];
+
+        if(!in_array($ext, $allowed)){
+            show_error('Formato no permitido. Usa MP4/WEBM/OGG', 400);
+            return;
+        }
+
+        $newfilename = round(microtime(true)) . '.' . $ext;
+
+        if(move_uploaded_file($_FILES['video']['tmp_name'], $video_folder.$newfilename)){
+            $data = [
+                'name'  => $name,
+                // reutilizamos "image" para el nombre del video
+                'image' => $newfilename,
+                // si existe url, lo dejamos vacío
+                'url'   => null
+            ];
+
+            $id = $this->banners_model->create_banner($data);
+            $banner = $this->banners_model->load_banner_info($id);
+            $this->print_edit_banner($id, $banner, 'Banner creado');
+            return;
+        }
+
+        show_error('No se pudo subir el video', 500);
+    }
 
 	public function print_edit_banner($id, $banner, $mensaje=null){
 		$data['title']="Editar Banner";
@@ -2682,57 +2685,55 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	public function update_banner(){
-		if($this->session->userdata('is_logued_in')){
-			$name = $this->input->post('name');
-			$url = $this->input->post('url');
-			$id = $this->input->post('id');
-			if(!file_exists($_FILES['image']['tmp_name']) || !is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$data = array(
-					'name'=>$name,
-					'url'=>$url,
-				);
-				$this->banners_model->update_banner($id, $data);
+    public function update_banner(){
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url().'admin/login/');
+            return;
+        }
 
-				$banner = $this->banners_model->load_banner_info($id);
-				//print gender updated
-				$this->print_edit_banner($id, $banner);
+        $name = $this->input->post('name');
+        $id   = (int)$this->input->post('id');
 
-			}else{
-				$image_folder='images/generos/';
-				$temp = explode(".", $_FILES["image"]["name"]);
-				$newfilename = round(microtime(true)) . '.' . end($temp);
-				$image_file=$image_folder.basename($_FILES['image']['name']);
+        if(empty($name) || !$id){
+            show_error('Datos inválidos', 400);
+            return;
+        }
 
-				if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-					die("Upload failed with error code " . $_FILES['image']['error']);
-				}
+        $data = [
+            'name' => $name,
+            'url'  => null
+        ];
 
-				$info = getimagesize($_FILES['image']['tmp_name']);
-				if ($info === FALSE) {
-					die("Unable to determine image type of uploaded file");
-				}
+        // si sube video, reemplazamos
+        if(isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK){
 
-				if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
-					die("Not a gif/jpeg/png");
-				}
-				if(move_uploaded_file($_FILES['image']['tmp_name'], $image_folder.$newfilename)){
+            $video_folder = FCPATH.'assets/banners/';
+            if(!is_dir($video_folder)) mkdir($video_folder, 0755, true);
 
-					$data = array(
-						'name'=>$name,
-						'url'=>$url,
-						'image'=>$newfilename,
-					);
-					$this->banners_model->update_banner($id, $data);
-					$banner = $this->banners_model->load_banner_info($id);
-					$mensaje = 'Banner Actualizado';
-					$this->print_edit_banner($id, $banner, $mensaje);
-				}
-			}
-		}else{
-			redirect(base_url().'admin/login/');
-		}
-	}
+            $temp = explode(".", $_FILES["video"]["name"]);
+            $ext = strtolower(end($temp));
+            $allowed = ['mp4','webm','ogg'];
+
+            if(!in_array($ext, $allowed)){
+                show_error('Formato no permitido. Usa MP4/WEBM/OGG', 400);
+                return;
+            }
+
+            $newfilename = round(microtime(true)) . '.' . $ext;
+
+            if(move_uploaded_file($_FILES['video']['tmp_name'], $video_folder.$newfilename)){
+                $data['image'] = $newfilename;
+            } else {
+                show_error('No se pudo subir el video', 500);
+                return;
+            }
+        }
+
+        $this->banners_model->update_banner($id, $data);
+
+        $banner = $this->banners_model->load_banner_info($id);
+        $this->print_edit_banner($id, $banner, 'Banner actualizado');
+    }
 
 	public function listar_ordenes(){
 		if($this->session->userdata('is_logued_in')){
