@@ -179,6 +179,46 @@
     <div id="mobileMenu"
          class="hidden lg:hidden absolute top-20 left-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-xl z-40 max-h-[80vh] overflow-y-auto">
         <div class="p-4 space-y-2">
+
+            <? if($this->session->userdata('is_logued_in')){ ?>
+                <div class="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-md p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/30">
+                            <? echo substr($this->session->userdata('username'), 0, 1); ?>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-bold text-slate-900 truncate"><? echo $this->session->userdata('username'); ?></div>
+                            <div class="text-xs text-slate-500 truncate">Signed in</div>
+                        </div>
+                    </div>
+
+                    <?php
+                    $tokens = (int)$this->session->userdata('tokens');
+                    $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
+                    if($is_unlimited || $tokens > 0) { ?>
+                        <div class="mt-3 inline-flex items-center rounded-full bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/20 px-4 py-2 w-full justify-between">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-white/80">Downloads</span>
+                            <? if($is_unlimited){ ?>
+                                <span class="flex items-center gap-2 font-bold text-sm"><i class="fa-solid fa-infinity"></i> UNLIMITED</span>
+                            <? } else { ?>
+                                <span class="flex items-center gap-2 font-bold text-sm"><span class="token-count"><? echo $tokens; ?></span> <i class="fa-solid fa-cloud-arrow-down"></i></span>
+                            <? } ?>
+                        </div>
+                    <? } ?>
+
+                    <div class="mt-3 grid grid-cols-2 gap-3">
+                        <a href="<? echo base_url(); ?>micuenta"
+                           class="w-full py-3 text-center font-bold text-white bg-[rgb(0,102,255)] rounded-xl shadow-lg shadow-blue-500/20 hover:scale-[1.01] transition-all">
+                            My Account
+                        </a>
+                        <a href="<? echo base_url(); ?>login/logout/"
+                           class="w-full py-3 text-center font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 transition-all">
+                            Log out
+                        </a>
+                    </div>
+                </div>
+            <? } ?>
+
             <a href="<? echo base_url(); ?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Home</a>
             <a href="<? echo base_url('audios');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Audios</a>
             <a href="<? echo base_url('drops');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Drops</a>
