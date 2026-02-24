@@ -246,9 +246,23 @@
 </div> <div id="jquery_jplayer_1" class="jp-jplayer"></div>
 <div id="jp_container_1" class="hidden"></div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.js"></script>
+<script src="<? echo base_url(); ?>js/ajaxify.min.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.downCount.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.datetimepicker.full.min.js"></script>
 <script src="<? echo base_url(); ?>js/jplayer/jquery.jplayer.min.js"></script>
 <script src="<? echo base_url(); ?>js/jplayer/jplayer.playlist.min.js"></script>
+
+<script src="<? echo base_url(); ?>js/jquery.flexslider-min.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.stellar.min.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.sticky.js"></script>
+<script src="<? echo base_url(); ?>js/bootstrap.min.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.waitforimages.js"></script>
+<script src="<? echo base_url(); ?>js/masonry.pkgd.min.js"></script>
+<script src="<? echo base_url(); ?>js/packery.pkgd.min.js"></script>
+<script src="<? echo base_url(); ?>js/tweetie.min.js"></script>
+<script src="<? echo base_url(); ?>js/owl.carousel.min.js"></script>
+<script src="<? echo base_url(); ?>js/jquery.bxslider.min.js"></script>
 <script src="<? echo base_url(); ?>js/main.js?v=2.9.2021"></script>
 
 <script>

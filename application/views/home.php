@@ -15,24 +15,6 @@
 
     <link rel="stylesheet" href="<? echo base_url('css/newhomeblue.css?v=1.0.4'); ?>">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#0066FF",      /* Tu azul principal */
-                        secondary: "#020817",    /* Fondo oscuro casi negro */
-                        accent: "#F8FAFC",       /* Blanco humo para fondos claros */
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Montserrat', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         a { text-decoration: none; }
