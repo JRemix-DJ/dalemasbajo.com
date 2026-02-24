@@ -1,18 +1,5 @@
 //hide header on scroll > 100 and show on scroll up
 
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function() {
-    if(window.pageYOffset>100){
-        var currentScrollPos = window.pageYOffset;
-        if (prevScrollpos > currentScrollPos) {
-          document.getElementById("sticktop").style.top = "0";
-        } else {
-          document.getElementById("sticktop").style.top = "-100px";
-        }
-        prevScrollpos = currentScrollPos;
-    }
-}
-
 $('#pagar_tarjeta').on('click', function(e){
     var base_url = "http://localhost/dalemasbajo.com/";
     e.preventDefault();

@@ -44,8 +44,6 @@
         [x-cloak] { display: none !important; }
     </style>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
     <meta property="og:image" content="<? echo base_url('images/dj_new.jpg'); ?>" />
     <meta property="og:title" content="DALE MAS BAJO" />
     <meta property="og:description" content="La mejor página para obtener tus remixes." />
