@@ -5,13 +5,13 @@
     $session_email = (string)$this->session->userdata('email'); // confirmado en proyecto :contentReference[oaicite:1]{index=1}
     ?>
 
-    <!-- HERO -->
-    <section class="relative w-full overflow-hidden flex items-center justify-center text-center bg-white py-16 md:py-20">
+    <section class="album-header relative w-full overflow-hidden flex items-center justify-center text-center bg-white py-16">
         <div class="container relative z-10 flex flex-col items-center px-4">
-            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-3 font-heading drop-shadow-sm">
+            <h1 class="font-heading font-light text-slate-900 leading-tight tracking-normal text-[44px] md:text-[64px] mb-3">
                 Become a Remixer
             </h1>
-            <p class="text-lg text-slate-500 font-medium max-w-2xl">
+
+            <p class="text-[18px] md:text-[20px] text-slate-500 font-normal max-w-2xl leading-relaxed">
                 Join our community of talented remixers and share your music with the world
             </p>
         </div>
