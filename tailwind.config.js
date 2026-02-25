@@ -15,7 +15,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
-        heading: ["Montserrat", "sans-serif"]
+        heading: ["Montserrat", "sans-serif"],
+        oswald: ['Oswald', 'sans-serif'],
       }
     }
   }
