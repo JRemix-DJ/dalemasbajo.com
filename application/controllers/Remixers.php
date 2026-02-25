@@ -15,7 +15,6 @@ class Remixers extends CI_Controller {
     }
 
     public function index(){
-        // Obtenemos ID del Remixer desde la URL: remixers/ID
         $dj_id = $this->uri->segment(2);
 
         if($this->is_dj($dj_id)){
@@ -29,7 +28,6 @@ class Remixers extends CI_Controller {
             $data['title'] = $data['user']->username . " - Remixes";
             $data['description'] = "Remixes exclusivos de " . $data['user']->username;
 
-            // 2. Configuración Filtros
             $where = array();
             if($this->session->userdata('content_type')=='videos'){
                 $where['product_type_id']=3;
@@ -37,7 +35,6 @@ class Remixers extends CI_Controller {
                 $where['product_type_id']=1;
             }
 
-            // 3. Paginación
             $total_records = $this->products_model->get_total_products_by_dj($dj_id, $where);
             $limit_per_page = 20;
             $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -84,7 +81,6 @@ class Remixers extends CI_Controller {
                 $data["links"] = "";
             }
 
-            // 4. RESPUESTA AJAX (Para navegación sin recarga)
             if ($this->input->is_ajax_request()) {
                 $html_rows = $this->load->view('table_products', $data, TRUE);
                 echo json_encode([
@@ -95,13 +91,12 @@ class Remixers extends CI_Controller {
                 exit;
             }
 
-            // 5. Carga Normal
             $this->load->view('templates/header', $data);
             $this->load->view('remixer', $data); // Vista principal
             $this->load->view('templates/footer', $data);
 
         }else{
-            redirect('audios'); // Si el DJ no existe, redirigir
+            redirect('audios');
         }
     }
 

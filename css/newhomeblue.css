@@ -39,17 +39,15 @@ img {
   align-items: center;
 }
 .home .content {
-  display: grid;
   grid-template-areas: "logo logo" "boton1 boton2";
   grid-template-columns: 300px 300px;
-  max-width: 600px;
   padding-left: 25px;
 }
 .home .content #logo {
   grid-area: logo;
 }
 .home .content .btn {
-  background: #4071b6;
+  background: #0066FF;
   color: #fff;
   display: block;
   padding: 8px 12px;
@@ -57,12 +55,12 @@ img {
   text-decoration: none;
   width: auto;
   border-radius: 3px;
-  line-height: 20px;
+  line-height: 60px;
   font-size: 1.2em;
   transition: all 0.5s ease;
 }
 .home .content .btn:hover {
-  background: #335a92;
+  background: #034ebf;
 }
 .home .content #btnvideos {
   grid-area: boton1;

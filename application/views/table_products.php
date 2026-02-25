@@ -40,13 +40,14 @@ if(isset($products) && !empty($products)) {
             <td class="p-4 text-center">
                 <? $img_cover = base_url('audios/cover_mp3/' . $audio->id); ?>
 
-                <a href="javascript:;" class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 group-hover:bg-primary group-hover:text-white transition-all shadow-sm"
+                <a href="javascript:;"
+                   class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white hover:bg-blue-700 transition-colors duration-150"
                    data-id="<? echo $audio->id; ?>"
                    data-demo="<? echo base_url().'assets/products/demos/'.$preview; ?>"
                    data-cover="<? echo $img_cover; ?>"
                    data-title="<? echo $title; ?>"
                    data-artist="<? echo $artist; ?>">
-                    <i class="fa fa-play text-xs ml-0.5"></i>
+                    <i class="fa fa-play text-white text-xs ml-0.5"></i>
                 </a>
             </td>
 
@@ -57,14 +58,14 @@ if(isset($products) && !empty($products)) {
                 <? } ?>
             </td>
 
-            <td class="p-4 text-slate-500 text-sm">
-                <span class="bg-slate-50 text-slate-600 px-2 py-1 rounded border border-slate-100 text-xs">
-                    <? echo $version; ?>
-                </span>
+            <td class="p-4 text-slate-600 text-sm font-medium  max-w-[250px]">
+                <? echo $artist; ?>
             </td>
 
-            <td class="p-4 text-slate-600 text-sm font-medium">
-                <? echo $artist; ?>
+            <td class="p-4 text-center align-middle">
+                <span class="inline-flex items-center justify-center text-center max-w-full px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold whitespace-normal break-words leading-snug">
+                    <? echo $version; ?>
+                </span>
             </td>
 
             <td class="p-4">
@@ -74,12 +75,14 @@ if(isset($products) && !empty($products)) {
                 </a>
             </td>
 
-            <td class="p-4 text-slate-400 font-mono text-xs">
+            <td class="p-4 text-slate-400 font-semibold text-s">
                 <? echo $bpm; ?>
             </td>
 
             <td class="p-4">
-                <a href="<? echo base_url('genero/'.$genre_id); ?>" class="text-slate-500 hover:text-primary transition-colors text-xs font-medium">
+                <a href="<? echo base_url('genero/'.$genre_id); ?>"
+                   style="background-color: #0066ff1a"
+                   class="inline-flex items-center px-3 py-1 rounded-full text-[rgb(0,102,255)] text-xs font-semibold hover:bg-slate-200 hover:text-blue-700 transition-colors">
                     <? echo $genre_name; ?>
                 </a>
             </td>
@@ -93,12 +96,12 @@ if(isset($products) && !empty($products)) {
                 $has_access = ($is_unlimited || $tokens > 0) ? 1 : 0;
                 ?>
 
-                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded border border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
+                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded-full border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
                         data-logged="<? echo $is_logged; ?>"
                         data-access="<? echo $has_access; ?>"
                         data-id="<? echo $audio->id; ?>"
                         title="Descargar">
-                    <i class="fa fa-download"></i>
+                    <i class="fa-solid fa-download text-xl"></i>
                 </button>
             </td>
         </tr>

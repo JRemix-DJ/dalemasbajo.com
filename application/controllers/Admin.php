@@ -2069,123 +2069,167 @@ class Admin extends CI_Controller {
 	}
 
 
-	public function subir(){
-		if($this->session->userdata('is_logued_in')){
-			if(isset($_POST['action'])){
-				$this->file_name=(isset($_POST['file'])?$_POST['file']:(isset($_POST['replace'])?$_POST['replace']:false));
-				switch($_POST['action']){
-					case 'file_upload':
-						$extension=strtolower(pathinfo($_FILES['files']['name'],PATHINFO_EXTENSION));
-						$file=$this->file_name.'.'.$extension;
-						switch($extension){
-							case 'mp3':
-								@unlink(($_POST['demo']=='1'?$this->path_preview:$this->path_download).$file);
-								if(copy($_FILES['files']['tmp_name'],($_POST['demo']=='1'?$this->path_preview:$this->path_download).($_POST['demo']==1?$file:$file))){
-									// this scope only runs when demo: 1
-									if($_POST['demo']==1){
-										//Is not necessarily convert previews
-										// $filePreview = $this->sox($this->path_preview.'Audio/'.$file);
-										// unlink($this->path_preview.'/Audio/'.$file);
-										// rename($this->path_preview.'/Audio/'.$filePreview,	$this->path_preview.'/Audio/'.$file);
-									}
-									// Only run for main file upload. If a demo were uploaded, avoid to replace preview.
-									if($_POST['preview']=='true')
-									{
-										//CREAR PREVIEW A PARTIR DEL ARCHIVO COPIADO
-										if(	!is_file($this->path_preview.$file)	):
-											$filePreview = $this->sox($this->path_download.$file);
-											rename($this->path_preview.$filePreview,	$this->path_preview.$file);
-										endif;
-									}
-									echo 'true';
-								}else{
-									echo 'false';
-								}
-							break;
-							case 'zip':
-								$pack	=	isset($_POST['pack'])? $_POST['pack']:'video';
-								@unlink(($_POST['demo']=='1'?$this->path_preview:$this->path_download).$file);
-								if(copy($_FILES['files']['tmp_name'],($_POST['demo']=='1'?$this->path_preview:$this->path_download).$file)){
-									echo 'true';
-								}else{
-									echo 'false';
-								}
-							break;
-							case 'rar':
-								$pack				=	isset($_POST['pack'])? $_POST['pack']:'video';
-								@unlink(($_POST['demo']=='1'?$this->path_preview:$this->path_download).($pack=='video'?'Video/':'Audio/').$file);
-								if(copy($_FILES['files']['tmp_name'],($_POST['demo']=='1'?$this->path_preview:$this->path_download).($pack=='video'?'Video/':'Audio/').$file)){
-									echo 'true';
-								}else{
-									echo 'false';
-								}
-							break;
-							case 'mp4':
-								//Antes de crear el archivo borro cualquier otro con el mismo nombre por si se ha equivocado o esta reemplazando.
-								@unlink(($_POST['demo']==1?$this->path_preview_videos:$this->path_download_videos).$file);
-								//echo ($_POST['demo']==1?$this->path_preview:$this->path_download).'/Video/'.$file;
-								if(copy($_FILES['files']['tmp_name'],($_POST['demo']=='1'?$this->path_preview_videos:$this->path_download_videos).($_POST['demo']==1?$file:$file))){
-								//creo preview
-									if($_POST['demo']==1){
-										$this->ffmpeg($this->path_preview_videos.$file,$file);
-										unlink($this->path_preview_videos.$file);
-									}
-									if($_POST['preview']=='true'){
-										/*Copy file from Download/Video/. to Preview/Video/. and convert */
-											$this->ffmpeg($this->path_download_videos.$file,$file);
-											//unlink($this->path_preview.'/Video/convert_'.$file);
-									}
-									echo 'true';
-								}else{
-									echo 'false';
-								}
-							break;
-							//imagen
-							default:
-								if(copy($_FILES['files']['tmp_name'],$this->path_cover.$file)){
-									if($this->image($this->path_cover.$file,$this->path_cover.$file,200,200)){
-										echo 'true';
-									}else{
-										echo 'library';
-									}
-								}else{
-									echo 'false';
-								}
-							break;
-						}
-					break;
-					case 'file_add':
-						if(!isset($_POST['real_file_name'])){
-							echo 'false'; 
-							return false;
-						}
-						$extension	=	strtolower(pathinfo($_POST['real_file_name'],PATHINFO_EXTENSION));
-						$extensionPreview	=	strtolower(pathinfo($_POST['file_preview'],PATHINFO_EXTENSION));
-						if(	$extension=='mp3' || $extensionPreview	==	'mp3'	){
-							//VERIFICO SI ES PARA ACTUALIZAR O CREAR NUEVO
-							if(isset($_POST['id_file']) && $_POST['id_file'] <>''){
-								//UPDATE
-								return $this->audio('update');
-							}else{
-								//INSERT
-								return $this->audio('insert');
-							}
-						}else{
-							if(isset($_POST['id_file']) && $_POST['id_file'] <>''){
-								//UPDATE
-								return $this->video('update');
-							}else{
-								//INSERT
-								return $this->video('insert');
-							}
-						}
-					break;
-				}
-			}
-		}else{
-			redirect(base_url().'admin/login/');
-		}
-	}
+    public function subir(){
+        if($this->session->userdata('is_logued_in')){
+
+            if(isset($_POST['action'])){
+
+                $this->file_name = (isset($_POST['file']) ? $_POST['file'] : (isset($_POST['replace']) ? $_POST['replace'] : false));
+
+                switch($_POST['action']){
+                    case 'cover_upload':
+
+                        if(!isset($_FILES['files']) || empty($_FILES['files']['name'])){
+                            echo 'false';
+                            return;
+                        }
+
+                        $extension = strtolower(pathinfo($_FILES['files']['name'], PATHINFO_EXTENSION));
+                        if(!in_array($extension, ['jpg','jpeg','png','webp'])){
+                            echo 'false';
+                            return;
+                        }
+
+                        // Nombre final
+                        $file = $this->file_name . '.' . $extension;
+
+                        $public_dir = FCPATH . 'assets/products/covers/';
+                        if(!is_dir($public_dir)){
+                            @mkdir($public_dir, 0755, true);
+                        }
+
+                        @unlink($public_dir . $file);
+
+                        if(!copy($_FILES['files']['tmp_name'], $public_dir . $file)){
+                            echo 'false';
+                            return;
+                        }
+
+                        try {
+                            $this->load->library('image_lib');
+
+                            $config = [
+                                'image_library'  => 'gd2',
+                                'source_image'   => $public_dir . $file,
+                                'maintain_ratio' => TRUE,
+                                'width'          => 1400,
+                                'height'         => 1400,
+                                'quality'        => '85%',
+                            ];
+
+                            $this->image_lib->initialize($config);
+                            $this->image_lib->resize();
+                            $this->image_lib->clear();
+                        } catch (\Throwable $e) {}
+
+                        echo 'assets/products/covers/' . $file;
+                        return;
+
+                        break;
+
+                    case 'file_upload':
+                        $extension = strtolower(pathinfo($_FILES['files']['name'], PATHINFO_EXTENSION));
+                        $file = $this->file_name . '.' . $extension;
+
+                        switch($extension){
+                            case 'mp3':
+                                @unlink(($_POST['demo']=='1'?$this->path_preview:$this->path_download).$file);
+                                if(copy($_FILES['files']['tmp_name'], ($_POST['demo']=='1'?$this->path_preview:$this->path_download).($_POST['demo']==1?$file:$file))){
+                                    if($_POST['demo']==1){
+                                    }
+                                    if($_POST['preview']=='true'){
+                                        if(!is_file($this->path_preview.$file)){
+                                            $filePreview = $this->sox($this->path_download.$file);
+                                            rename($this->path_preview.$filePreview, $this->path_preview.$file);
+                                        }
+                                    }
+                                    echo 'true';
+                                }else{
+                                    echo 'false';
+                                }
+                                break;
+                            case 'zip':
+                                $pack = isset($_POST['pack']) ? $_POST['pack'] : 'video';
+                                @unlink(($_POST['demo']=='1'?$this->path_preview:$this->path_download).$file);
+                                if(copy($_FILES['files']['tmp_name'], ($_POST['demo']=='1'?$this->path_preview:$this->path_download).$file)){
+                                    echo 'true';
+                                }else{
+                                    echo 'false';
+                                }
+                                break;
+                            case 'rar':
+
+                                $pack = isset($_POST['pack']) ? $_POST['pack'] : 'video';
+                                @unlink(($_POST['demo']=='1'?$this->path_preview:$this->path_download).($pack=='video'?'Video/':'Audio/').$file);
+
+                                if(copy($_FILES['files']['tmp_name'], ($_POST['demo']=='1'?$this->path_preview:$this->path_download).($pack=='video'?'Video/':'Audio/').$file)){
+                                    echo 'true';
+                                }else{
+                                    echo 'false';
+                                }
+                                break;
+                            case 'mp4':
+                                @unlink(($_POST['demo']==1?$this->path_preview_videos:$this->path_download_videos).$file);
+                                if(copy($_FILES['files']['tmp_name'], ($_POST['demo']=='1'?$this->path_preview_videos:$this->path_download_videos).($_POST['demo']==1?$file:$file))){
+                                    if($_POST['demo']==1){
+                                        $this->ffmpeg($this->path_preview_videos.$file, $file);
+                                        unlink($this->path_preview_videos.$file);
+                                    }
+
+                                    if($_POST['preview']=='true'){
+                                        $this->ffmpeg($this->path_download_videos.$file, $file);
+                                    }
+
+                                    echo 'true';
+
+                                }else{
+                                    echo 'false';
+                                }
+                                break;
+                            default:
+                                if(copy($_FILES['files']['tmp_name'], $this->path_cover.$file)){
+                                    if($this->image($this->path_cover.$file, $this->path_cover.$file, 200, 200)){
+                                        echo 'true';
+                                    }else{
+                                        echo 'library';
+                                    }
+                                }else{
+                                    echo 'false';
+                                }
+                                break;
+                        }
+                        break;
+                    case 'file_add':
+                        if(!isset($_POST['real_file_name'])){
+                            echo 'false';
+                            return false;
+                        }
+                        if(!isset($_POST['cover'])){
+                            $_POST['cover'] = ''; // por si llega vacío
+                        }
+                        $extension = strtolower(pathinfo($_POST['real_file_name'], PATHINFO_EXTENSION));
+                        $extensionPreview = strtolower(pathinfo($_POST['file_preview'], PATHINFO_EXTENSION));
+
+                        if($extension=='mp3' || $extensionPreview=='mp3'){
+                            if(isset($_POST['id_file']) && $_POST['id_file'] <> ''){
+                                return $this->audio('update');
+                            }else{
+                                return $this->audio('insert');
+                            }
+                        }else{
+                            if(isset($_POST['id_file']) && $_POST['id_file'] <> ''){
+                                return $this->video('update');
+                            }else{
+                                return $this->video('insert');
+                            }
+                        }
+                        break;
+                }
+            }
+        }else{
+            redirect(base_url().'admin/login/');
+        }
+    }
 
 	public function showme(){
 		print_r($_SESSION);
@@ -2209,7 +2253,9 @@ class Admin extends CI_Controller {
 			'demo'				=>	$demo,
 			'descargable'		=>	$_POST['descargable'],
 			'format'			=>	'video',
-			'duration'			=>	$duration
+			'duration'			=>	$duration,
+            'featured_image' => isset($_POST['cover']) ? $_POST['cover'] : null,
+            'payment_link' => isset($_POST['payment_link']) ? $_POST['payment_link'] : null
 		);
 		if($this->session->userdata('role')=='is_admin'||$this->session->userdata('role')=='is_subadmin'){
 			$productos_data['approved']=1;
@@ -2336,7 +2382,9 @@ class Admin extends CI_Controller {
 			'demo'				=>	$_POST['demo'],
 			'descargable'		=>	$_POST['descargable'],
 			'format'			=> 'audio',
-			'duration'			=> $duration
+			'duration'			=> $duration,
+            'featured_image' => isset($_POST['cover']) ? $_POST['cover'] : null,
+            'payment_link' => isset($_POST['payment_link']) ? $_POST['payment_link'] : null
 		);
 		if($this->session->userdata('role')=='is_admin'||$this->session->userdata('role')=='is_subadmin'){
 			$productos_data['approved']=1;
@@ -2552,54 +2600,57 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	public function add_banner(){
-		if($this->session->userdata('is_logued_in')){
-			$name = $this->input->post('name');
-			$url = $this->input->post('url');
-			//$id = $this->input->post('id');
-			if(!file_exists($_FILES['image']['tmp_name']) || !is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$data = array(
-					'name'=>$name,
-					'url'=>$url,
-				);
-				$id=$this->banners_model->create_banner($data);
+    public function add_banner(){
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url().'admin/login/');
+            return;
+        }
 
-				$banner = $this->banners_model->load_banner_info($id);
-				//print gender updated
-				$this->print_edit_banner($id, $banner);
-			}else{
-				$image_folder='images/banners/';
-				$temp = explode(".", $_FILES["image"]["name"]);
-				$newfilename = round(microtime(true)) . '.' . end($temp);
-				$image_file=$image_folder.basename($_FILES['image']['name']);
+        $name = $this->input->post('name');
 
-				if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-					die("Upload failed with error code " . $_FILES['image']['error']);
-				}
+        // validar nombre
+        if(empty($name)){
+            show_error('Nombre requerido', 400);
+            return;
+        }
 
-				$info = getimagesize($_FILES['image']['tmp_name']);
-				if ($info === FALSE) {
-					die("Unable to determine image type of uploaded file");
-				}
+        // validar archivo
+        if(!isset($_FILES['video']) || $_FILES['video']['error'] !== UPLOAD_ERR_OK){
+            show_error('Debes subir un video', 400);
+            return;
+        }
 
-				if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
-					die("Not a gif/jpeg/png");
-				}
-				if(move_uploaded_file($_FILES['image']['tmp_name'], $image_folder.$newfilename)){
-					$data = array(
-						'name'=>$name,
-						'url'=>$url,
-						'image'=>$newfilename,
-					);
-					$id=$this->banners_model->create_banner($data);
-					$banner = $this->banners_model->load_banner_info($id);
-					$this->print_edit_banner($id, $banner);
-				}
-			}
-		}else{
-			redirect(base_url().'admin/login/');
-		}
-	}
+        $video_folder = FCPATH.'assets/banners/';
+        if(!is_dir($video_folder)) mkdir($video_folder, 0755, true);
+
+        $temp = explode(".", $_FILES["video"]["name"]);
+        $ext = strtolower(end($temp));
+        $allowed = ['mp4','webm','ogg'];
+
+        if(!in_array($ext, $allowed)){
+            show_error('Formato no permitido. Usa MP4/WEBM/OGG', 400);
+            return;
+        }
+
+        $newfilename = round(microtime(true)) . '.' . $ext;
+
+        if(move_uploaded_file($_FILES['video']['tmp_name'], $video_folder.$newfilename)){
+            $data = [
+                'name'  => $name,
+                // reutilizamos "image" para el nombre del video
+                'image' => $newfilename,
+                // si existe url, lo dejamos vacío
+                'url'   => null
+            ];
+
+            $id = $this->banners_model->create_banner($data);
+            $banner = $this->banners_model->load_banner_info($id);
+            $this->print_edit_banner($id, $banner, 'Banner creado');
+            return;
+        }
+
+        show_error('No se pudo subir el video', 500);
+    }
 
 	public function print_edit_banner($id, $banner, $mensaje=null){
 		$data['title']="Editar Banner";
@@ -2634,57 +2685,55 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	public function update_banner(){
-		if($this->session->userdata('is_logued_in')){
-			$name = $this->input->post('name');
-			$url = $this->input->post('url');
-			$id = $this->input->post('id');
-			if(!file_exists($_FILES['image']['tmp_name']) || !is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$data = array(
-					'name'=>$name,
-					'url'=>$url,
-				);
-				$this->banners_model->update_banner($id, $data);
+    public function update_banner(){
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url().'admin/login/');
+            return;
+        }
 
-				$banner = $this->banners_model->load_banner_info($id);
-				//print gender updated
-				$this->print_edit_banner($id, $banner);
+        $name = $this->input->post('name');
+        $id   = (int)$this->input->post('id');
 
-			}else{
-				$image_folder='images/generos/';
-				$temp = explode(".", $_FILES["image"]["name"]);
-				$newfilename = round(microtime(true)) . '.' . end($temp);
-				$image_file=$image_folder.basename($_FILES['image']['name']);
+        if(empty($name) || !$id){
+            show_error('Datos inválidos', 400);
+            return;
+        }
 
-				if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-					die("Upload failed with error code " . $_FILES['image']['error']);
-				}
+        $data = [
+            'name' => $name,
+            'url'  => null
+        ];
 
-				$info = getimagesize($_FILES['image']['tmp_name']);
-				if ($info === FALSE) {
-					die("Unable to determine image type of uploaded file");
-				}
+        // si sube video, reemplazamos
+        if(isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK){
 
-				if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
-					die("Not a gif/jpeg/png");
-				}
-				if(move_uploaded_file($_FILES['image']['tmp_name'], $image_folder.$newfilename)){
+            $video_folder = FCPATH.'assets/banners/';
+            if(!is_dir($video_folder)) mkdir($video_folder, 0755, true);
 
-					$data = array(
-						'name'=>$name,
-						'url'=>$url,
-						'image'=>$newfilename,
-					);
-					$this->banners_model->update_banner($id, $data);
-					$banner = $this->banners_model->load_banner_info($id);
-					$mensaje = 'Banner Actualizado';
-					$this->print_edit_banner($id, $banner, $mensaje);
-				}
-			}
-		}else{
-			redirect(base_url().'admin/login/');
-		}
-	}
+            $temp = explode(".", $_FILES["video"]["name"]);
+            $ext = strtolower(end($temp));
+            $allowed = ['mp4','webm','ogg'];
+
+            if(!in_array($ext, $allowed)){
+                show_error('Formato no permitido. Usa MP4/WEBM/OGG', 400);
+                return;
+            }
+
+            $newfilename = round(microtime(true)) . '.' . $ext;
+
+            if(move_uploaded_file($_FILES['video']['tmp_name'], $video_folder.$newfilename)){
+                $data['image'] = $newfilename;
+            } else {
+                show_error('No se pudo subir el video', 500);
+                return;
+            }
+        }
+
+        $this->banners_model->update_banner($id, $data);
+
+        $banner = $this->banners_model->load_banner_info($id);
+        $this->print_edit_banner($id, $banner, 'Banner actualizado');
+    }
 
 	public function listar_ordenes(){
 		if($this->session->userdata('is_logued_in')){

@@ -16,71 +16,109 @@ class Products extends CI_Controller {
 	// 	$data['products']=$this->products_model->get_products();
 	// }
 
-	public function edit_product(){
-		$this->load->model('users_model');
-		$user_role= $this->session->userdata('role');
-		if($this->session->userdata('is_logued_in')){
-			$name = $this->input->post('name');
-			$price = $this->input->post('price');
-			$description = $this->input->post('description');
-			$bpm = $this->input->post('bpm');
-			$version = $this->input->post('version');
-			$artist = $this->input->post('artist');
-			$gender_id = $this->input->post('gender_id');
-			$product_type_id = $this->input->post('product_type_id');
-			$owner_id = $this->input->post('user_id');
-			$product_id = $this->input->post('product_id');
-			$paginationnumber = $this->input->post('paginationnumber');
-			$data=[];
-			$where = array();
+    private function _upload_featured_image($field = 'featured_image'){
+        if(empty($_FILES[$field]['name'])) return null;
 
-			$data = array(
-				'name'=>$name,
-				'artist'=>$artist,
-				'price'=>$price,
-				'version'=>$version,
-				'description'=>$description,
-				'gender_id'=>$gender_id,
-				'product_type_id'=>$product_type_id,
-				'owner_id'=>$owner_id,
-				'bpm'=>$bpm,
-			);
+        $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+        if(!in_array($ext, ['jpg','jpeg','png','webp'])) return false;
 
-			if(($_FILES["demo"]["name"]!="")){
-				$demo_folder = 'assets/products/demos/';
-				$temp = explode(".", $_FILES["demo"]["name"]);
-				$newdemoname = round(microtime(true)) . '.' . end($temp);
-				$demo_file=$demo_folder.basename($_FILES['demo']['name']);
-				move_uploaded_file($_FILES['demo']['tmp_name'], $demo_folder.$newdemoname);
-				$data['demo']=$newdemoname;
-			}
-			if(($_FILES["descargable"]["name"]!="")){
-				$file_folder = 'assets/products/descargables/';
-				$temp = explode(".", $_FILES["descargable"]["name"]);
-				$newdescargablename = round(microtime(true)) . '.' . end($temp);
-				$descagable=$file_folder.basename($_FILES['descargable']['name']);
-				move_uploaded_file($_FILES['descargable']['tmp_name'], $file_folder.$newdescargablename);
-				$data['descargable']=$newdescargablename;
-			}
-			
-			$this->products_model->update_product($product_id, $data);
-			$producto = $this->products_model->load_product_info($product_id);
-			if($producto->approved==0){
-				$aprobacion="?aprobacion=1";
-			}else{
-				$aprobacion="";
-			}
-			if($producto->product_type_id==3){
-				redirect(base_url().'admin/listar_videos/'.$paginationnumber.$aprobacion);
-			}else{
-				redirect(base_url().'admin/listar_productos/'.$paginationnumber.$aprobacion);
-			}
+        $dir = FCPATH.'assets/products/covers/';
+        if(!is_dir($dir)) @mkdir($dir, 0755, true);
 
-		}else{
-			redirect(base_url().'admin/login/');
-		}
+        $filename = 'cover_'.date('YmdHis').'_'.mt_rand(1000,9999).'.'.$ext;
+        $dest = $dir.$filename;
 
-	}
+        if(!move_uploaded_file($_FILES[$field]['tmp_name'], $dest)){
+            return false;
+        }
+
+        try{
+            $this->load->library('image_lib');
+            $config = [
+                'image_library'  => 'gd2',
+                'source_image'   => $dest,
+                'maintain_ratio' => true,
+                'width'          => 1400,
+                'height'         => 1400,
+                'quality'        => '85%',
+            ];
+            $this->image_lib->initialize($config);
+            $this->image_lib->resize();
+            $this->image_lib->clear();
+        }catch(\Throwable $e){}
+
+        return 'assets/products/covers/'.$filename;
+    }
+
+    public function edit_product(){
+        $this->load->model('users_model');
+
+        if(!$this->session->userdata('is_logued_in')){
+            redirect(base_url().'admin/login/');
+            return;
+        }
+
+        $name = $this->input->post('name');
+        $price = $this->input->post('price');
+        $description = $this->input->post('description');
+        $bpm = $this->input->post('bpm');
+        $version = $this->input->post('version');
+        $artist = $this->input->post('artist');
+        $gender_id = $this->input->post('gender_id');
+        $product_type_id = (int)$this->input->post('product_type_id');
+        $owner_id = $this->input->post('user_id');
+        $product_id = (int)$this->input->post('product_id');
+        $paginationnumber = $this->input->post('paginationnumber');
+
+        $data = array(
+            'name' => $name,
+            'artist' => $artist,
+            'price' => $price,
+            'version' => $version,
+            'description' => $description,
+            'gender_id' => $gender_id,
+            'product_type_id' => $product_type_id,
+            'owner_id' => $owner_id,
+            'bpm' => $bpm
+        );
+
+        if($product_type_id === 5){
+            $data['payment_link'] = $this->input->post('payment_link');
+        }
+
+        $cover_path = $this->_upload_featured_image('featured_image');
+        if($cover_path !== false && $cover_path !== null){
+            $data['featured_image'] = $cover_path;
+        }
+
+        if(!empty($_FILES['demo']['name'])){
+            $demo_folder = 'assets/products/demos/';
+            $temp = explode(".", $_FILES["demo"]["name"]);
+            $newdemoname = round(microtime(true)) . '.' . end($temp);
+            move_uploaded_file($_FILES['demo']['tmp_name'], $demo_folder.$newdemoname);
+            $data['demo'] = $newdemoname;
+        }
+
+        if(!empty($_FILES['descargable']['name'])){
+            $file_folder = 'assets/products/descargables/';
+            $temp = explode(".", $_FILES["descargable"]["name"]);
+            $newdescargablename = round(microtime(true)) . '.' . end($temp);
+            move_uploaded_file($_FILES['descargable']['tmp_name'], $file_folder.$newdescargablename);
+            $data['descargable'] = $newdescargablename;
+        }
+
+        $this->products_model->update_product($product_id, $data);
+
+        $producto = $this->products_model->load_product_info($product_id);
+        $aprobacion = ($producto && (int)$producto->approved === 0) ? "?aprobacion=1" : "";
+
+        if($producto && (int)$producto->product_type_id === 3){
+            redirect(base_url().'admin/listar_videos/'.$paginationnumber.$aprobacion);
+            return;
+        }
+
+        redirect(base_url().'admin/listar_productos/'.$paginationnumber.$aprobacion);
+    }
 	public function user_pay_for_it($user_id, $product_id){
 		if($this->orders_model->user_files($user_id, $product_id)){
 			return true;
@@ -89,87 +127,81 @@ class Products extends CI_Controller {
 		}
 	}
 
-	public function descargar(){
-		if($this->session->userdata('is_logued_in')){
-			$product_id=$this->uri->segment(3);
-			if($this->user_pay_for_it($this->session->userdata('id_usuario'), $product_id)){
-				$user_file = $this->orders_model->user_files($this->session->userdata('id_usuario'), $product_id);
-				$product = $this->products_model->load_product_info($product_id);
-				$genero = $this->genero_model->load_genero_info($product->gender_id);
-				$dj = $this->users_model->load_user_info($product->owner_id);
-				if($dj){
-					$djusername = $dj->username;
-				}else{
-					$djusername = 'Unavailable';
-				}
-				if($product->product_type_id==1){
-					$ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
-					$file=preg_replace('/[^a-zA-Z0-9]/', ' ',$product->name).' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB.mp3';
-				}else{
-					$ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
-					$file=$product->name.' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB .'.$ext;
-				}
-				if($product->product_type_id==3){
-					$tamano=@filesize('/var/www/dalemasbajo.com/assets/products/descargables/videos/'.$product->descargable);
-					$file_url='/var/www/dalemasbajo.com/assets/products/descargables/videos/'.$product->descargable;
-				}else{
-					$tamano=@filesize('/var/www/dalemasbajo.com/assets/products/descargables/'.$product->descargable);
-					$file_url='/var/www/dalemasbajo.com/assets/products/descargables/'.$product->descargable;
-				}
-				//echo $file_url;
-				$tamano=@filesize($file_url);
-				//echo $tamano;
-				//echo $file_url;
-				$new_downloads_left=$user_file[0]->downloads_left - 1;
-				$data = array(
-					'downloads_left' => $new_downloads_left
-				);
-				$this->orders_model->update_user_files_item($user_file[0]->id, $data);
-				if(file_exists($file_url)) {
-					header("Pragma: no-cache");
-					header('Expires: 0');
-					header('Access-Control-Allow-Origin: *');
-					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-					header("Last-Modified: " . gmdate("D, d M Y H:i:s T", filemtime($file_url))); 
-					header('Cache-Control: private',false);
-					header('Content-Type: application/octet-stream');
-					header('Content-Disposition: attachment; filename="'.$file.'"');
-					header('Content-Transfer-Encoding: binary');
-					header('Content-Length: '.$tamano);
-					// reason: it's unreliable to download whole file at once
-					$chunksize = 1 * (1024 * 1024);
-					$fp = fopen($file_url,'rb'); 
-					$buffer = ''; 
-					while (!feof($fp)) 
-						{ 
-						$buffer = fread($fp, $chunksize); 
-						echo $buffer; 
-						ob_flush(); 
-						flush(); 
-						} 
-					fclose($fp); 
-					// resume original code here:
-					if ( !$fp ) {
-					    echo "File Not Found";
-					    exit();
-					}
-					if ( !fpassthru($fp) ) {
-					    echo "There was an error!";
-					    exit();
-					}
-					
-					header("Connection: close");
-					exit();  
-				}else{
-					echo "File Not Found!!";	
-				}
-			}else{
-				echo 'No tienes acceso a este archivo';
-			}
-		}else{
-			redirect(base_url());
-		}
-	}
+    public function descargar(){
+        if($this->session->userdata('is_logued_in')){
+            $product_id = $this->uri->segment(3);
+            $user_id = $this->session->userdata('id_usuario');
+
+            // 1. VERIFICACIÓN DOBLE (Igual que en Micuenta)
+            // Verificamos en tabla de asignaciones (Tokens) O en tabla de ordenes (Compras)
+            $tiene_archivo = $this->users_model->isUserFile($user_id, $product_id);
+            $tiene_orden   = $this->orders_model->user_files($user_id, $product_id);
+
+            $has_file = ($tiene_archivo || $tiene_orden);
+
+            // 2. Verificar Ilimitado
+            $is_unlimited = ($this->session->userdata('is_user_unlimited') == true || $this->session->userdata('role') == 1);
+
+            if($has_file || $is_unlimited){
+
+                $product = $this->products_model->load_product_info($product_id);
+                $genero = $this->genero_model->load_genero_info($product->gender_id);
+                $dj = $this->users_model->load_user_info($product->owner_id);
+
+                $djusername = ($dj) ? $dj->username : 'Unavailable';
+
+                if($product->product_type_id==1){
+                    $ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
+                    $file=preg_replace('/[^a-zA-Z0-9]/', ' ',$product->name).' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB.mp3';
+                }else{
+                    $ext = pathinfo($product->descargable, PATHINFO_EXTENSION);
+                    $file=$product->name.' - '.$product->artist.' - '.$djusername.' - '.$genero->name.' - '.$product->version.' - '.$product->bpm.'bpm - DMB .'.$ext;
+                }
+
+                if($product->product_type_id==3){
+                    $file_url='/var/www/dalemasbajo.com/assets/products/descargables/videos/'.$product->descargable;
+                }else{
+                    $file_url='/var/www/dalemasbajo.com/assets/products/descargables/'.$product->descargable;
+                }
+
+                if(!file_exists($file_url)){
+                    echo "File Not Found!!";
+                    return;
+                }
+
+                $tamano=@filesize($file_url);
+
+                if(file_exists($file_url)) {
+                    header("Pragma: no-cache");
+                    header('Expires: 0');
+                    header('Access-Control-Allow-Origin: *');
+                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                    header("Last-Modified: " . gmdate("D, d M Y H:i:s T", filemtime($file_url)));
+                    header('Cache-Control: private',false);
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.$file.'"');
+                    header('Content-Transfer-Encoding: binary');
+                    header('Content-Length: '.$tamano);
+
+                    $chunksize = 1 * (1024 * 1024);
+                    $fp = fopen($file_url,'rb');
+                    $buffer = '';
+                    while (!feof($fp)) {
+                        $buffer = fread($fp, $chunksize);
+                        echo $buffer;
+                        ob_flush();
+                        flush();
+                    }
+                    fclose($fp);
+                    exit();
+                }
+            }else{
+                echo 'No tienes permiso para descargar este archivo. Por favor recarga la página.';
+            }
+        }else{
+            redirect(base_url());
+        }
+    }
 
 	public function descargar_admin(){
 		if($this->session->userdata('is_logued_in')&&$this->session->userdata('role')=='is_admin'){

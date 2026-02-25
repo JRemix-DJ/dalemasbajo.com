@@ -1,91 +1,213 @@
-<div id="ajaxArea"> 
-    <div class="pageArea">
-    <section class="album-header">
-            <figure class="album-cover-wrap">
-                <div class="album-cover_overlay"></div>
-            </figure>
-            <div class="container">
-                <div class="cover-content">
-                   <hr>
-                    <div class="clearfix text-uppercase">
-                        <h1 style="padding-top: 30px">PLANES</h1>
-                        <cite class="bg-success"><i class="fa fa-exclamation-triangle"></i> Hemos mejorado nuestro sistema de pagos, hazlo con confianza!</cite>
-                    </div>
-                </div>
-            </div>
-        </section>
-    	<section id="cuerpo" class="planespage">
-                    
-    		<header class="style4 confirmacion">
-		    	<div class="container">
-		    		<div class="row">
-		    			<div class="col-xs-12">
-                            
-                        <div class="contenedor" >
-                        <? if(isset($plans)){  ?>
-                            <? foreach($plans as $plan){ ?>
-                                <div class="tabla tabla hover ">
-                                    <div class="section_plan">
-                                        <h2><?= $plan->name; ?></h2>
-                                    </div>
-                                    <div class="section_plan">
-                                        <p><? echo $plan->description;  ?></p>
-                                    </div>
-                                  
-                                    <div class="section_plan">
-                                    <span class="precio">$ <? echo $plan->price; ?></span>
-                                    </div>
-                                 
-                                    <div class="section_plan">
-                                    <span class=""><? echo $plan->duration; ?></span>
-                                    <p> &nbsp; días</p>
-                                    </div>
-                                    <? if ($plan->ilimitado_activo == 1) { ?>
-                                        <div class="section_plan">
-                                            <h6>Descargas Ilimitadas de Audio.</h6>
-                                        </div>
-                                    <? }else{ ?>
-                                    <div class="section_plan">
-                                    <span class="table-tokens-audio"><? if($plan->tokens!=0 && $plan->tokens!=NULL){ echo $plan->tokens; }else{ echo '0'; } ?></span>
-                                    <p> &nbsp; Descargas Audio </p>
-                                    </div>
-                                    <? } ?>
-                                    <div class="section_plan">
-                                    <p> Renovacion Automatica </p>
-                                    </div>
-                                    
-                                    <div class="section_plan">
-                                    <p>Busqueda Avanzada </p>
-                                    </div>
-                                    <div class="section_plan">
-                                    <p>Nueva Música Diariamente </p>
-                                    </div>
-                                    
-                                    <div class="section_plan">
-                                    <p> Descargas con 1 Click </p>
-                                    </div>
-                                   
-                                    <div class="section_plan">
-                                    <p>HQ Audio</p>
-                                    </div>
-                                    
-                                
-                                    
-                                    
+<section class="album-header relative w-full overflow-hidden flex items-center justify-center text-center bg-white py-16">
+    <div class="container relative z-10 flex flex-col items-center px-4">
+        <h1 class="font-heading font-light text-slate-900 leading-tight tracking-normal text-[44px] md:text-[64px] mb-3">
+            Choose Your Plan
+        </h1>
 
-                                    <a class="btn btn-default" href="<? echo base_url(); ?>getplan/?plan_id=<? echo $plan->id; ?>&currency=USD"><b>Comprar</b></a>   
-                                    
-                                </div>
-                                
-                                
-                                <??>
-                            <? } ?>
-                        <? } ?>
-                        </div>
-		    			</div>
-		    		</div>
-		    	</div> 
-    		</header>
-    	</section>
+        <p class="text-[18px] md:text-[20px] text-slate-500 font-normal max-w-2xl leading-relaxed">
+            Get immediate access to premium DJ remixes and exclusive content
+        </p>
     </div>
-</div>
+</section>
+
+<section id="cuerpo" class="pb-16 md:pb-24 bg-white">
+    <div class="container mx-auto px-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto items-start">
+
+            <? if(isset($plans) && !empty($plans)){
+                foreach($plans as $plan){
+
+                    $plan_name = trim((string)$plan->name);
+
+                    $is_standard = (stripos($plan_name, 'Standard') !== false);
+                    $is_premium  = (stripos($plan_name, 'Premium')  !== false);
+                    $is_3_months = (stripos($plan_name, '3 months') !== false) || preg_match('/\b3\b.*months/i', $plan_name);
+                    $is_6_months = (stripos($plan_name, '6 months') !== false) || preg_match('/\b6\b.*months/i', $plan_name);
+                    $is_annual   = (stripos($plan_name, 'Annual')   !== false);
+
+                    $show_most_popular = $is_standard;
+
+                    // ---- NUEVO: label para Request Your Remix ----
+                    $request_remix_label = null;
+
+                    if ($is_standard) {
+                        $request_remix_label = '3';
+                    } else if ($is_premium) {
+                        $request_remix_label = '5';
+                    } else if ($is_3_months || $is_6_months || $is_annual) {
+                        $request_remix_label = '3 Monthly';
+                    }
+
+                    $show_request_remix = ($request_remix_label !== null);
+
+                    $es_ilimitado = ($plan->ilimitado_activo == 1);
+                    $is_highlighted = ($es_ilimitado || $is_standard);
+
+                    if ($is_highlighted) {
+                        $container_classes = 'relative w-full h-full rounded-2xl p-[2px] bg-gradient-to-b from-[#0066FF] to-slate-900 shadow-xl z-10';
+                        $inner_classes = 'bg-white rounded-[14px] h-full p-6 md:p-8 flex flex-col';
+                    } else {
+                        $container_classes = 'relative w-full h-full rounded-2xl border border-slate-200 bg-white hover:border-slate-300 shadow-sm transition-all duration-300';
+                        $inner_classes = 'h-full p-6 md:p-8 flex flex-col';
+                    }
+
+                    if ($is_highlighted) {
+                        $btn_class = 'bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:bg-blue-700';
+                    } else {
+                        $btn_class = 'bg-[rgb(0,102,255)] text-white hover:bg-blue-700';
+                    }
+
+                    if($this->session->userdata('is_logued_in')){
+                        $btn_href = base_url()."getplan/?plan_id=".$plan->id."&currency=USD";
+                        $btn_attrs = "";
+                    } else {
+                        $btn_href = "javascript:void(0);";
+                        $btn_attrs = 'data-toggle="modal" data-target="#myModal"';
+                    }
+                    ?>
+
+                    <div class="<? echo $container_classes; ?>">
+
+                        <? if($show_most_popular){ ?>
+                            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0066FF] to-slate-900 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md uppercase tracking-wide flex items-center gap-2 whitespace-nowrap">
+                                <i class="fa fa-star text-white"></i> Most Popular
+                            </div>
+                        <? } ?>
+
+                        <div class="<? echo $inner_classes; ?>">
+
+                            <div class="mb-6 text-center">
+                                <h2 class="text-xl font-bold text-slate-900 uppercase tracking-wide mb-2">
+                                    <?= $plan->name; ?>
+                                </h2>
+                                <p class="text-slate-500 text-sm h-10 overflow-hidden text-ellipsis leading-relaxed">
+                                    <? echo $plan->description; ?>
+                                </p>
+                            </div>
+
+                            <div class="flex items-baseline justify-center gap-1 mb-8 text-center">
+                                <span class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+                                    $<? echo $plan->price; ?>
+                                </span>
+                                <span class="text-slate-400 font-medium">
+                                    / <? echo $plan->duration; ?> days
+                                </span>
+                            </div>
+
+                            <ul class="space-y-4 mb-8 flex-1">
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                        <i class="fa fa-check text-primary text-xs"></i>
+                                    </div>
+                                    <span class="ml-3 text-slate-700 font-medium">
+                                        <? if ($plan->ilimitado_activo == 1) { ?>
+                                            <span class="text-primary font-bold">Unlimited Audio Downloads</span>
+                                        <? } else { ?>
+                                            <span class="font-bold"><? if($plan->tokens!=0 && $plan->tokens!=NULL){ echo $plan->tokens; }else{ echo '0'; } ?></span> Audio Downloads
+                                        <? } ?>
+                                    </span>
+                                </li>
+
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                        <i class="fa fa-check text-primary text-xs"></i>
+                                    </div>
+                                    <span class="ml-3 text-slate-600 text-sm">Automatic Renewal</span>
+                                </li>
+
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                        <i class="fa fa-check text-primary text-xs"></i>
+                                    </div>
+                                    <span class="ml-3 text-slate-600 text-sm">New music daily</span>
+                                </li>
+
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                        <i class="fa fa-check text-primary text-xs"></i>
+                                    </div>
+                                    <span class="ml-3 text-slate-600 text-sm">Direct downloads (1 Click)</span>
+                                </li>
+
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                        <i class="fa fa-check text-primary text-xs"></i>
+                                    </div>
+                                    <span class="ml-3 text-slate-600 text-sm">Intro, extended, remix, breakdown, transition and more</span>
+                                </li>
+
+                                <li class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                        <i class="fa fa-check text-primary text-xs"></i>
+                                    </div>
+                                    <span class="ml-3 text-slate-600 text-sm">Advanced Search</span>
+                                </li>
+
+                                <? if($show_request_remix){ ?>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center mt-0.5">
+                                            <i class="fa fa-check text-primary text-xs"></i>
+                                        </div>
+                                        <span class="ml-3 text-slate-700 font-semibold">
+                                            <span class="text-primary font-extrabold"><? echo htmlspecialchars($request_remix_label, ENT_QUOTES, 'UTF-8'); ?></span>
+                                            Access to <span class="text-primary font-extrabold">Request Your Remix</span>
+                                        </span>
+                                    </li>
+                                <? } ?>
+                            </ul>
+
+                            <a href="<? echo $btn_href; ?>" <? echo $btn_attrs; ?>
+                               class="w-full block text-center py-4 rounded-xl font-bold transition-all duration-200 transform hover:-translate-y-1 <? echo $btn_class; ?>">
+                                Get Plan
+                            </a>
+
+                            <p class="text-center text-xs text-slate-400 mt-4">Secure payment guaranteed</p>
+
+                        </div>
+                    </div>
+                <? } } else { ?>
+                <div class="col-span-full text-center py-10">
+                    <p class="text-xl text-slate-500">No plans available at the moment.</p>
+                </div>
+            <? } ?>
+        </div>
+
+        <div class="mt-20 mb-10 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">All Plans Include</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 max-w-7xl mx-auto">
+            <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-[#0066FF] text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                    <i class="fa fa-mouse-pointer text-xl"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 mb-2">1-Click Download</h3>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                    INSTANTLY DOWNLOAD YOUR FAVORITE REMIXES IN HIGH QUALITY
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-[#0066FF] text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                    <i class="fa fa-headphones text-xl"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 mb-2">HQ Audio</h3>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                    CRYSTAL CLEAR 320KBPS AUDIO QUALITY FOR PROFESSIONAL USE
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-[#0066FF] text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                    <i class="fa fa-bolt text-xl"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 mb-2">Instant Access</h3>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                    GET IMMEDIATE ACCESS TO OUR ENTIRE LIBRARY OF REMIXES
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>

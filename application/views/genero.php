@@ -1,16 +1,16 @@
 <div id="ajaxArea" class="bg-slate-50 min-h-screen">
+    <section class="pt-10 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="relative w-full overflow-hidden rounded-[28px] bg-[#3E6CED] shadow-xl border border-white/10">
+                <!-- contenido centrado -->
+                <div class="relative z-10 flex min-h-[320px] md:min-h-[300px] items-center justify-center text-center">
+                    <div class="w-full max-w-3xl">
 
-    <section class="album-header relative h-[250px] w-full overflow-hidden flex items-center justify-center text-center bg-gradient-to-r from-[#004a99] to-[#007bff]">
+                        <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2 drop-shadow-md">
+                            <? echo $genero->name; ?>
+                        </h1>
 
-        <figure class="album-cover-wrap absolute inset-0 z-0 opacity-20 mix-blend-multiply">
-        </figure>
-
-        <div class="container relative z-10">
-            <div class="cover-content">
-                <div class="clearfix text-uppercase">
-                    <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2 drop-shadow-md">
-                        <? echo $genero->name; ?>
-                    </h1>
+                    </div>
                 </div>
             </div>
         </div>
