@@ -60,7 +60,7 @@ else if(empty($eligible)) $state = 'upgrade';
 
                         <!-- STEP 1 -->
                         <div class="flex items-start gap-4 pb-8 border-b border-slate-100">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-b from-primary to-slate-900 text-white flex items-center justify-center font-bold shadow">
+                            <div class="w-10 h-10 rounded-xl bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow">
                                 1
                             </div>
                             <div class="flex-1">
@@ -82,7 +82,7 @@ else if(empty($eligible)) $state = 'upgrade';
                         <!-- STEP 2 + SIDE CARD -->
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 border-b border-slate-100">
                             <div class="lg:col-span-2 flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-b from-primary to-slate-900 text-white flex items-center justify-center font-bold shadow">
+                                <div class="w-10 h-10 rounded-xl bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow">
                                     2
                                 </div>
 
@@ -94,9 +94,9 @@ else if(empty($eligible)) $state = 'upgrade';
                                             Song Link (YouTube, Spotify, SoundCloud) *
                                         </label>
                                         <div class="relative">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                      <i class="fa-solid fa-link"></i>
-                    </span>
+                                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                                              <i class="fa-solid fa-link"></i>
+                                            </span>
                                             <input
                                                     type="url"
                                                     name="song_link"
@@ -111,7 +111,7 @@ else if(empty($eligible)) $state = 'upgrade';
 
                             <!-- SIDE CARD STEP 2 -->
                             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center">
-                                <div class="w-12 h-12 bg-gradient-to-r from-primary to-slate-900 text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
+                                <div class="w-12 h-12 bg-[rgb(0,102,255)] text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
                                     <i class="fa-solid fa-clock text-xl"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-900 mb-2">Fast Turnaround</h4>
@@ -124,7 +124,7 @@ else if(empty($eligible)) $state = 'upgrade';
                         <!-- STEP 3 + SIDE CARD -->
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div class="lg:col-span-2 flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-b from-primary to-slate-900 text-white flex items-center justify-center font-bold shadow">
+                                <div class="w-10 h-10 rounded-xl bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow">
                                     3
                                 </div>
 
@@ -145,7 +145,7 @@ else if(empty($eligible)) $state = 'upgrade';
 
                             <!-- SIDE CARD STEP 3 -->
                             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center justify-center text-center">
-                                <div class="w-12 h-12 bg-gradient-to-r from-primary to-slate-900 text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
+                                <div class="w-12 h-12 bg-[rgb(0,102,255)] text-white rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
                                     <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-900 mb-2">Studio-Quality Sound</h4>

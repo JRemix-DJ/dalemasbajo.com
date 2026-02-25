@@ -145,30 +145,50 @@
     </div>
 </div>
 
-<footer class="mt-auto border-t border-white/10" style="background-color: #3E6CED;">
+<footer class="mt-auto border-t border-white/10" style="background-color: #0066FF;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
             <div>
-                <h3 class="font-semibold text-white mb-4">Follow Us</h3>
-                <ul class="space-x-3 text-blue-100">
-                    <a href="https://www.facebook.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
-                        <i class="fa-brands fa-facebook-f text-lg"></i>
-                    </a>
-                    <a href="https://www.instagram.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
-                        <i class="fa-brands fa-instagram text-lg"></i>
-                    </a>
-                    <a href="https://soundcloud.com/dalemasbajo" target="_blank" class="hover:text-gray-300 transition-colors">
-                        <i class="fa-brands fa-soundcloud text-lg"></i>
-                    </a>
+                <h3 class="font-extrabold text-white mb-4 text-lg">
+                    Follow Us
+                </h3>
+
+                <ul class="flex items-center gap-4 text-blue-100 font-extrabold">
+                    <li>
+                        <a href="https://www.facebook.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
+                            <i class="fa-brands fa-facebook-f text-lg"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/dalemasbajo/" target="_blank" class="hover:text-gray-300 transition-colors">
+                            <i class="fa-brands fa-instagram text-lg"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://soundcloud.com/dalemasbajo" target="_blank" class="hover:text-gray-300 transition-colors">
+                            <i class="fa-brands fa-soundcloud text-lg"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="font-semibold text-white mb-4"></h3>
-                <ul class="space-y-3 text-sm text-blue-100">
-                    <li><a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors">FAQ</a></li>
-                    <li><a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors">Terms and Conditions</a></li>
-                    <li><a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-gray-300 transition-colors">Be a Remixer</a></li>
+                <ul class="space-y-3 text-sm text-blue-100 font-extrabold">
+                    <li>
+                        <a href="<? echo base_url('faq'); ?>" class="hover:text-gray-300 transition-colors font-bold">
+                            FAQ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<? echo base_url('pages/terms_conditions/'); ?>" class="hover:text-gray-300 transition-colors font-bold">
+                            Terms and Conditions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<? echo base_url('pages/become_a_member/'); ?>" class="hover:text-gray-300 transition-colors font-bold">
+                            Be a Remixer
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

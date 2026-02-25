@@ -29,18 +29,41 @@
 <body class="bg-white text-slate-900 antialiased">
 
 <header id="siteHeader"
-        class="fixed top-0 w-full z-50 transition-all duration-300 bg-white/30 backdrop-blur-md">
-    <div class="w-full px-4 sm:px-6 lg:px-10">
+        class="fixed top-0 w-full z-50 transition-all duration-300 bg-white">
+    <style>
+        #siteHeader{--blue-cut:260px}
+        #siteHeader .nav-split-bg{
+            background: linear-gradient(
+                    90deg,
+                    rgba(0,102,255) 0,
+                    rgba(0,102,255) var(--blue-cut),
+                    rgba(255,255,255,0.30) var(--blue-cut),
+                    rgba(255,255,255,0.30) 100%
+            );
+        }
+        #siteHeader .logo-slot{
+            width: var(--blue-cut);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 140px;
+            flex: 0 0 auto;
+        }
+    </style>
+    <div class="nav-split-bg absolute inset-0 pointer-events-none"></div>
+
+    <div class="w-full px-4 sm:px-6 lg:px-10 relative shadow-lg">
         <div class="flex items-center h-20">
-            <div class="flex-shrink-0 flex items-center">
+
+            <div class="logo-slot ">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2 group decoration-0">
-                    <img src="<? echo base_url(); ?>images/aza.png" alt="dalemasbajo"
+                    <img src="<? echo base_url(); ?>images/HORIZONTAL--video.png" alt="dalemasbajo"
                          class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                 </a>
             </div>
 
             <nav class="hidden lg:flex flex-1 items-center justify-center gap-8">
-                <a href="<? echo base_url('audios');?>"
+                <a id="navFirstLink" href="<? echo base_url('audios');?>"
                    class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Audios</a>
 
                 <div class="relative group h-20 flex items-center cursor-pointer">
@@ -77,15 +100,13 @@
                     </div>
                 </div>
 
-                <a href="<? echo base_url('drops');?>"
-                   class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Drops</a>
                 <a href="<? echo base_url('planes');?>"
                    class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Plans</a>
                 <a href="<? echo base_url('pages/become_a_member');?>"
                    class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Be a remixer</a>
 
                 <a href="<? echo base_url('pages/request_remix'); ?>"
-                   class="inline-flex items-center px-5 py-3 rounded-full bg-[rgb(0,102,255)] text-white text-sm font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:scale-[1.03] transition-all">
+                   class="inline-flex items-center px-5 py-3 rounded-full bg-[rgb(0,102,255)] text-white text-sm font-bold hover:scale-[1.03] transition-all">
                     Request Your Remix
                 </a>
 
@@ -114,13 +135,13 @@
                         </div>
                     </div>
                 <? }else{ ?>
-                    <div class="hidden md:flex items-center gap-2 ml-4">
+                    <div class="hidden md:flex items-center gap-2 ml-4 mr-4">
                         <a href="#" data-toggle="modal" data-target="#myModal"
                            class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-primary transition-colors">
                             Sign in
                         </a>
                         <a href="#" data-toggle="modal" data-target="#myModalRegistrarme"
-                           class="px-5 py-2.5 text-sm font-bold text-white bg-[rgb(0,102,255)] rounded-full hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all hover:scale-105">
+                           class="text-sm font-bold mr-10 inline-flex items-center rounded-full bg-white text-[rgb(0,102,255)] px-4 py-2 border-2 border-[rgb(0,102,255)] hover:bg-[rgb(0,102,255)] hover:text-white transition-colors duration-200">
                             Sign Up
                         </a>
                     </div>
@@ -133,17 +154,19 @@
                     $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
 
                     if($is_unlimited || $tokens > 0) { ?>
-                        <div class="ml-4 inline-flex items-center rounded-full bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/30 px-4 py-2">
-                            <span class="text-[10px] uppercase font-bold tracking-wider text-white/80 mr-3">Downloads</span>
+                        <div class="ml-4 inline-flex items-center rounded-full bg-white text-[rgb(0,102,255)] px-4 py-2"
+                             style="border:2px solid rgb(0,102,255);">
+                            <span class="text-sm font-bold tracking-wider text-[rgb(0,102,255)] mr-1">Downloads</span>
+
                             <? if($is_unlimited){ ?>
                                 <div class="flex items-center gap-2 font-bold text-sm">
-                                    <i class="fa-solid fa-infinity"></i>
+                                    <i class="fa-solid fa-infinity text-[rgb(0,102,255)]"></i>
                                     <span>UNLIMITED</span>
                                 </div>
                             <? } else { ?>
                                 <div class="flex items-center gap-2 font-bold text-sm">
                                     <span class="token-count"><? echo $tokens; ?></span>
-                                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                                    <i class="fa-solid fa-cloud-arrow-down text-[rgb(0,102,255)]"></i>
                                 </div>
                             <? } ?>
                         </div>
@@ -160,11 +183,11 @@
     </div>
 
     <div id="mobileMenu"
-         class="hidden lg:hidden absolute top-20 left-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-xl z-40 max-h-[80vh] overflow-y-auto">
+         class="hidden lg:hidden absolute top-20 left-0 w-full bg-white backdrop-blur-md border-t border-slate-200 shadow-xl z-40 max-h-[80vh] overflow-y-auto">
         <div class="p-4 space-y-2">
 
             <? if($this->session->userdata('is_logued_in')){ ?>
-                <div class="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-md p-4">
+                <div class="rounded-2xl border border-slate-200 bg-white backdrop-blur-md p-4">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/30">
                             <? echo substr($this->session->userdata('username'), 0, 1); ?>
@@ -204,7 +227,6 @@
 
             <a href="<? echo base_url(); ?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Home</a>
             <a href="<? echo base_url('audios');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Audios</a>
-            <a href="<? echo base_url('drops');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Drops</a>
             <a href="<? echo base_url('planes');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Plans</a>
             <a href="<? echo base_url('pages/become_a_member');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Be a remixer</a>
 
@@ -268,6 +290,24 @@
 <div class="w-full relative">
 
     <script>
+        (function (){
+            const header = document.getElementById("siteHeader");
+            const firstLink = document.getElementById("navFirstLink");
+
+            function setSplit(){
+                if (!header || !firstLink) return;
+                const h = header.getBoundingClientRect();
+                const a = firstLink.getBoundingClientRect();
+                const cut = Math.max(
+                    340,
+                    Math.floor(a.left - h.left - 48)
+                );
+                header.style.setProperty('--blue-cut', cut + 'px');
+            }
+            window.addEventListener('resize', setSplit);
+            window.addEventListener('load', setSplit);
+            setSplit();
+        })();
         (function () {
             const header = document.getElementById('siteHeader');
             const mobileBtn = document.getElementById('mobileMenuBtn');
@@ -283,14 +323,6 @@
             const genresBtn = document.getElementById('mobileGenresBtn');
             const genresPanel = document.getElementById('mobileGenres');
             const genresIcon = document.getElementById('mobileGenresIcon');
-
-            function setScrolled() {
-                if (!header) return;
-                const scrolled = window.pageYOffset > 20;
-                header.classList.toggle('shadow-sm', scrolled);
-                header.classList.toggle('bg-white/60', scrolled);
-                header.classList.toggle('bg-white/30', !scrolled);
-            }
 
             function closeMobile() {
                 if (!mobileMenu || !mobileBtn) return;

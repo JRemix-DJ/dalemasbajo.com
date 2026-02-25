@@ -390,6 +390,8 @@ class Users_model extends CI_Model {
         // Standard o Premium => OK
         if(strpos($name, 'standard') !== false) return true;
         if(strpos($name, 'premium') !== false) return true;
+        if(strpos($name, '3 months') !== false) return true;
+        if(strpos($name, '6 months') !== false) return true;
 
         // Si tus planes se llaman distinto, agrega aquí
         return false;

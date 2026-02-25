@@ -16,13 +16,13 @@
 
                 <!-- CONTENIDO -->
                 <div class="relative z-10 flex min-h-[420px] md:min-h-[520px] items-center justify-center px-6 py-12">
-                    <div class="w-full max-w-3xl rounded-2xl bg-white/10 backdrop-blur-xl shadow-2xl px-6 py-10 md:px-12 md:py-12 text-center">
-                        <h1 class="text-3xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-sm">
-                            Premium Monthly Subscription
+                    <div class="w-full max-w-3xl rounded-2xl px-6 py-10 md:px-12 md:py-12 text-center">
+                        <h1 class="text-8xl md:text-9xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                            Welcome
                         </h1>
 
                         <p class="mt-3 text-sm md:text-lg text-white/80 font-medium">
-                            Unlimited access to exclusive DJ remixes
+                            We’re launching Version 2.0 — Faster, clearer, more powerful
                         </p>
 
                         <a href="<?php echo base_url('planes'); ?>"
@@ -63,7 +63,7 @@
                         $artist = isset($audio->artist) ? $audio->artist : 'Unknown Artist';
                         $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
                         ?>
-                        <div class="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border border-slate-100 group">
+                        <div class="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border-2 border-slate-100 group">
                             <div class="relative aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100">
                                 <img src="<? echo $img; ?>"
                                      alt="<? echo $title; ?>"
@@ -148,8 +148,8 @@
                         <th class="p-4 font-semibold w-24">Date</th>
                         <th class="p-4 font-semibold w-16 text-center">Play</th>
                         <th class="p-4 font-semibold">Song Title</th>
-                        <th class="p-4 font-semibold">Version</th>
                         <th class="p-4 font-semibold">Artist</th>
+                        <th class="p-4 font-semibold text-center">Version</th>
                         <th class="p-4 font-semibold">Remixer</th>
                         <th class="p-4 font-semibold w-20">BPM</th>
                         <th class="p-4 font-semibold w-32">Genre</th>

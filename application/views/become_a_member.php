@@ -2,7 +2,7 @@
 
     <?php
     $is_logged = (bool)$this->session->userdata('is_logued_in');
-    $session_email = (string)$this->session->userdata('email'); // confirmado en proyecto :contentReference[oaicite:1]{index=1}
+    $session_email = (string)$this->session->userdata('email');
     ?>
 
     <section class="album-header relative w-full overflow-hidden flex items-center justify-center text-center bg-white py-16">
@@ -31,7 +31,7 @@
                 foreach($benefits as $b){
                     ?>
                     <div class="flex flex-col items-center text-center p-7 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
-                        <div class="w-16 h-16 bg-gradient-to-r from-[#0066FF] to-slate-900 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                        <div class="w-16 h-16 bg-[#0066FF] text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
                             <i class="fa-solid <?= $b['icon']; ?> text-2xl"></i>
                         </div>
                         <h3 class="font-bold text-slate-900 mb-2"><?= $b['title']; ?></h3>
@@ -64,7 +64,7 @@
                                 You need to sign in to continue.
                             </p>
                             <button id="openLoginModalBtn"
-                                    class="px-6 py-3 rounded-full font-bold text-white bg-gradient-to-r from-[#0066FF] to-slate-900 hover:shadow-lg hover:shadow-blue-500/20 hover:scale-[1.01] transition-all">
+                                    class="px-6 py-3 rounded-full font-bold text-white bg-[#0066FF] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/20 hover:scale-[1.01] transition-all">
                                 Sign in
                             </button>
                         </div>
@@ -73,7 +73,7 @@
                     <!-- STEPPER -->
                     <div class="flex items-center justify-center gap-3 mb-10 select-none">
                         <div class="flex items-center">
-                            <div id="stepCircle1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white bg-gradient-to-r from-[#0066FF] to-slate-900">1</div>
+                            <div id="stepCircle1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white bg-[#0066FF]">1</div>
                             <div id="stepLine1" class="w-16 h-1 rounded-full bg-slate-200 mx-3"></div>
                         </div>
                         <div class="flex items-center">
@@ -81,13 +81,12 @@
                             <div id="stepLine2" class="w-16 h-1 rounded-full bg-slate-200 mx-3"></div>
                         </div>
                         <div class="flex items-center">
-                            <div id="stepCircle3" class="w-10 h-10 rounded-full flex items-center justify-content-center font-bold text-slate-500 bg-slate-200">3</div>
+                            <div id="stepCircle3" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-slate-500 bg-slate-200">3</div>
                         </div>
                     </div>
 
                     <form id="beRemixerForm" class="space-y-5" onsubmit="return false;">
 
-                        <!-- Backend-required fields -->
                         <input type="hidden" name="email" id="email" value="<?= htmlspecialchars($session_email, ENT_QUOTES); ?>">
                         <input type="hidden" name="name" id="name">
                         <input type="hidden" name="experience" id="experience">
@@ -105,7 +104,6 @@
                                        placeholder="John Doe" required>
                             </div>
 
-                            <!-- Email: from session -->
                             <div>
                                 <label class="block text-sm font-semibold text-slate-900 mb-2">Email Address <span class="text-red-500">*</span></label>
                                 <input id="email_display" type="text"
@@ -124,7 +122,6 @@
 
                         <!-- STEP 2 -->
                         <div id="step2" class="space-y-5 hidden <?= $is_logged ? '' : 'opacity-50 pointer-events-none'; ?>">
-
                             <div>
                                 <label class="block text-sm font-semibold text-slate-900 mb-2">Years of Experience <span class="text-red-500">*</span></label>
                                 <input id="years" inputmode="numeric" pattern="[0-9]*"
@@ -154,12 +151,10 @@
                                     <option value="No">No</option>
                                 </select>
                             </div>
-
                         </div>
 
                         <!-- STEP 3 -->
                         <div id="step3" class="space-y-5 hidden <?= $is_logged ? '' : 'opacity-50 pointer-events-none'; ?>">
-
                             <div>
                                 <label class="block text-sm font-semibold text-slate-900 mb-2">
                                     Works Done <span class="text-red-500">*</span>
@@ -176,7 +171,6 @@
                                           class="w-full min-h-[160px] rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 outline-none focus:bg-white focus:border-[#0066FF] focus:ring-4 focus:ring-blue-500/10"
                                           placeholder="Share your story, achievements, and why you want to join Dale Más Bajo..."></textarea>
                             </div>
-
                         </div>
 
                         <!-- ACTIONS -->
@@ -236,17 +230,14 @@
             let uploadsNames = "";
 
             function openLoginModal(){
-                // Bootstrap/jQuery (compat)
                 if (window.jQuery && jQuery('#myModal').length) {
                     jQuery('#myModal').modal('show');
                     return;
                 }
-                // fallback: click any trigger if exists
                 const trigger = document.querySelector('[data-target="#myModal"]');
                 if(trigger) trigger.click();
             }
 
-            // If not logged, force login modal on load
             if(!IS_LOGGED_IN){
                 setTimeout(openLoginModal, 250);
                 if(openLoginModalBtn){
@@ -256,7 +247,7 @@
 
             function setActiveCircle(el, active){
                 el.className = active
-                    ? "w-10 h-10 rounded-full flex items-center justify-center font-bold text-white bg-gradient-to-r from-[#0066FF] to-slate-900"
+                    ? "w-10 h-10 rounded-full flex items-center justify-center font-bold text-white bg-[#0066FF]"
                     : "w-10 h-10 rounded-full flex items-center justify-center font-bold text-slate-500 bg-slate-200";
             }
             function setLineDone(el, done){
@@ -301,20 +292,18 @@
                 return num + " " + (num === 1 ? "year" : "years");
             }
 
-            // Years: only digits + hint "year(s)"
             if(yearsInput){
                 yearsInput.addEventListener('input', function(){
                     const onlyDigits = this.value.replace(/[^\d]/g, "");
                     this.value = onlyDigits;
                     const label = yearsToLabel(onlyDigits);
-                    yearsHint.textContent = label ? ("= " + label) : "";
+                    if (yearsHint) yearsHint.textContent = label ? ("= " + label) : "";
                 });
             }
 
             function validateStep(){
                 if(current === 1){
                     if(!val('full_name') || !val('artist_name')) return false;
-                    // email comes from session; if not logged we block anyway
                 }
                 if(current === 2){
                     if(!val('years') || !val('country_select') || !val('work_select')) return false;
@@ -350,13 +339,13 @@
             if(uploads){
                 uploads.addEventListener('change', function(){
                     if(!uploads.files || uploads.files.length === 0){
-                        uploadsList.textContent = "";
+                        if (uploadsList) uploadsList.textContent = "";
                         uploadsNames = "";
                         return;
                     }
                     const names = Array.from(uploads.files).map(f => f.name);
                     uploadsNames = names.join(", ");
-                    uploadsList.textContent = uploadsNames;
+                    if (uploadsList) uploadsList.textContent = uploadsNames;
                 });
             }
 
@@ -371,7 +360,6 @@
                     return;
                 }
 
-                // Build backend payload
                 const fullName = val('full_name');
                 const artist = val('artist_name');
 
@@ -384,14 +372,12 @@
                 const social = val('social');
                 const about = val('about');
 
-                // Hidden backend fields
                 document.getElementById('name').value = fullName;
-                document.getElementById('experience').value = yearsLabel; // backend expects text
+                document.getElementById('experience').value = yearsLabel;
                 document.getElementById('country').value = country;
                 document.getElementById('work').value = work;
-                document.getElementById('trabajos').value = social; // Social Media Links -> trabajos
+                document.getElementById('trabajos').value = social;
 
-                // message composed
                 let msg = "";
                 msg += "Artist/DJ Name: " + artist + "\\n";
                 msg += "Experience: " + yearsLabel + "\\n";
@@ -405,7 +391,7 @@
 
                 const fd = new FormData();
                 fd.append('name', fullName);
-                fd.append('email', document.getElementById('email').value); // session email
+                fd.append('email', document.getElementById('email').value);
                 fd.append('experience', yearsLabel);
                 fd.append('work', work);
                 fd.append('country', country);
@@ -427,9 +413,9 @@
                     if(data && data.success){
                         showOk("Application submitted successfully!");
                         document.getElementById('beRemixerForm').reset();
-                        uploadsList.textContent = "";
+                        if (uploadsList) uploadsList.textContent = "";
                         uploadsNames = "";
-                        yearsHint.textContent = "";
+                        if (yearsHint) yearsHint.textContent = "";
                         current = 1;
                         render();
                     } else {
