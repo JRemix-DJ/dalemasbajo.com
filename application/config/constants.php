@@ -86,12 +86,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 define('MONEY_PAYMENTS', 0);
 
-define('SMTP_URL', 'in-v3.mailjet.com');
-define('SMTP_USER', '76753d6bcf3d3f4a78a7b714e8fdc6d0');
-define('SMTP_KEY', '153b5435f263c193cac5c7d5298d0069');
-define('SMTP_PORT', '587');
-
-
 define('PAYPAL_ACTIVE', false);
 define('PAYPAL_MAIL', 'i_trinidadcastillo@hotmail.com');
 

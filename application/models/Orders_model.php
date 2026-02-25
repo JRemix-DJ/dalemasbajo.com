@@ -319,5 +319,20 @@ class Orders_model extends CI_Model {
         if($q->num_rows() === 1) return $q->row();
         return false;
     }
+    public function find_pending_plan_order_by_user_amount($user_id, $amount)
+    {
+        $amount = (float)$amount;
 
+        $this->db->select('*');
+        $this->db->from('orders');
+        $this->db->where('user_id', (int)$user_id);
+        $this->db->where('status', 0);
+        $this->db->where('is_plan', 1);
+        $this->db->where('total_price >=', $amount - 0.01);
+        $this->db->where('total_price <=', $amount + 0.01);
+        $this->db->order_by('id', 'DESC');
+        $this->db->limit(1);
+
+        return $this->db->get()->row();
+    }
 }

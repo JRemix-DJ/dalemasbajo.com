@@ -75,23 +75,23 @@ class Payment extends CI_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 
-    public function done_tukuy(){
+    public function done_tukuy()
+    {
         $post = file_get_contents('php://input');
-        $data = json_decode($post);
+        $payload = json_decode($post);
 
-        if(!isset($data->success) || $data->success != true){
+        if (!isset($payload->success) || $payload->success != true) {
             http_response_code(200);
             echo json_encode(['status' => 'ignored']);
             return;
         }
 
-        $client_email = isset($data->client_email) ? trim($data->client_email) : '';
-        $amount = isset($data->amount) ? (float)$data->amount : 0;
-        $txn = isset($data->transaction_details) ? trim($data->transaction_details) : '';
+        $client_email = isset($payload->client_email) ? trim($payload->client_email) : '';
+        $amount = isset($payload->amount) ? (float)$payload->amount : 0;
 
-        if($client_email === '' || $amount <= 0 || $txn === ''){
+        if ($client_email === '' || $amount <= 0) {
             $title = "DMB - ERROR PAGO TUKUY - Datos incompletos";
-            $mensaje = "JSON Completo: ".$post;
+            $mensaje = "JSON Completo: " . $post;
             $this->send_received_message($title, $mensaje);
             http_response_code(200);
             echo json_encode(['status' => 'bad_payload']);
@@ -100,78 +100,41 @@ class Payment extends CI_Controller {
 
         $user = $this->users_model->get_user_where_array(['email' => $client_email]);
 
-        if(!$user){
+        if (!$user) {
             $title = "DMB - ERROR PAGO TUKUY - Usuario no encontrado";
-            $mensaje = "
-            Datos recibidos:<br>
-            Email Cliente: {$client_email}<br>
-            Monto: {$amount}<br>
-            Txn: {$txn}<br>
-            JSON Completo: {$post}
-        ";
+            $mensaje = "Email Cliente: {$client_email}<br>Monto: {$amount}<br>JSON Completo: {$post}";
             $this->send_received_message($title, $mensaje);
             http_response_code(200);
             echo json_encode(['status' => 'user_not_found']);
             return;
         }
 
-        $existing_order = $this->orders_model->get_by_txn_id($txn);
-        if($existing_order){
+        $order = $this->orders_model->find_pending_plan_order_by_user_amount($user->id, $amount);
+
+        if (!$order) {
             http_response_code(200);
-            echo json_encode(['status' => 'already_processed']);
+            echo json_encode(['status' => 'no_pending_order_match']);
             return;
         }
 
-        $plan = $this->plan_model->load_plan_info_by_amount($amount);
+        $this->orders_model->update_order($order->id, ['status' => 1]);
 
-        if($plan){
-            $data_order = array(
-                'user_id'      => $user->id,
-                'date_order'   => date("Y-m-d H:i:s"),
-                'total_price'  => $plan->price,
-                'status'       => 1,
-                'is_plan'      => 1,
-                'plan_id'      => $plan->id,
-                'txn_id'       => $txn
-            );
+        $this->add_tokens_to_user($order->id, NULL);
 
-            $order_id = $this->orders_model->create_order_plan($data_order);
+        $mail_ok = $this->send_notification_mail($order->id, 0);
 
-            $this->add_tokens_to_user($order_id, 1);
-            $this->send_notification_mail($order_id, 0);
-
-            http_response_code(200);
-            echo json_encode(['status' => 'success_plan']);
-            return;
-        }
-
-        $drop_order = $this->orders_model->find_pending_drop_order_by_email_amount($user->id, $amount);
-
-        if(!$drop_order){
-            $title = "DMB - ERROR PAGO TUKUY - Orden Drop no encontrada";
-            $mensaje = "
-            Datos recibidos:<br>
-            Email Cliente: {$client_email}<br>
-            Monto: {$amount}<br>
-            Txn: {$txn}<br>
-            Detalle Error: No se encontró una orden DROP pendiente (status=0) con ese monto.<br>
-            JSON Completo: {$post}
-        ";
+        if (!$mail_ok) {
+            $title = "DMB - ERROR PAGO TUKUY - Falló envío de correo";
+            $mensaje = "order_id: {$order->id}<br>Email Cliente: {$client_email}<br>Monto: {$amount}";
             $this->send_received_message($title, $mensaje);
-            http_response_code(200);
-            echo json_encode(['status' => 'drop_order_not_found']);
-            return;
         }
-
-        $this->orders_model->update_order($drop_order->id, [
-            'status' => 1,
-            'txn_id' => $txn
-        ]);
-
-        $this->send_notification_mail($drop_order->id, 0);
 
         http_response_code(200);
-        echo json_encode(['status' => 'success_drop']);
+        echo json_encode([
+            'status' => 'applied',
+            'order_id' => (int)$order->id,
+            'mail' => $mail_ok ? 'ok' : 'fail'
+        ]);
     }
 
     private function build_payment_view_data($order_id, $renovacion = 0){
@@ -218,22 +181,15 @@ class Payment extends CI_Controller {
 
     public function send_notification_mail($order_id, $renovacion)
     {
-        $config['protocol']     = 'smtp';
-        $config['smtp_host']    = SMTP_URL;
-        $config['smtp_port']    = SMTP_PORT;
-        $config['smtp_timeout'] = '7';
-        $config['smtp_user']    = SMTP_USER;
-        $config['smtp_pass']    = SMTP_KEY;
-        $config['charset']      = 'utf-8';
-        $config['newline']      = "\r\n";
-        $config['mailtype']     = 'html';
-        $config['validation']   = TRUE;
-
-        $this->email->initialize($config);
-        $this->email->from('admin@dalemasbajo.com', 'DALE MÁS BAJO');
-
         $orden = $this->orders_model->load_order_info($order_id);
         if (!$orden) {
+            log_message('error', "send_notification_mail: orden no encontrada. order_id={$order_id}");
+            return false;
+        }
+
+        $user = $this->users_model->load_user_info($orden->user_id);
+        if (!$user || empty($user->email)) {
+            log_message('error', "send_notification_mail: usuario no encontrado o sin email. order_id={$order_id}");
             return false;
         }
 
@@ -242,55 +198,100 @@ class Payment extends CI_Controller {
             $cupon = $this->products_model->get_cupon_by_id($orden->cupon_id);
         }
 
-        $user = $this->users_model->load_user_info($orden->user_id);
-        if (!$user) {
-            return false;
-        }
-
-        $items = array();
+        $items = [];
         if (!empty($orden->is_plan)) {
             $plan = $this->plan_model->load_plan_info($orden->plan_id);
             if ($plan) {
-                $items[] = (object) array(
-                    'name'            => $plan->name,
-                    'tokens'          => $plan->tokens,
-                    'tokens_video'    => $plan->tokens_video,
-                    'duration'        => $plan->duration,
-                    'description'     => $plan->description,
-                    'ilimitado_activo'=> $plan->ilimitado_activo
-                );
+                $items[] = (object)[
+                    'name'             => $plan->name,
+                    'tokens'           => $plan->tokens,
+                    'tokens_video'     => $plan->tokens_video,
+                    'duration'         => $plan->duration,
+                    'description'      => $plan->description,
+                    'ilimitado_activo' => $plan->ilimitado_activo
+                ];
             }
         } else {
             $items = $this->orders_model->load_order_items($order_id);
-            if (!is_array($items)) {
-                $items = array();
-            }
+            if (!is_array($items)) $items = [];
         }
 
-        $this->email->to($user->email);
+        $data = [
+            'items'      => $items,
+            'renovacion' => (int)$renovacion,
+            'user'       => $user,
+            'is_plan'    => !empty($orden->is_plan),
+            'orden'      => $orden
+        ];
+        if ($cupon) $data['cupon'] = $cupon;
 
-        $admin_emails = array('dalemasbajo@gmail.com', 'sevelasquezro@gmail.com');
-        $this->email->bcc($admin_emails);
-
-        $mensaje_asunto = ((int)$renovacion === 1)
+        $subject = ((int)$renovacion === 1)
             ? 'Gracias por renovar tu plan - Dale Más Bajo'
             : 'Confirmación de Compra - Dale Más Bajo';
 
-        $this->email->subject($mensaje_asunto);
+        $html = $this->load->view('emails/payment', $data, true);
 
-        $data = array(
-            'items'     => $items,
-            'renovacion'=> (int)$renovacion,
-            'user'      => $user,
-            'is_plan'   => !empty($orden->is_plan),
-            'orden'     => $orden,
-            'cupon'     => $cupon
+        // --- EMAIL ---
+        $this->email->clear(true);
+
+        // Carga config de application/config/email.php
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if (is_array($email_cfg)) {
+            $this->email->initialize($email_cfg);
+        } else {
+            // fallback: intenta inicializar con lo que haya (no debería pasar)
+            $this->email->initialize();
+        }
+
+        $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
+        $this->email->to($user->email);
+        $this->email->bcc(['dalemasbajo@gmail.com', 'sevelasquezro@gmail.com']);
+
+        $this->email->subject($subject);
+        $this->email->message($html);
+
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
+
+        $ok = $this->email->send(false);
+
+        log_message('error',
+            "GMAIL SMTP send=" . ($ok ? 'OK' : 'FAIL') .
+            " order_id={$order_id} to={$user->email} :: " .
+            $this->email->print_debugger(['headers','subject'])
         );
 
-        $mail = $this->load->view('emails/payment', $data, TRUE);
-        $this->email->message($mail);
+        if (!$ok) {
+            log_message('error', $this->email->print_debugger(['headers','subject','body']));
+        }
 
-        return (bool) $this->email->send();
+        return (bool)$ok;
+    }
+    public function test_gmail()
+    {
+        $this->email->clear(true);
+
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if (is_array($email_cfg)) {
+            $this->email->initialize($email_cfg);
+        } else {
+            $this->email->initialize();
+        }
+
+        $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
+        $this->email->to('dalemasbajo@gmail.com');
+        $this->email->subject('TEST SMTP GMAIL desde VPS');
+        $this->email->message('<h1>Hola</h1><p>Si llegó, SMTP Gmail OK.</p>');
+
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
+
+        $ok = $this->email->send(false);
+
+        echo $ok ? "OK<br>" : "FAIL<br>";
+        echo "<pre>".$this->email->print_debugger(['headers','subject'])."</pre>";
     }
 
 	public function realizado(){
@@ -412,6 +413,14 @@ class Payment extends CI_Controller {
             'orden'      => $orden,
             'cupon'      => $cupon
         );
+
+        $mail_ok = $this->send_notification_mail($order_id, $renovacion);
+
+        if (!$mail_ok) {
+            echo '<div style="max-width:700px;margin:10px auto;padding:12px;border:1px solid #fecaca;background:#fef2f2;color:#991b1b;border-radius:10px;font-family:Arial,sans-serif;">
+        ERROR: no se pudo enviar el correo. Revisa el log del servidor (application/logs).
+    </div>';
+        }
 
         $this->load->view('emails/payment', $data);
     }
@@ -670,73 +679,33 @@ class Payment extends CI_Controller {
 	}
 
 
-	public function send_received_message($title, $data)
-	{
-		$config['protocol']    = 'smtp';
-		$config['smtp_host']    = SMTP_URL;
-		$config['smtp_port']    = SMTP_PORT;
-		$config['smtp_timeout'] = '7';
-		$config['smtp_user']    =  SMTP_USER;
-		$config['smtp_pass']    = SMTP_KEY;
-		$config['charset']    = 'utf-8';
-		$config['newline']    = "\r\n";
-		$config['mailtype'] = 'html'; // or html
-		$config['validation'] = TRUE; // bool whether to validate email or not      
-		$this->email->initialize($config);
-		$this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
-		$this->email->to('dalemasbajo@gmail.com');
-		//$this->email->cc('o.reyes@shiftandcontrol.com');
-		$this->email->subject($title);
-		$this->email->message($data);
-		$this->email->send();
-	}
+    public function send_received_message($title, $data)
+    {
+        $this->email->clear(true);
 
-	public function send_test(){
-		$order_id=$_GET['orden'];
-		$config['protocol']    = 'smtp';
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if (is_array($email_cfg)) {
+            $this->email->initialize($email_cfg);
+        } else {
+            $this->email->initialize();
+        }
 
-		$config['smtp_host']    = SMTP_URL;
+        $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
+        $this->email->to('dalemasbajo@gmail.com');
+        $this->email->bcc('sevelasquezro@gmail.com');
 
-		$config['smtp_port']    = SMTP_PORT;
+        $this->email->subject($title);
+        $this->email->message($data);
 
-		$config['smtp_timeout'] = '7';
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
 
-		$config['smtp_user']    = SMTP_USER;
+        $ok = $this->email->send(false);
 
-		$config['smtp_pass']    = SMTP_KEY;
+        log_message('error', "send_received_message=" . ($ok ? 'OK' : 'FAIL') . " :: " . $this->email->print_debugger(['headers','subject']));
 
-		$config['charset']    = 'utf-8';
-
-		$config['newline']    = "\r\n";
-
-		$config['mailtype'] = 'html'; // or html
-
-		$config['validation'] = TRUE; // bool whether to validate email or not      
-
-		$this->email->initialize($config);
-
-		$this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
-
-		$orden = $this->orders_model->load_order_info($order_id);
-
-		$user= $this->users_model->load_user_info($orden->user_id);
-
-		$items = $this->orders_model->load_order_items($order_id);
-		print_r($items);
-		$this->email->to($user->email);
-
-		$this->email->bcc('dalemasbajo@gmail.com');
-
-		$this->email->subject('Pago Recibido');
-
-		$data['items']=$items;
-		$data['user']=$user;
-		$data['orden']=$orden;
-
-		$mail = $this->load->view('emails/payment', $data, TRUE);
-		$this->email->message($mail);
-
-		$this->email->send();
-	}
+        return (bool)$ok;
+    }
 
 }

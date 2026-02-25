@@ -129,14 +129,14 @@ else if(empty($eligible)) $state = 'upgrade';
                                 </div>
 
                                 <div class="flex-1">
-                                    <h3 class="text-xl font-bold text-slate-900">Remix Preferences</h3>
+                                    <h3 class="text-xl font-bold text-slate-900">Preferences</h3>
 
                                     <div class="mt-6">
                                         <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
                                         <textarea
                                                 name="instructions"
                                                 rows="5"
-                                                placeholder="Tell us about any specific elements you'd like in your remix: drops, builds, vocal effects, tempo changes, etc..."
+                                                placeholder="Tell us about any feature you'd like in your edit. Remember, it’s an extended version (normal intro, intro verse, or intro chorus)."
                                                 class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 outline-none focus:ring-2 focus:ring-primary/30"
                                         ></textarea>
                                     </div>
