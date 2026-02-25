@@ -80,18 +80,14 @@ class Payment extends CI_Controller {
         $post = file_get_contents('php://input');
         $payload = json_decode($post);
 
-        if (!isset($payload->success) || $payload->success != true) {
-            http_response_code(200);
-            echo json_encode(['status' => 'ignored']);
-            return;
-        }
+        $state = isset($payload->state) ? trim((string)$payload->state) : '';
+        $client_email = isset($payload->customer->email) ? trim((string)$payload->customer->email) : '';
+        $amount_raw = isset($payload->amount) ? (string)$payload->amount : '';
+        $amount = (float)$amount_raw;
 
-        $client_email = isset($payload->client_email) ? trim($payload->client_email) : '';
-        $amount = isset($payload->amount) ? (float)$payload->amount : 0;
-
-        if ($client_email === '' || $amount <= 0) {
-            $title = "DMB - ERROR PAGO TUKUY - Datos incompletos";
-            $mensaje = "JSON Completo: " . $post;
+        if ($state !== 'done' || $client_email === '' || $amount <= 0) {
+            $title = "DMB - ERROR PAGO TUKUY - Datos incompletos o estado no válido";
+            $mensaje = "State: {$state}<br>Email: {$client_email}<br>Amount: {$amount_raw}<br>JSON Completo: {$post}";
             $this->send_received_message($title, $mensaje);
             http_response_code(200);
             echo json_encode(['status' => 'bad_payload']);
@@ -102,7 +98,7 @@ class Payment extends CI_Controller {
 
         if (!$user) {
             $title = "DMB - ERROR PAGO TUKUY - Usuario no encontrado";
-            $mensaje = "Email Cliente: {$client_email}<br>Monto: {$amount}<br>JSON Completo: {$post}";
+            $mensaje = "Email Cliente: {$client_email}<br>Monto: {$amount_raw}<br>JSON Completo: {$post}";
             $this->send_received_message($title, $mensaje);
             http_response_code(200);
             echo json_encode(['status' => 'user_not_found']);
@@ -111,21 +107,23 @@ class Payment extends CI_Controller {
 
         $order = $this->orders_model->find_pending_plan_order_by_user_amount($user->id, $amount);
 
-        if (!$order) {
+        if (!$order || empty($order->id)) {
             http_response_code(200);
             echo json_encode(['status' => 'no_pending_order_match']);
             return;
         }
 
-        $this->orders_model->update_order($order->id, ['status' => 1]);
+        $this->orders_model->update_order((int)$order->id, [
+            'status' => 1
+        ]);
 
-        $this->add_tokens_to_user($order->id, NULL);
+        $this->add_tokens_to_user((int)$order->id, NULL);
 
-        $mail_ok = $this->send_notification_mail($order->id, 0);
+        $mail_ok = $this->send_notification_mail((int)$order->id, 0);
 
         if (!$mail_ok) {
             $title = "DMB - ERROR PAGO TUKUY - Falló envío de correo";
-            $mensaje = "order_id: {$order->id}<br>Email Cliente: {$client_email}<br>Monto: {$amount}";
+            $mensaje = "order_id: {$order->id}<br>Email Cliente: {$client_email}<br>Monto: {$amount_raw}<br>JSON Completo: {$post}";
             $this->send_received_message($title, $mensaje);
         }
 

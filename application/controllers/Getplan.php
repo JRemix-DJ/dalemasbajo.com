@@ -10,47 +10,98 @@ class Getplan extends CI_Controller {
 		$this->load->database('default');
 	}
 
-	public function index()
-	{
-		if($this->session->userdata('is_logued_in')){
-			$data['title']="Checkout - Dale Más Bajo";
-			$data['description']="Finaliza tu pago";
-			$data['products']=$this->products_model->get_products();
-			$data['generos']=$this->genero_model->get_generos();
-			$data['users']=$this->users_model->get_all_users();
-			$data['djs']=$this->users_model->get_djs();
-			$plan_id=$_GET['plan_id'];
-			$data['plan']=$this->plan_model->load_plan_info($plan_id);
-			
-			$this->load->view('templates/header', $data);
-			$this->load->view('get_plan');
-			$this->load->view('templates/footer', $data);
-		}else{
-			$data['title']="Checkout - Dale Más Bajo";
-			$data['description']="Finaliza tu pago";
-			$this->load->view('templates/header', $data);
-			$this->load->view('checkout-registrate.php');
-			$this->load->view('templates/footer', $data);
-		}
-	}
+    public function index()
+    {
+        if(!$this->session->userdata('is_logued_in')){
+            $data['title'] = "Checkout - Dale Más Bajo";
+            $data['description'] = "Complete your payment";
+            $this->load->view('templates/header', $data);
+            $this->load->view('checkout-registrate.php');
+            $this->load->view('templates/footer', $data);
+            return;
+        }
 
-	public function create_order(){
-		print_r($_POST);
-		$user_id = $this->input->post('user_id');
-		$plan_id = $this->input->post('plan_id');
-		$plan=$this->plan_model->load_plan_info($plan_id);
-		$data_order = array(
-			'user_id'		=>	$this->session->userdata('id_usuario'),
-			'date_order'	=> 	date("Y-m-d H:i:s"),
-			'total_price'	=> 	$plan->price,
-			'status'		=> 	1,
-			'is_plan'		=>	1,
-			'plan_id'		=>	$plan->id
-		);
-		$order_id = $this->orders_model->create_order_plan($data_order);
-		echo $order_id;
-	}
+        $data['title'] = "Checkout - Dale Más Bajo";
+        $data['description'] = "Complete your payment";
+        $data['products'] = $this->products_model->get_products();
+        $data['generos'] = $this->genero_model->get_generos();
+        $data['users'] = $this->users_model->get_all_users();
+        $data['djs'] = $this->users_model->get_djs();
 
+        $plan_id = (int) $this->input->get('plan_id', true);
+        if(!$plan_id){
+            show_error('Missing plan_id', 400);
+            return;
+        }
+
+        $plan = $this->plan_model->load_plan_info($plan_id);
+        if(!$plan){
+            show_error('Plan not found', 404);
+            return;
+        }
+
+        $data['plan'] = $plan;
+
+        $data_order = array(
+            'user_id'     => (int) $this->session->userdata('id_usuario'),
+            'date_order'  => date("Y-m-d H:i:s"),
+            'total_price' => (float) $plan->price,
+            'status'      => 1,
+            'is_plan'     => 1,
+            'plan_id'     => (int) $plan->id
+        );
+
+        if(isset($_SESSION['cart']['cupon'])){
+            $data_order['discount'] = 1;
+            $data_order['total_discount'] = $_SESSION['cart']['cupon']['descuento_total'];
+            $data_order['cupon_id'] = $_SESSION['cart']['cupon']['cupon_id'];
+        }
+
+        $order_id = $this->orders_model->create_order_plan($data_order);
+        $data['order_id'] = $order_id;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('get_plan', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
+    public function create_order()
+    {
+        if(!$this->session->userdata('is_logued_in')){
+            show_error('Unauthorized', 403);
+            return;
+        }
+
+        $plan_id = (int) $this->input->post('plan_id', true);
+        if(!$plan_id){
+            show_error('Missing plan_id', 400);
+            return;
+        }
+
+        $plan = $this->plan_model->load_plan_info($plan_id);
+        if(!$plan){
+            show_error('Plan not found', 404);
+            return;
+        }
+
+        $data_order = array(
+            'user_id'     => (int) $this->session->userdata('id_usuario'),
+            'date_order'  => date("Y-m-d H:i:s"),
+            'total_price' => (float) $plan->price,
+            'status'      => 1,
+            'is_plan'     => 1,
+            'plan_id'     => (int) $plan->id
+        );
+
+        if(isset($_SESSION['cart']['cupon'])){
+            $data_order['discount'] = 1;
+            $data_order['total_discount'] = $_SESSION['cart']['cupon']['descuento_total'];
+            $data_order['cupon_id'] = $_SESSION['cart']['cupon']['cupon_id'];
+        }
+
+        $order_id = $this->orders_model->create_order_plan($data_order);
+        echo (int) $order_id;
+    }
 
 	public function test(){
 		if($this->session->userdata('is_logued_in')){

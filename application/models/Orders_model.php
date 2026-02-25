@@ -326,7 +326,7 @@ class Orders_model extends CI_Model {
         $this->db->select('*');
         $this->db->from('orders');
         $this->db->where('user_id', (int)$user_id);
-        $this->db->where('status', 0);
+        $this->db->where('status', 1);
         $this->db->where('is_plan', 1);
         $this->db->where('total_price >=', $amount - 0.01);
         $this->db->where('total_price <=', $amount + 0.01);
