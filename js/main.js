@@ -14,7 +14,7 @@ window.onscroll = function() {
 }
 
 $('#pagar_tarjeta').on('click', function(e){
-    var base_url = "https://dalemasbajo.com/";
+    var base_url = "http://localhost/dalemasbajo.com/";
     e.preventDefault();
     var user_id = $(this).data('user_id');
     var plan_id = $(this).data('plan_id');
@@ -50,7 +50,7 @@ $('#myModalVideo').on('hidden.bs.modal', function (e) {
 });
 
 jQuery(function($) {
-    var base_url = "https://dalemasbajo.com/";
+    var base_url = "http://localhost/dalemasbajo.com/";
     "use strict";
     /*Table OF Contents
 	==========================
@@ -426,7 +426,7 @@ jQuery(function($) {
                 .done(function(data){
                     if(data.success){
                         alert('Tu contraseña ha sido modificada. Serás redirigido para que ingreses.');
-                        location.href ="https://dalemasbajo.com";
+                        location.href ="http://localhost/dalemasbajo.com";
                     }else{
                         alert('Algo ha salido mal, intentalo más tarde');
                     }
@@ -807,7 +807,7 @@ jQuery(function($) {
           // $("#jquery_jplayer_1").jPlayer({
           //   ready: function () {
           //     $(this).jPlayer("setMedia", {
-          //       mp3: 'https://dalemasbajo.com/assets/demo/demo.mp3'
+          //       mp3: 'http://localhost/dalemasbajo.com/assets/demo/demo.mp3'
           //     });
           //   },
           //   cssSelectorAncestor: "#jp_container_1",

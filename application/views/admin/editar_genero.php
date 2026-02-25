@@ -5,7 +5,7 @@
           <h5><? echo $title; ?></h5>
           <p><? echo $description; ?></p>
         </div><!-- sl-page-title -->
-<div class="top_btn"><a href="https://dalemasbajo.com/admin/nuevo_genero/" class="btn btn-success">Añadir Nuevo</a></div>
+<div class="top_btn"><a href="http://localhost/dalemasbajo.com/admin/nuevo_genero/" class="btn btn-success">Añadir Nuevo</a></div>
         <div class="card pd-20 pd-sm-40">
           <div class="form-layout">
             <? echo form_open_multipart(base_url().'admin/update_genero/'); ?>

@@ -282,4 +282,42 @@ class Orders_model extends CI_Model {
 		return true;
 	}
 
+    public function create_order_drop($data){
+        $this->db->insert('orders', $data);
+        return $this->db->insert_id();
+    }
+
+    public function add_items_to_order_drop($data){
+        $this->db->insert('order_items', $data);
+        return $this->db->insert_id();
+    }
+
+    public function find_pending_drop_order_by_drop($user_id, $drop_id){
+        $this->db->where('user_id', (int)$user_id);
+        $this->db->where('status', 0);
+        $this->db->where('is_drop', 1);
+        $this->db->where('drop_id', (int)$drop_id);
+        $this->db->order_by('date_order', 'DESC');
+        $this->db->limit(1);
+        $q = $this->db->get('orders');
+        if($q->num_rows() === 1) return $q->row();
+        return false;
+    }
+
+    public function find_pending_drop_order_by_email_amount($user_id, $amount){
+        $this->db->where('user_id', (int)$user_id);
+        $this->db->where('status', 0);
+        $this->db->where('is_drop', 1);
+        $this->db->where('total_price', (float)$amount);
+        $this->db->group_start();
+        $this->db->where('txn_id IS NULL', null, false);
+        $this->db->or_where('txn_id', '');
+        $this->db->group_end();
+        $this->db->order_by('date_order', 'DESC');
+        $this->db->limit(1);
+        $q = $this->db->get('orders');
+        if($q->num_rows() === 1) return $q->row();
+        return false;
+    }
+
 }

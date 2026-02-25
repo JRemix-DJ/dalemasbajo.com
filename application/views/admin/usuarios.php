@@ -6,7 +6,7 @@
         <input type="hidden" id="where" value="<?= $where ?>">
         <input type="hidden" id="user_id" value="">
         <input type="hidden" id="accion" value="<?= $accion ?>">
-        <div class="top_btn"><a href="https://dalemasbajo.com/admin/nuevo_usuario/" class="btn btn-success">Añadir Nuevo</a></div>
+        <div class="top_btn"><a href="http://localhost/dalemasbajo.com/admin/nuevo_usuario/" class="btn btn-success">Añadir Nuevo</a></div>
           <div class="card pd-20">
             <form action="<?php echo base_url('admin/listar_usuarios/'); ?>" class="form-inline">
             <input type="text" name="s" class="form-control" placeholder="buscar por email" <?if(isset($_GET['s'])){ ?> value="<? echo $_GET['s']; ?>" <? } ?>>

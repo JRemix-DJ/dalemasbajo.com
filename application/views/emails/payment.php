@@ -147,7 +147,7 @@
             <tr>
               <th class="column" width="640" style="padding-left: 30px; padding-right: 30px; text-align: left;">
                 <a href="http://example.com" style="text-decoration: none;">
-                  <img class="mobile-center" src="https://dalemasbajo.com/images/logo.png" width="105" alt="Dale Más Bajo - Recibo de Pago" style="border: 0; width: 100%; max-width: 105px;">
+                  <img class="mobile-center" src="http://localhost/dalemasbajo.com/images/logo.png" width="105" alt="Dale Más Bajo - Recibo de Pago" style="border: 0; width: 100%; max-width: 105px;">
                 </a>
               </th>
             </tr>
@@ -221,7 +221,7 @@
             <tr class="mobile-valign-top">
               <th class="column mobile-4" width="145" style="padding-left: 30px; padding-right: 10px; text-align: left;">
                 <a href="#" style="display: inline-block; text-decoration: none;">
-                  <img src="https://dalemasbajo.com/images/favicon.png" width="100" alt="<? echo $item->name; ?>" style="border: 0; width: 100%; max-width: 100px;">
+                  <img src="http://localhost/dalemasbajo.com/images/favicon.png" width="100" alt="<? echo $item->name; ?>" style="border: 0; width: 100%; max-width: 100px;">
                 </a>
               </th>
               <th class="column mobile-8" width="255" style="padding-left: 10px; padding-right: 10px; font-weight: 400; text-align: left;">
@@ -336,8 +336,8 @@
                 <table class="row" cellpadding="0" cellspacing="0">
                   <tr valign="top" style="vertical-align: top;">
                     <th class="column mobile-padding-bottom" width="255" style="padding-top: 10px; padding-right: 10px; text-align: left;">
-                      <a href="https://dalemasbajo.com">
-                        <img src="https://dalemasbajo.com/images/icon-white.png" width="78" alt="Dale Más Bajo" style="border: 0; width: 100%; max-width: 38px;">
+                      <a href="http://localhost/dalemasbajo.com">
+                        <img src="http://localhost/dalemasbajo.com/images/icon-white.png" width="78" alt="Dale Más Bajo" style="border: 0; width: 100%; max-width: 38px;">
                       </a>
                     </th>
                     <th class="column mobile-text-left" width="365" style="padding-left: 10px;">
@@ -345,12 +345,12 @@
                         <tr>
                           <td style="padding-left: 0;">
                             <a href="http://facebook.com/dalemasbajo/" style="text-decoration: none;">
-                              <img src="https://dalemasbajo.com/images/icons/facebook.png" width="24" alt="Twitter" style="border: 0; width: 100%; max-width: 24px;">
+                              <img src="http://localhost/dalemasbajo.com/images/icons/facebook.png" width="24" alt="Twitter" style="border: 0; width: 100%; max-width: 24px;">
                             </a>
                           </td>
                           <td>
                             <a href="http://twitter.com/dalemasbajo/" style="text-decoration: none;">
-                              <img src="https://dalemasbajo.com/images/icons/twitter.png" width="24" alt="Facebook" style="border: 0; width: 100%; max-width: 24px;">
+                              <img src="http://localhost/dalemasbajo.com/images/icons/twitter.png" width="24" alt="Facebook" style="border: 0; width: 100%; max-width: 24px;">
                             </a>
                           </td>
                         </tr>
@@ -374,10 +374,10 @@
                     </th>
                     <th class="column mobile-6" width="420" style="padding-left: 10px; font-weight: 400; text-align: left;">
                       <div class="sans-serif" style="line-height: 100%; margin-bottom: 15px;">
-                        <a href="https://dalemasbajo.com/faq/" style="color: #969AA1; text-decoration: none;">FAQ</a>
+                        <a href="http://localhost/dalemasbajo.com/faq/" style="color: #969AA1; text-decoration: none;">FAQ</a>
                       </div>
                       <div class="sans-serif" style="line-height: 100%; margin-bottom: 15px;">
-                        <a href="https://dalemasbajo.com" style="color: #969AA1; text-decoration: none;">Visitar Sitio Web</a>
+                        <a href="http://localhost/dalemasbajo.com" style="color: #969AA1; text-decoration: none;">Visitar Sitio Web</a>
                       </div>
                     </th>
                   </tr>
@@ -388,7 +388,7 @@
                 <table class="row" cellpadding="0" cellspacing="0">
                   <tr>
                     <th class="column" width="640" style="color: #969AA1; font-weight: 400; text-align: left;">
-                      <div class="sans-serif">&copy; DaleMásBajo. Todos los derechos reservados <a href="https://dalemasbajo.com" style="color: #969AA1; text-decoration: none;">Terminos &amp; Condiciones</a></div>
+                      <div class="sans-serif">&copy; DaleMásBajo. Todos los derechos reservados <a href="http://localhost/dalemasbajo.com" style="color: #969AA1; text-decoration: none;">Terminos &amp; Condiciones</a></div>
                     </th>
                   </tr>
                   <tr>

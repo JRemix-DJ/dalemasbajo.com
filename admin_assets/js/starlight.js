@@ -5,7 +5,7 @@
  */
 
  'use strict';
-var base_url = "https://dalemasbajo.com/";
+var base_url = "http://localhost/dalemasbajo.com/";
 
     $("#recuperar-btn").on('click', function(e){
         console.log('recuperando');
@@ -286,15 +286,15 @@ var base_url = "https://dalemasbajo.com/";
       //alert($_GET['aprobacion']);
       if(typeof $_GET['aprobacion']!== "undefined"){
         if(typeof $_GET['search']!== "undefined"){
-          window.location.href = 'https://dalemasbajo.com/admin/listar_productos/?aprobacion=1&search='+$_GET['search']+'genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_productos/?aprobacion=1&search='+$_GET['search']+'genero_filter='+genero;
         }else{
-          window.location.href = 'https://dalemasbajo.com/admin/listar_productos/?aprobacion=1&genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_productos/?aprobacion=1&genero_filter='+genero;
         }
       }else{
         if(typeof $_GET['search']!== "undefined"){
-          window.location.href = 'https://dalemasbajo.com/admin/listar_productos/?search='+$_GET['search']+'&genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_productos/?search='+$_GET['search']+'&genero_filter='+genero;
         }else{
-          window.location.href = 'https://dalemasbajo.com/admin/listar_productos/?genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_productos/?genero_filter='+genero;
         }
       }
     });
@@ -322,15 +322,15 @@ var base_url = "https://dalemasbajo.com/";
       //alert($_GET['aprobacion']);
       if(typeof $_GET['aprobacion']!== "undefined"){
         if(typeof $_GET['search']!== "undefined"){
-          window.location.href = 'https://dalemasbajo.com/admin/listar_videos/?aprobacion=1&search='+$_GET['search']+'genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_videos/?aprobacion=1&search='+$_GET['search']+'genero_filter='+genero;
         }else{
-          window.location.href = 'https://dalemasbajo.com/admin/listar_videos/?aprobacion=1&genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_videos/?aprobacion=1&genero_filter='+genero;
         }
       }else{
         if(typeof $_GET['search']!== "undefined"){
-          window.location.href = 'https://dalemasbajo.com/admin/listar_videos/?search='+$_GET['search']+'&genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_videos/?search='+$_GET['search']+'&genero_filter='+genero;
         }else{
-          window.location.href = 'https://dalemasbajo.com/admin/listar_videos/?genero_filter='+genero;
+          window.location.href = 'http://localhost/dalemasbajo.com/admin/listar_videos/?genero_filter='+genero;
         }
       }
     });
