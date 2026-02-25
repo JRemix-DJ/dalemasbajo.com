@@ -16,10 +16,19 @@ class Home extends CI_Controller {
 	{
 		$data['title']="Dale Más Bajo";
 		$data['description']="Música para Djs y Vjs, los mejores remixes en un solo lugar";
-		
+        $where = ['approved' => 1];
+        $data['products'] = $this->products_model->get_current_page_records(
+            5,          // limit
+            0,          // start
+            $where,     // where_parameter
+            'gender_id',// no_parameter (where_not_in column)
+            [45],       // not_in
+            null        // search
+        );
+
+        if ($data['products'] === false) $data['products'] = [];
 		$data['plans']=$this->plan_model->get_plans();
 		$this->load->view('home', $data);
-        $this->load->view('planes_new', $data);
 		$this->load->view('templates/footer', $data);
 	}
 

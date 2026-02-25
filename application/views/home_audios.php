@@ -1,26 +1,40 @@
 <div class="bg-slate-50 min-h-screen font-sans">
 
-    <section class="relative h-[500px] w-full overflow-hidden mb-12 group">
-        <div class="absolute inset-0 z-0">
-            <video class="w-full h-full object-cover" autoplay muted loop playsinline>
-                <source src="<? echo base_url('assets/new_video.mp4'); ?>" type="video/mp4">
-            </video>
-            <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
-        </div>
+    <section class="py-10 md:py-14">
+        <div class="container mx-auto px-4">
+            <div id="heroBanner"
+                 class="relative w-full overflow-hidden rounded-[28px] border border-slate-200 bg-slate-900 shadow-xl"
+                 data-base="<?php echo base_url('assets/banners/'); ?>"
+                 data-banners='<?php echo json_encode($banners ?? [], JSON_UNESCAPED_SLASHES); ?>'>
 
-        <div class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
-            <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4 drop-shadow-lg">
-                Premium Monthly<br>
-                <span class="text-primary text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                    Subscription
-                </span>
-            </h1>
-            <p class="text-lg text-slate-200 mb-8 max-w-2xl font-light">
-                Unlimited access to exclusive DJ Remixes
-            </p>
-            <a href="<? echo base_url('planes'); ?>" class="px-8 py-4 bg-primary hover:bg-blue-600 text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.5)] flex items-center gap-2">
-                JOIN NOW <i class="fa fa-arrow-right"></i>
-            </a>
+                <!-- VIDEO LAYER (JS inyecta el <video> aquí) -->
+                <div class="absolute inset-0" data-video-layer></div>
+
+                <!-- overlays -->
+                <div class="absolute inset-0 bg-slate-900/50 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),rgba(0,0,0,0.65))] pointer-events-none"></div>
+
+                <!-- CONTENIDO -->
+                <div class="relative z-10 flex min-h-[420px] md:min-h-[520px] items-center justify-center px-6 py-12">
+                    <div class="w-full max-w-3xl rounded-2xl px-6 py-10 md:px-12 md:py-12 text-center">
+                        <h1 class="text-8xl md:text-9xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                            Welcome
+                        </h1>
+
+                        <p class="mt-3 text-sm md:text-lg text-white/80 font-medium">
+                            We’re launching Version 2.0 — Faster, clearer, more powerful
+                        </p>
+
+                        <a href="<?php echo base_url('planes'); ?>"
+                           class="mt-8 inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-primary text-white font-bold transition-all duration-200 hover:scale-[1.03] hover:bg-blue-600 shadow-lg shadow-blue-500/30">
+                            JOIN NOW <i class="fa fa-arrow-right text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- DOTS -->
+                <div class="absolute bottom-4 left-0 right-0 z-20 flex items-center justify-center gap-2" data-dots></div>
+            </div>
         </div>
     </section>
 
@@ -33,24 +47,23 @@
                         <i class="fa fa-arrow-trend-up text-primary text-sm"></i>
                     </span> Trending Now
                 </h2>
-                <a href="<? echo base_url('audios/trending'); ?>" class="text-sm text-primary font-medium hover:underline">See all</a>
+                <a href="<? echo base_url('/search/?sname=&sgenero=&sremixers='); ?>" class="text-sm text-primary font-medium hover:underline">See all</a>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 <?
-                // Lógica para obtener los audios
                 $loop_trending = isset($trending_audios) ? $trending_audios : (isset($products) ? array_slice($products, 0, 5) : []);
 
                 if(!empty($loop_trending)) {
                     foreach($loop_trending as $audio) {
-
+                        // Imagen desde cover_mp3
                         $img = base_url('audios/cover_mp3/' . $audio->id);
 
                         $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
                         $artist = isset($audio->artist) ? $audio->artist : 'Unknown Artist';
                         $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
                         ?>
-                        <div class="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border border-slate-100 group">
+                        <div class="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border-2 border-slate-100 group">
                             <div class="relative aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100">
                                 <img src="<? echo $img; ?>"
                                      alt="<? echo $title; ?>"
@@ -76,13 +89,57 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-between mb-6 mt-8">
+        <div class="flex items-center justify-between mb-4 mt-8">
             <h2 class="text-2xl font-bold text-slate-900">Latest Remixes</h2>
             <div id="table-loader" class="hidden text-primary">
                 <i class="fa fa-circle-o-notch fa-spin"></i> Cargando...
             </div>
         </div>
 
+        <form action="<? echo base_url('search/'); ?>" method="GET" class="mb-6">
+            <div class="flex flex-col md:flex-row gap-3">
+                <div class="relative flex-grow group">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fa fa-search text-slate-400 group-focus-within:text-primary transition-colors"></i>
+                    </div>
+                    <input type="text" name="sname" id="sname"
+                           class="block w-full p-3 pl-10 text-sm text-slate-900 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                           placeholder="Search for remix, artist or title..." autocomplete="off">
+                </div>
+
+                <div class="w-full md:w-48">
+                    <div class="relative">
+                        <select name="sgenero" id="sgenero" class="block w-full p-3 text-sm text-slate-700 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                            <option value="">Genre</option>
+                            <? if(isset($generos)){ foreach($generos as $g) { ?>
+                                <option value="<? echo $g->id; ?>"><? echo $g->name; ?></option>
+                            <? }} ?>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <i class="fa fa-angle-down text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-48">
+                    <div class="relative">
+                        <select name="sremixers" id="sremixers" class="block w-full p-3 text-sm text-slate-700 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                            <option value="">Remixer</option>
+                            <? if(isset($djs)){ foreach($djs as $dj) { ?>
+                                <option value="<? echo $dj->id; ?>"><? echo $dj->username; ?></option>
+                            <? }} ?>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <i class="fa fa-angle-down text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="p-3 px-6 text-white bg-primary hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center transition-all shadow-md shadow-blue-500/20">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
@@ -91,8 +148,8 @@
                         <th class="p-4 font-semibold w-24">Date</th>
                         <th class="p-4 font-semibold w-16 text-center">Play</th>
                         <th class="p-4 font-semibold">Song Title</th>
-                        <th class="p-4 font-semibold">Version</th>
                         <th class="p-4 font-semibold">Artist</th>
+                        <th class="p-4 font-semibold text-center">Version</th>
                         <th class="p-4 font-semibold">Remixer</th>
                         <th class="p-4 font-semibold w-20">BPM</th>
                         <th class="p-4 font-semibold w-32">Genre</th>
@@ -116,73 +173,6 @@
         </div>
 
     </div>
-</div>
-
-<div id="music-player-bar" class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 transform translate-y-full transition-transform duration-500 ease-in-out">
-
-    <div class="container mx-auto px-4 py-3 h-24 md:h-20 flex items-center justify-between gap-4">
-
-        <div class="flex items-center gap-4 w-1/4 min-w-[140px] md:min-w-[200px]">
-            <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden shadow-sm flex-shrink-0 bg-slate-100">
-                <img id="player-cover" src="" alt="Cover" class="w-full h-full object-cover">
-            </div>
-            <div class="overflow-hidden hidden sm:block">
-                <h4 id="player-title" class="font-bold text-slate-900 text-sm truncate leading-tight">Selecciona canción</h4>
-                <p id="player-artist" class="text-xs text-slate-500 truncate mt-0.5">DALE MAS BAJO</p>
-            </div>
-        </div>
-
-        <div class="flex flex-col items-center justify-center flex-1 max-w-2xl w-full">
-
-            <div class="flex items-center gap-6 mb-1">
-                <button id="skip-back-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="-10 segundos">
-                    <i class="fa-solid fa-rotate-left text-lg"></i>
-                </button>
-
-                <button id="player-play-btn" class="w-10 h-10 bg-primary hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 transition-all transform hover:scale-105 active:scale-95">
-                    <i class="fa fa-play pl-1"></i>
-                </button>
-
-                <button id="skip-fwd-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="+10 segundos">
-                    <i class="fa-solid fa-rotate-right text-lg"></i>
-                </button>
-            </div>
-
-            <div class="w-full flex items-center gap-3 text-[10px] md:text-xs font-mono text-slate-400 font-medium select-none">
-                <span id="current-time">0:00</span>
-
-                <div class="relative w-full h-1.5 group cursor-pointer py-1" id="progress-container">
-                    <div class="absolute top-1/2 -translate-y-1/2 left-0 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
-                        <div id="progress-bar" class="h-full bg-primary w-0 rounded-full relative"></div>
-                    </div>
-                    <div id="progress-thumb" class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-primary rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity transform -translate-x-1.5 pointer-events-none" style="left: 0%"></div>
-                </div>
-
-                <span id="total-time">0:00</span>
-            </div>
-        </div>
-
-        <div class="flex items-center justify-end gap-4 md:gap-6 w-1/4 min-w-[140px] md:min-w-[200px]">
-
-            <div class="hidden md:flex items-center gap-2 group relative">
-                <button id="mute-btn" class="text-slate-400 hover:text-slate-600 w-6 text-center">
-                    <i class="fa fa-volume-high"></i>
-                </button>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1"
-                       class="w-20 lg:w-24 h-1 rounded-lg appearance-none cursor-pointer">
-            </div>
-
-            <div class="h-8 w-px bg-slate-200 hidden md:block"></div>
-
-            <button id="player-download-btn"
-                    class="btn-smart-download w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 hover:bg-primary hover:text-white text-slate-600 transition-all shadow-sm border border-slate-200"
-                    data-id="" data-logged="" data-access="" title="Descargar Remix">
-                <i class="fa fa-download"></i>
-            </button>
-        </div>
-    </div>
-
-    <audio id="main-audio-element" preload="none"></audio>
 </div>
 
 <style>
@@ -263,4 +253,90 @@
             });
         });
     });
+    (function () {
+        const root = document.getElementById('heroBanner');
+        if (!root) return;
+
+        const basePath = (root.dataset.base || '').replace(/\/?$/, '/');
+        let banners = [];
+        try {
+            banners = JSON.parse(root.dataset.banners || '[]') || [];
+        } catch (e) {
+            banners = [];
+        }
+
+        const videoLayer = root.querySelector('[data-video-layer]');
+        const dotsWrap = root.querySelector('[data-dots]');
+        let idx = 0;
+        let currentVideo = null;
+
+        function makeDot(active) {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'h-2.5 w-2.5 rounded-full transition-all ' + (active ? 'bg-white w-6' : 'bg-white/40 hover:bg-white/70');
+            return b;
+        }
+
+        function renderDots() {
+            if (!dotsWrap) return;
+            dotsWrap.innerHTML = '';
+            if (banners.length <= 1) return;
+
+            banners.forEach((_, i) => {
+                const dot = makeDot(i === idx);
+                dot.addEventListener('click', () => go(i));
+                dotsWrap.appendChild(dot);
+            });
+        }
+
+        function mountVideo() {
+            if (!videoLayer) return;
+
+            videoLayer.innerHTML = '';
+            const b = banners[idx];
+
+            // fallback si no hay banners
+            const src = b && b.image ? (basePath + b.image) : "<?php echo base_url('assets/new_video.mp4'); ?>";
+
+            const v = document.createElement('video');
+            v.className = 'h-full w-full object-cover';
+            v.autoplay = true;
+            v.muted = true;
+            v.playsInline = true;
+            v.loop = (banners.length <= 1);
+
+            const s = document.createElement('source');
+            s.src = src;
+            s.type = 'video/mp4';
+
+            v.appendChild(s);
+
+            v.addEventListener('ended', () => next());
+
+            v.addEventListener('canplay', () => {
+                v.play().catch(() => {});
+            });
+
+            videoLayer.appendChild(v);
+            currentVideo = v;
+        }
+
+        function next() {
+            if (!banners.length) return;
+            idx = (idx + 1) % banners.length;
+            mountVideo();
+            renderDots();
+        }
+
+        function go(i) {
+            if (!banners.length) return;
+            idx = i;
+            mountVideo();
+            renderDots();
+        }
+
+        // init
+        mountVideo();
+        renderDots();
+    })();
 </script>

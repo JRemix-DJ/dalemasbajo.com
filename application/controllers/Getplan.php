@@ -52,8 +52,7 @@ class Getplan extends CI_Controller {
 	}
 
 
-	public function test()
-	{
+	public function test(){
 		if($this->session->userdata('is_logued_in')){
 			$data['title']="Checkout - Dale Más Bajo";
 			$data['description']="Finaliza tu pago";
@@ -99,6 +98,4 @@ class Getplan extends CI_Controller {
 		}
 		return $total;
 	}
-
-
 }

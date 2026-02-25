@@ -13,182 +13,273 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#0066FF",
-                        secondary: "#020817",
-                        accent: "#F8FAFC",
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Montserrat', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="<? echo base_url('assets/tailwind/tailwind.min.css'); ?>">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3, .font-heading { font-family: 'Montserrat', sans-serif; }
-        [x-cloak] { display: none !important; }
-
-        /* Barra de scroll personalizada para los menús largos */
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
-
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
 </head>
 <body class="bg-white text-slate-900 antialiased">
 
-<header x-data="{ mobileMenuOpen: false, scrolled: false }"
-        @scroll.window="scrolled = (window.pageYOffset > 20)"
-        :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'"
-        class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-gray-100">
+<header id="siteHeader"
+        class="fixed top-0 w-full z-50 transition-all duration-300 bg-white">
+    <style>
+        #siteHeader{--blue-cut:260px}
+        #siteHeader .nav-split-bg{
+            background: linear-gradient(
+                    90deg,
+                    rgba(0,102,255) 0,
+                    rgba(0,102,255) var(--blue-cut),
+                    rgba(255,255,255,0.30) var(--blue-cut),
+                    rgba(255,255,255,0.30) 100%
+            );
+        }
+        #siteHeader .logo-slot{
+            width: var(--blue-cut);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 140px;
+            flex: 0 0 auto;
+        }
+    </style>
+    <div class="nav-split-bg absolute inset-0 pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
+    <div class="w-full px-4 sm:px-6 lg:px-10 relative shadow-lg">
+        <div class="flex items-center h-20">
 
-            <div class="flex-shrink-0 flex items-center">
+            <div class="logo-slot ">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2 group decoration-0">
-                        <span class="text-2xl font-heading font-black tracking-tighter text-slate-900 group-hover:text-primary transition-colors">
-                            DALE MÁS BAJO
-                        </span>
+                    <img src="<? echo base_url(); ?>images/HORIZONTAL--video.png" alt="dalemasbajo"
+                         class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                 </a>
             </div>
 
-            <nav class="hidden lg:flex items-center gap-8">
-                <a href="<? echo base_url('audios');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Audios</a>
+            <nav class="hidden lg:flex flex-1 items-center justify-center gap-8">
+                <a id="navFirstLink" href="<? echo base_url('audios');?>"
+                   class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Audios</a>
 
                 <div class="relative group h-20 flex items-center cursor-pointer">
-                    <button class="text-sm font-semibold text-slate-600 group-hover:text-primary flex items-center gap-1 focus:outline-none">
-                        Remixers <i class="fa-solid fa-chevron-down text-[10px] opacity-50 ml-1"></i>
+                    <button type="button"
+                            class="text-sm font-semibold text-slate-700 group-hover:text-primary flex items-center gap-1 focus:outline-none">
+                        Remixers <i class="fa-solid fa-chevron-down text-[10px] opacity-60 ml-1"></i>
                     </button>
                     <div class="absolute top-16 -left-20 w-[600px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
                         <div class="grid grid-cols-3 gap-x-4 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                            <? foreach($djs as $dj) { ?>
-                                <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
+                            <? if(isset($djs) && !empty($djs)) { foreach($djs as $dj) { ?>
+                                <a href="<? echo base_url('remixers/').$dj->id;?>"
+                                   class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
                                     <i class="fa-solid fa-user-music text-xs opacity-40 mr-2"></i><? echo $dj->username; ?>
                                 </a>
-                            <? } ?>
+                            <? } } ?>
                         </div>
                     </div>
                 </div>
 
                 <div class="relative group h-20 flex items-center cursor-pointer">
-                    <button class="text-sm font-semibold text-slate-600 group-hover:text-primary flex items-center gap-1 focus:outline-none">
-                        Géneros <i class="fa-solid fa-chevron-down text-[10px] opacity-50 ml-1"></i>
+                    <button type="button"
+                            class="text-sm font-semibold text-slate-700 group-hover:text-primary flex items-center gap-1 focus:outline-none">
+                        Genre <i class="fa-solid fa-chevron-down text-[10px] opacity-60 ml-1"></i>
                     </button>
                     <div class="absolute top-16 -left-32 w-[700px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-4 z-50">
                         <div class="grid grid-cols-4 gap-x-2 gap-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                            <? foreach($generos as $genre){ ?>
-                                <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300 inline-block mr-2"></span><? echo $genre->name; ?>
+                            <? if(isset($generos) && !empty($generos)) { foreach($generos as $genre){ ?>
+                                <a href="<? echo base_url('genero/').$genre->id; ?>"
+                                   class="block px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-primary rounded-lg truncate transition-colors">
+                                    <? echo $genre->name; ?>
                                 </a>
-                            <? } ?>
+                            <? } } ?>
                         </div>
                     </div>
                 </div>
 
-                <a href="<? echo base_url('drops');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Drops</a>
-                <a href="<? echo base_url('planes');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Plans</a>
-                <a href="<? echo base_url('pages/become_a_member');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Be a remixer</a>
-                <a href="<? echo base_url('pages/request_remix');?>" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">Request Your Remix</a>
-            </nav>
+                <a href="<? echo base_url('planes');?>"
+                   class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Plans</a>
+                <a href="<? echo base_url('pages/become_a_member');?>"
+                   class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Be a remixer</a>
 
-            <div class="flex items-center gap-4">
-                <div class="hidden md:block h-6 w-px bg-gray-200"></div>
+                <a href="<? echo base_url('pages/request_remix'); ?>"
+                   class="inline-flex items-center px-5 py-3 rounded-full bg-[rgb(0,102,255)] text-white text-sm font-bold hover:scale-[1.03] transition-all">
+                    Request Your Remix
+                </a>
 
                 <? if($this->session->userdata('is_logued_in')){ ?>
-                    <div class="relative group" x-data="{ open: false }">
-                        <button @click="open = !open" @click.outside="open = false" class="flex items-center gap-3 focus:outline-none">
-                            <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-md shadow-primary/30">
+                    <div class="relative ml-4">
+                        <button id="userMenuBtn" type="button"
+                                class="flex items-center gap-3 focus:outline-none"
+                                aria-haspopup="menu" aria-expanded="false">
+                            <div class="w-9 h-9 rounded-full bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/30">
                                 <? echo substr($this->session->userdata('username'), 0, 1); ?>
                             </div>
                             <span class="hidden lg:block text-sm font-bold text-slate-700"><? echo $this->session->userdata('username'); ?></span>
                             <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                         </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             class="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl p-1 z-50"
-                             style="display: none;">
-                            <a href="<? echo base_url(); ?>micuenta" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">Mi Cuenta</a>
+
+                        <div id="userMenu"
+                             class="hidden absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-xl p-1 z-50"
+                             role="menu" aria-labelledby="userMenuBtn">
+                            <a href="<? echo base_url(); ?>micuenta"
+                               class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg"
+                               role="menuitem">My Account</a>
                             <div class="h-px bg-gray-100 my-1"></div>
-                            <a href="<? echo base_url(); ?>login/logout/" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">Cerrar Sesión</a>
+                            <a href="<? echo base_url(); ?>login/logout/"
+                               class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg"
+                               role="menuitem">Log out</a>
                         </div>
                     </div>
                 <? }else{ ?>
-                    <div class="hidden md:flex items-center gap-2">
-                        <a href="#" data-toggle="modal" data-target="#myModal" class="px-4 py-2 text-sm font-bold text-slate-600 hover:text-primary transition-colors">
-                            Ingresar
+                    <div class="hidden md:flex items-center gap-2 ml-4 mr-4">
+                        <a href="#" data-toggle="modal" data-target="#myModal"
+                           class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-primary transition-colors">
+                            Sign in
                         </a>
-                        <a href="#" data-toggle="modal" data-target="#myModalRegistrarme" class="px-5 py-2.5 text-sm font-bold text-white bg-primary rounded-full hover:bg-blue-700 shadow-lg shadow-primary/30 transition-all hover:scale-105">
-                            Registrarse
+                        <a href="#" data-toggle="modal" data-target="#myModalRegistrarme"
+                           class="text-sm font-bold mr-10 inline-flex items-center rounded-full bg-white text-[rgb(0,102,255)] px-4 py-2 border-2 border-[rgb(0,102,255)] hover:bg-[rgb(0,102,255)] hover:text-white transition-colors duration-200">
+                            Sign Up
                         </a>
                     </div>
                 <? } ?>
+            </nav>
 
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 text-slate-700 hover:text-primary focus:outline-none">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
+            <div class="hidden md:flex items-center justify-end">
+                <? if($this->session->userdata('is_logued_in')){
+                    $tokens = (int)$this->session->userdata('tokens');
+                    $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
+
+                    if($is_unlimited || $tokens > 0) { ?>
+                        <div class="ml-4 inline-flex items-center rounded-full bg-white text-[rgb(0,102,255)] px-4 py-2"
+                             style="border:2px solid rgb(0,102,255);">
+                            <span class="text-sm font-bold tracking-wider text-[rgb(0,102,255)] mr-1">Downloads</span>
+
+                            <? if($is_unlimited){ ?>
+                                <div class="flex items-center gap-2 font-bold text-sm">
+                                    <i class="fa-solid fa-infinity text-[rgb(0,102,255)]"></i>
+                                    <span>UNLIMITED</span>
+                                </div>
+                            <? } else { ?>
+                                <div class="flex items-center gap-2 font-bold text-sm">
+                                    <span class="token-count"><? echo $tokens; ?></span>
+                                    <i class="fa-solid fa-cloud-arrow-down text-[rgb(0,102,255)]"></i>
+                                </div>
+                            <? } ?>
+                        </div>
+                    <?  }
+                } ?>
             </div>
+
+            <button id="mobileMenuBtn" type="button"
+                    class="lg:hidden p-2 text-slate-700 hover:text-primary focus:outline-none ml-auto"
+                    aria-controls="mobileMenu" aria-expanded="false">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
         </div>
     </div>
 
-    <div x-show="mobileMenuOpen"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 -translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-leave="opacity-0 -translate-y-2"
-         class="lg:hidden absolute top-20 left-0 w-full bg-white border-t border-gray-100 shadow-xl z-40 max-h-[80vh] overflow-y-auto"
-         style="display: none;">
-
+    <div id="mobileMenu"
+         class="hidden lg:hidden absolute top-20 left-0 w-full bg-white backdrop-blur-md border-t border-slate-200 shadow-xl z-40 max-h-[80vh] overflow-y-auto">
         <div class="p-4 space-y-2">
-            <a href="<? echo base_url(); ?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Inicio</a>
-            <a href="<? echo base_url('drops');?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Drops</a>
-            <a href="<? echo base_url('planes');?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Planes</a>
-            <a href="<? echo base_url('pages/become_a_member');?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Be a remixer</a>
-            <a href="<? echo base_url('pages/request_remix');?>" class="block p-3 rounded-lg font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary">Request Your Remix</a>
 
-            <div class="h-px bg-gray-100 my-2"></div>
-            <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Remixers</div>
-            <div class="grid grid-cols-2 gap-2 mt-2">
-                <? foreach($djs as $dj) { ?>
-                    <a href="<? echo base_url('remixers/').$dj->id;?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">
-                        <? echo $dj->username; ?>
-                    </a>
-                <? } ?>
+            <? if($this->session->userdata('is_logued_in')){ ?>
+                <div class="rounded-2xl border border-slate-200 bg-white backdrop-blur-md p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[rgb(0,102,255)] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/30">
+                            <? echo substr($this->session->userdata('username'), 0, 1); ?>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-bold text-slate-900 truncate"><? echo $this->session->userdata('username'); ?></div>
+                            <div class="text-xs text-slate-500 truncate">Signed in</div>
+                        </div>
+                    </div>
+
+                    <?php
+                    $tokens = (int)$this->session->userdata('tokens');
+                    $is_unlimited = ($this->session->userdata('is_user_unlimited') || $this->session->userdata('role') == 1);
+                    if($is_unlimited || $tokens > 0) { ?>
+                        <div class="mt-3 inline-flex items-center rounded-full bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/20 px-4 py-2 w-full justify-between">
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-white/80">Downloads</span>
+                            <? if($is_unlimited){ ?>
+                                <span class="flex items-center gap-2 font-bold text-sm"><i class="fa-solid fa-infinity"></i> UNLIMITED</span>
+                            <? } else { ?>
+                                <span class="flex items-center gap-2 font-bold text-sm"><span class="token-count"><? echo $tokens; ?></span> <i class="fa-solid fa-cloud-arrow-down"></i></span>
+                            <? } ?>
+                        </div>
+                    <? } ?>
+
+                    <div class="mt-3 grid grid-cols-2 gap-3">
+                        <a href="<? echo base_url(); ?>micuenta"
+                           class="w-full py-3 text-center font-bold text-white bg-[rgb(0,102,255)] rounded-xl shadow-lg shadow-blue-500/20 hover:scale-[1.01] transition-all">
+                            My Account
+                        </a>
+                        <a href="<? echo base_url(); ?>login/logout/"
+                           class="w-full py-3 text-center font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 transition-all">
+                            Log out
+                        </a>
+                    </div>
+                </div>
+            <? } ?>
+
+            <a href="<? echo base_url(); ?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Home</a>
+            <a href="<? echo base_url('audios');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Audios</a>
+            <a href="<? echo base_url('planes');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Plans</a>
+            <a href="<? echo base_url('pages/become_a_member');?>" class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Be a remixer</a>
+
+            <a href="<? echo base_url('pages/request_remix');?>"
+               class="mt-2 block p-3 rounded-lg font-bold text-white bg-[rgb(0,102,255)] shadow-lg shadow-blue-500/30 text-center hover:scale-[1.01] transition-all">
+                Request Your Remix
+            </a>
+
+            <div class="h-px bg-slate-200 my-3"></div>
+
+            <button id="mobileRemixersBtn" type="button"
+                    class="w-full flex items-center justify-between p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50"
+                    aria-controls="mobileRemixers" aria-expanded="false">
+                <span>Remixers</span>
+                <i id="mobileRemixersIcon" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+            </button>
+
+            <div id="mobileRemixers" class="hidden">
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <? if(isset($djs) && !empty($djs)) { foreach($djs as $dj) { ?>
+                        <a href="<? echo base_url('remixers/').$dj->id;?>"
+                           class="block px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg truncate">
+                            <? echo $dj->username; ?>
+                        </a>
+                    <? } } ?>
+                </div>
             </div>
 
-            <div class="h-px bg-gray-100 my-2"></div>
-            <div class="px-3 text-xs font-bold text-slate-400 uppercase tracking-wider">Géneros</div>
-            <div class="grid grid-cols-2 gap-2 mt-2">
-                <? foreach($generos as $genre){ ?>
-                    <a href="<? echo base_url('genero/').$genre->id; ?>" class="block px-3 py-2 text-sm text-slate-600 hover:text-primary truncate">
-                        <? echo $genre->name; ?>
-                    </a>
-                <? } ?>
+            <button id="mobileGenresBtn" type="button"
+                    class="w-full flex items-center justify-between p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50"
+                    aria-controls="mobileGenres" aria-expanded="false">
+                <span>Genres</span>
+                <i id="mobileGenresIcon" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+            </button>
+
+            <div id="mobileGenres" class="hidden">
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <? if(isset($generos) && !empty($generos)) { foreach($generos as $genre){ ?>
+                        <a href="<? echo base_url('genero/').$genre->id; ?>"
+                           class="block px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg truncate">
+                            <? echo $genre->name; ?>
+                        </a>
+                    <? } } ?>
+                </div>
             </div>
 
             <? if(!$this->session->userdata('is_logued_in')){ ?>
-                <div class="h-px bg-gray-100 my-4"></div>
+                <div class="h-px bg-slate-200 my-4"></div>
                 <div class="flex flex-col gap-3">
-                    <a href="#" data-toggle="modal" data-target="#myModal" class="w-full py-3 text-center font-bold text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-50">Ingresar</a>
-                    <a href="#" data-toggle="modal" data-target="#myModalRegistrarme" class="w-full py-3 text-center font-bold text-white bg-primary rounded-xl shadow-lg shadow-primary/20">Registrarse</a>
+                    <a href="#" data-toggle="modal" data-target="#myModal"
+                       class="w-full py-3 text-center font-bold text-slate-800 border border-slate-200 rounded-xl hover:bg-slate-50">Sign in</a>
+                    <a href="#" data-toggle="modal" data-target="#myModalRegistrarme"
+                       class="w-full py-3 text-center font-bold text-white bg-[rgb(0,102,255)] rounded-xl shadow-lg shadow-blue-500/20">Sign up</a>
                 </div>
             <? } ?>
         </div>
@@ -196,5 +287,138 @@
 </header>
 
 <div class="h-20"></div>
-
 <div class="w-full relative">
+
+    <script>
+        (function (){
+            const header = document.getElementById("siteHeader");
+            const firstLink = document.getElementById("navFirstLink");
+
+            function setSplit(){
+                if (!header || !firstLink) return;
+                const h = header.getBoundingClientRect();
+                const a = firstLink.getBoundingClientRect();
+                const cut = Math.max(
+                    340,
+                    Math.floor(a.left - h.left - 48)
+                );
+                header.style.setProperty('--blue-cut', cut + 'px');
+            }
+            window.addEventListener('resize', setSplit);
+            window.addEventListener('load', setSplit);
+            setSplit();
+        })();
+        (function () {
+            const header = document.getElementById('siteHeader');
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            const userBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+
+            const remixersBtn = document.getElementById('mobileRemixersBtn');
+            const remixersPanel = document.getElementById('mobileRemixers');
+            const remixersIcon = document.getElementById('mobileRemixersIcon');
+
+            const genresBtn = document.getElementById('mobileGenresBtn');
+            const genresPanel = document.getElementById('mobileGenres');
+            const genresIcon = document.getElementById('mobileGenresIcon');
+
+            function closeMobile() {
+                if (!mobileMenu || !mobileBtn) return;
+                mobileMenu.classList.add('hidden');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleMobile() {
+                if (!mobileMenu || !mobileBtn) return;
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                if (isOpen) closeMobile();
+                else {
+                    mobileMenu.classList.remove('hidden');
+                    mobileBtn.setAttribute('aria-expanded', 'true');
+                }
+            }
+
+            function closeUserMenu() {
+                if (!userMenu || !userBtn) return;
+                userMenu.classList.add('hidden');
+                userBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleUserMenu() {
+                if (!userMenu || !userBtn) return;
+                const isOpen = !userMenu.classList.contains('hidden');
+                if (isOpen) closeUserMenu();
+                else {
+                    userMenu.classList.remove('hidden');
+                    userBtn.setAttribute('aria-expanded', 'true');
+                }
+            }
+
+            function closePanel(btn, panel, icon) {
+                if (!btn || !panel) return;
+                panel.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+
+            function togglePanel(btn, panel, icon) {
+                if (!btn || !panel) return;
+                const isOpen = !panel.classList.contains('hidden');
+                if (isOpen) closePanel(btn, panel, icon);
+                else {
+                    panel.classList.remove('hidden');
+                    btn.setAttribute('aria-expanded', 'true');
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                }
+            }
+
+            window.addEventListener('scroll', setScrolled, { passive: true });
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024) closeMobile();
+            });
+
+            if (mobileBtn) mobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMobile();
+            });
+
+            if (userBtn) userBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleUserMenu();
+            });
+
+            if (remixersBtn) remixersBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                togglePanel(remixersBtn, remixersPanel, remixersIcon);
+            });
+
+            if (genresBtn) genresBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                togglePanel(genresBtn, genresPanel, genresIcon);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (mobileMenu && mobileBtn) {
+                    const insideMobile = mobileMenu.contains(e.target) || mobileBtn.contains(e.target);
+                    if (!insideMobile) closeMobile();
+                }
+                if (userMenu && userBtn) {
+                    const insideUser = userMenu.contains(e.target) || userBtn.contains(e.target);
+                    if (!insideUser) closeUserMenu();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeMobile();
+                    closeUserMenu();
+                    closePanel(remixersBtn, remixersPanel, remixersIcon);
+                    closePanel(genresBtn, genresPanel, genresIcon);
+                }
+            });
+
+            setScrolled();
+        })();
+    </script>

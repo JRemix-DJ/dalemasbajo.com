@@ -349,4 +349,52 @@ class Users_model extends CI_Model {
 		}
 	}
 
+    public function get_active_plan($user_id){
+        $today = date('Y-m-d');
+
+        $sql = "
+        SELECT p.*, ut.expiration, o.date_order, o.status, o.is_plan
+        FROM user_tokens ut
+        INNER JOIN orders o ON o.id = ut.order_id
+        INNER JOIN plans p ON p.id = o.plan_id
+        WHERE ut.user_id = ?
+          AND (ut.expiration IS NULL OR DATE(ut.expiration) >= ?)
+          AND o.plan_id IS NOT NULL
+        ORDER BY 
+          (CASE WHEN ut.expiration IS NULL THEN 1 ELSE 0 END) DESC,
+          ut.expiration DESC,
+          o.date_order DESC
+        LIMIT 1
+    ";
+
+        $q = $this->db->query($sql, [(int)$user_id, $today]);
+        return ($q->num_rows() > 0) ? $q->row() : false;
+    }
+
+    /**
+     * Standard o superior:
+     * - unlimited => OK
+     * - plan name contiene Standard o Premium => OK
+     */
+    public function has_standard_or_higher_plan($user_id){
+        // Unlimited => OK
+        if($this->isUnlimited($user_id)){
+            return true;
+        }
+
+        $plan = $this->get_active_plan($user_id);
+        if(!$plan) return false;
+
+        $name = strtolower(trim($plan->name));
+
+        // Standard o Premium => OK
+        if(strpos($name, 'standard') !== false) return true;
+        if(strpos($name, 'premium') !== false) return true;
+        if(strpos($name, '3 months') !== false) return true;
+        if(strpos($name, '6 months') !== false) return true;
+
+        // Si tus planes se llaman distinto, agrega aquí
+        return false;
+    }
+
 }
