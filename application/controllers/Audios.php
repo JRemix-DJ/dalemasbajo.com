@@ -29,6 +29,19 @@ class Audios extends CI_Controller {
             $data["products"] = [];
         }
 
+        $data['downloaded_ids'] = [];
+
+        if($this->session->userdata('is_logued_in')){
+            $user_id = (int)$this->session->userdata('id_usuario');
+            $user_products = $this->users_model->get_user_products($user_id);
+
+            if(!empty($user_products)){
+                foreach($user_products as $up){
+                    $data['downloaded_ids'][] = (int)$up->product_id;
+                }
+            }
+        }
+
         $config['base_url'] = base_url('audios/');
         $config['first_url'] = base_url('audios');
         $config['total_rows'] = $total_records;

@@ -1,16 +1,16 @@
 //hide header on scroll > 100 and show on scroll up
 
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function() {
-    if(window.pageYOffset>100){
-        var currentScrollPos = window.pageYOffset;
-        if (prevScrollpos > currentScrollPos) {
-          document.getElementById("sticktop").style.top = "0";
-        } else {
-          document.getElementById("sticktop").style.top = "-100px";
-        }
+let prevScrollpos = window.pageYOffset;
+const sticktop = document.getElementById("sticktop");
+
+if (sticktop) {
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset <= 100) return;
+
+        const currentScrollPos = window.pageYOffset;
+        sticktop.style.top = (prevScrollpos > currentScrollPos) ? "0" : "-100px";
         prevScrollpos = currentScrollPos;
-    }
+    }, { passive: true });
 }
 
 $('#pagar_tarjeta').on('click', function(e){

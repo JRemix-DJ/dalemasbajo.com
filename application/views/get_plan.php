@@ -145,13 +145,11 @@
                                     $metodos_pago++;
                                     ?>
                                     <div class="item">
-                                        <a href="<? echo $plan->url_pago?>"
+                                        <a href="javascript:void(0);"
                                            class="block w-full text-center py-4 px-6 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-md transition-all transform hover:-translate-y-1 mb-3"
                                            id="pagar_tarjeta"
-                                           data-user_id="<? echo $this->session->userdata('id_usuario'); ?>"
-                                           data-plan_id="<? echo $plan->id; ?>"
-                                           data-email="<? echo $this->session->userdata('email'); ?>"
-                                           data-monto="<? echo $plan->price; ?>">
+                                           data-href="<? echo $plan->url_pago; ?>"
+                                           data-email="<? echo $this->session->userdata('email'); ?>">
                                             PAY BY CREDIT/DEBIT CARD
                                         </a>
 
@@ -201,3 +199,27 @@
         </div>
     </section>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('pagar_tarjeta');
+        if (!btn) return;
+
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const href = btn.getAttribute('data-href');
+            const email = btn.getAttribute('data-email') || '';
+
+            if (!href) return;
+
+            const msg =
+                "Important:\n\n" +
+                "Please complete the payment using the SAME email address as your DaleMasBajo.com account.\n\n" +
+                (email ? ("Your account email is: " + email + "\n\n") : "") +
+                "Click OK to continue.";
+
+            const ok = window.confirm(msg);
+            if (ok) window.location.href = href;
+        });
+    });
+</script>

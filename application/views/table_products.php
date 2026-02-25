@@ -1,5 +1,6 @@
 <?php
 if(isset($products) && !empty($products)) {
+    $downloaded_ids = isset($downloaded_ids) && is_array($downloaded_ids) ? $downloaded_ids : [];
     foreach($products as $audio) {
         $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
         $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
@@ -96,11 +97,23 @@ if(isset($products) && !empty($products)) {
                 $has_access = ($is_unlimited || $tokens > 0) ? 1 : 0;
                 ?>
 
-                <button class="btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded-full border-slate-200 text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all focus:outline-none"
+                <?php
+                $is_downloaded = in_array((int)$audio->id, $downloaded_ids, true);
+
+                $btn_base = "btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded-full transition-all focus:outline-none";
+
+                $btn_not_downloaded = "text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50";
+
+                $btn_downloaded = "bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700";
+                ?>
+
+                <button
+                        class="<?php echo $btn_base.' '.($is_downloaded ? $btn_downloaded : $btn_not_downloaded); ?>"
                         data-logged="<? echo $is_logged; ?>"
                         data-access="<? echo $has_access; ?>"
                         data-id="<? echo $audio->id; ?>"
-                        title="Descargar">
+                        title="<?php echo $is_downloaded ? 'Downloaded' : 'Download'; ?>"
+                >
                     <i class="fa-solid fa-download text-xl"></i>
                 </button>
             </td>
