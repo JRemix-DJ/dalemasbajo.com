@@ -174,26 +174,12 @@ class Payment extends CI_Controller {
         echo json_encode(['status' => 'success_drop']);
     }
 
-    public function send_notification_mail($order_id, $renovacion){
-
-        $config['protocol']    = 'smtp';
-        $config['smtp_host']    = SMTP_URL;
-        $config['smtp_port']    = SMTP_PORT;
-        $config['smtp_timeout'] = '7';
-        $config['smtp_user']    = SMTP_USER;
-        $config['smtp_pass']    = SMTP_KEY;
-        $config['charset']    = 'utf-8';
-        $config['newline']    = "\r\n";
-        $config['mailtype'] = 'html';
-        $config['validation'] = TRUE;
-
-        $this->email->initialize($config);
-
-        $this->email->from('admin@dalemasbajo.com', 'DALE MÁS BAJO');
-
+    private function build_payment_view_data($order_id, $renovacion = 0){
         $orden = $this->orders_model->load_order_info($order_id);
+        if(!$orden) return false;
 
-        if($orden->cupon_id != null){
+        $cupon = null;
+        if (!empty($orden->cupon_id)) {
             $cupon = $this->products_model->get_cupon_by_id($orden->cupon_id);
         }
 
@@ -201,50 +187,110 @@ class Payment extends CI_Controller {
 
         if($orden->is_plan){
             $plan = $this->plan_model->load_plan_info($orden->plan_id);
-            $items[0]= (object) array(
-                'name' => $plan->name,
-                'tokens' => $plan->tokens,
-                'tokens_video' => $plan->tokens_video,
-                'duration' => $plan->duration,
-                'description' => $plan->description,
-                'ilimitado_activo' => $plan->ilimitado_activo
-            );
+            $items = [
+                (object)[
+                    'name'            => $plan->name,
+                    'tokens'          => $plan->tokens,
+                    'tokens_video'    => $plan->tokens_video,
+                    'duration'        => $plan->duration,
+                    'description'     => $plan->description,
+                    'ilimitado_activo'=> $plan->ilimitado_activo
+                ]
+            ];
         } else {
             $items = $this->orders_model->load_order_items($order_id);
         }
 
-        $this->email->to($user->email);
+        $data = [
+            'items'      => $items,
+            'renovacion' => (int)$renovacion,
+            'user'       => $user,
+            'is_plan'    => (int)$orden->is_plan,
+            'orden'      => $orden
+        ];
 
-        // Se envía a dalemasbajo y a sevelasquezro
-        $admin_emails = array('dalemasbajo@gmail.com', 'sevelasquezro@gmail.com');
-        $this->email->bcc($admin_emails);
-
-        // Asunto
-        if ($renovacion == 1) {
-            $mensaje_asunto = 'Gracias por renovar tu plan - Dale Más Bajo';
-        } else {
-            $mensaje_asunto = 'Confirmación de Compra - Dale Más Bajo';
-        }
-
-        $this->email->subject($mensaje_asunto);
-
-        // Datos para la vista
-        $data['items'] = $items;
-        $data['renovacion'] = $renovacion;
-        $data['user'] = $user;
-        $data['is_plan'] = $orden->is_plan;
-        $data['orden'] = $orden;
         if($cupon){
             $data['cupon'] = $cupon;
         }
 
-        // Cargar vista de correo
-        $mail = $this->load->view('emails/payment', $data, TRUE);
+        return $data;
+    }
 
+    public function send_notification_mail($order_id, $renovacion)
+    {
+        $config['protocol']     = 'smtp';
+        $config['smtp_host']    = SMTP_URL;
+        $config['smtp_port']    = SMTP_PORT;
+        $config['smtp_timeout'] = '7';
+        $config['smtp_user']    = SMTP_USER;
+        $config['smtp_pass']    = SMTP_KEY;
+        $config['charset']      = 'utf-8';
+        $config['newline']      = "\r\n";
+        $config['mailtype']     = 'html';
+        $config['validation']   = TRUE;
+
+        $this->email->initialize($config);
+        $this->email->from('admin@dalemasbajo.com', 'DALE MÁS BAJO');
+
+        $orden = $this->orders_model->load_order_info($order_id);
+        if (!$orden) {
+            return false;
+        }
+
+        $cupon = null;
+        if (!empty($orden->cupon_id)) {
+            $cupon = $this->products_model->get_cupon_by_id($orden->cupon_id);
+        }
+
+        $user = $this->users_model->load_user_info($orden->user_id);
+        if (!$user) {
+            return false;
+        }
+
+        $items = array();
+        if (!empty($orden->is_plan)) {
+            $plan = $this->plan_model->load_plan_info($orden->plan_id);
+            if ($plan) {
+                $items[] = (object) array(
+                    'name'            => $plan->name,
+                    'tokens'          => $plan->tokens,
+                    'tokens_video'    => $plan->tokens_video,
+                    'duration'        => $plan->duration,
+                    'description'     => $plan->description,
+                    'ilimitado_activo'=> $plan->ilimitado_activo
+                );
+            }
+        } else {
+            $items = $this->orders_model->load_order_items($order_id);
+            if (!is_array($items)) {
+                $items = array();
+            }
+        }
+
+        $this->email->to($user->email);
+
+        $admin_emails = array('dalemasbajo@gmail.com', 'sevelasquezro@gmail.com');
+        $this->email->bcc($admin_emails);
+
+        $mensaje_asunto = ((int)$renovacion === 1)
+            ? 'Gracias por renovar tu plan - Dale Más Bajo'
+            : 'Confirmación de Compra - Dale Más Bajo';
+
+        $this->email->subject($mensaje_asunto);
+
+        $data = array(
+            'items'     => $items,
+            'renovacion'=> (int)$renovacion,
+            'user'      => $user,
+            'is_plan'   => !empty($orden->is_plan),
+            'orden'     => $orden,
+            'cupon'     => $cupon
+        );
+
+        $mail = $this->load->view('emails/payment', $data, TRUE);
         $this->email->message($mail);
 
-        // Enviar
-        if($this->email->send()){} else {}
+        return (bool) $this->email->send();
     }
 
 	public function realizado(){
@@ -280,28 +326,95 @@ class Payment extends CI_Controller {
 		}	
 	}
 
-	public function aplicar_orden(){
-		if($this->session->userdata('is_logued_in')){
-			if($this->user_has_admin_access()){
-				$order_id=$_GET['order_id'];
-				$renovacion = (isset($_GET['renovacion'])) ? $_GET['renovacion'] : 0 ;
-				$order = $this->orders_model->load_order_info($order_id);
-				if($renovacion){
-					$this->add_payment_to_owner($order_id);
-					$this->add_tokens_to_user($order_id);
-					$this->send_notification_mail($order_id, $renovacion = 1);
-					echo "La orden ".$order_id." fue renovada correctamente";
-				}else if ($order->txn_id != "MANUAL") {
-					$data['txn_id']='MANUAL';
-					$this->orders_model->update_order($order_id, $data);
-					$this->add_payment_to_owner($order_id);
-					$this->add_tokens_to_user($order_id);
-					$this->send_notification_mail($order_id, $renovacion = 0);
-					echo "La orden ".$order_id." fue aplicada correctamente";
-				}
-			}
-		}
-	}
+    public function aplicar_orden()
+    {
+        if (!$this->session->userdata('is_logued_in') || !$this->user_has_admin_access()) {
+            show_error('No autorizado', 403);
+            return;
+        }
+
+        $order_id  = (int) $this->input->get('order_id', true);
+        $renovacion = (int) $this->input->get('renovacion', true);
+
+        if (empty($order_id)) {
+            show_error('order_id inválido', 400);
+            return;
+        }
+
+        $order = $this->orders_model->load_order_info($order_id);
+        if (!$order) {
+            show_error('Orden no encontrada', 404);
+            return;
+        }
+
+        $mensaje = null;
+
+        if ($renovacion === 1) {
+            $this->add_payment_to_owner($order_id);
+            $this->add_tokens_to_user($order_id);
+            $this->send_notification_mail($order_id, 1);
+            $mensaje = "La orden {$order_id} fue renovada correctamente";
+        } else if ($order->txn_id != "MANUAL") {
+            $data_update = array(
+                'txn_id'  => 'MANUAL',
+                'status'  => 1
+            );
+
+            $this->orders_model->update_order($order_id, $data_update);
+
+            $this->add_payment_to_owner($order_id);
+            $this->add_tokens_to_user($order_id);
+            $this->send_notification_mail($order_id, 0);
+
+            $mensaje = "La orden {$order_id} fue aplicada correctamente";
+        } else {
+            $mensaje = "La orden {$order_id} ya estaba aplicada (MANUAL).";
+        }
+
+        $orden = $this->orders_model->load_order_info($order_id);
+
+        $cupon = null;
+        if (!empty($orden->cupon_id)) {
+            $cupon = $this->products_model->get_cupon_by_id($orden->cupon_id);
+        }
+
+        $user = $this->users_model->load_user_info($orden->user_id);
+
+        $items = array();
+        if (!empty($orden->is_plan)) {
+            $plan = $this->plan_model->load_plan_info($orden->plan_id);
+            if ($plan) {
+                $items[] = (object) array(
+                    'name'            => $plan->name,
+                    'tokens'          => $plan->tokens,
+                    'tokens_video'    => $plan->tokens_video,
+                    'duration'        => $plan->duration,
+                    'description'     => $plan->description,
+                    'ilimitado_activo'=> $plan->ilimitado_activo
+                );
+            }
+        } else {
+            $items = $this->orders_model->load_order_items($order_id);
+            if (!is_array($items)) {
+                $items = array();
+            }
+        }
+
+        echo '<div style="max-width:700px;margin:20px auto;padding:14px 16px;border:1px solid #d1fae5;background:#ecfdf5;color:#065f46;border-radius:10px;font-family:Arial,sans-serif;">'
+            . htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8')
+            . '</div>';
+
+        $data = array(
+            'items'      => $items,
+            'renovacion' => $renovacion,
+            'user'       => $user,
+            'is_plan'    => !empty($orden->is_plan),
+            'orden'      => $orden,
+            'cupon'      => $cupon
+        );
+
+        $this->load->view('emails/payment', $data);
+    }
 
 	public function user_has_admin_access(){
 		switch($this->session->userdata('role')){
