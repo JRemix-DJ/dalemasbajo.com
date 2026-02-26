@@ -25,79 +25,64 @@ class Pages extends CI_Controller {
 		$countries = $this->location_model->get_countries(); 
 		return $countries;
 	}
-	public function ser_miembro_mail(){
-		$email = $this->input->post('email');
-		$name = $this->input->post('name');
-		$experience = $this->input->post('experience');
-		$work = $this->input->post('work');
-		$country = $this->input->post('country');
-		$trabajos = $this->input->post('trabajos');
-		$message = $this->input->post('message');
+    public function ser_miembro_mail(){
+        header('Content-type: application/json; charset=utf-8');
 
-		$mensaje = "
-		<table width='100%'>
-			<tr>
-				<td><strong>Nombre: </strong></td>
-				<td>$name</td>
-			</tr>
-			<tr>
-				<td><strong>E-mail: </strong></td>
-				<td>$email</td>
-			</tr>
-			<tr>
-				<td><strong>Experiencia: </strong></td>
-				<td>$experience</td>
-			</tr>
-			<tr>
-				<td><strong>País: </strong></td>
-				<td>$country</td>
-			</tr>
-			<tr>
-				<td><strong>¿Trabaja para otros sitios web?: </strong></td>
-				<td>$work</td>
-			</tr>
-			<tr>
-				<td><strong>Quiere pertenecer a DMB porque: </strong></td>
-				<td>$message</td>
-			</tr>
-			<tr>
-				<td><strong>Trabajos </strong></td>
-				<td><a href=".$trabajos.">Ver</a></td>
-			</tr>
-		</table>
-		";
-		$config['protocol']    = 'smtp';
+        $email = trim((string)$this->input->post('email'));
+        $name = trim((string)$this->input->post('name'));
+        $experience = trim((string)$this->input->post('experience'));
+        $work = trim((string)$this->input->post('work'));
+        $country = trim((string)$this->input->post('country'));
+        $trabajos = trim((string)$this->input->post('trabajos'));
+        $message = (string)$this->input->post('message');
 
-		$config['smtp_host']    = SMTP_URL;
+        if($email === '' || $name === ''){
+            echo json_encode(['success' => false]);
+            return;
+        }
 
-		$config['smtp_port']    = SMTP_PORT;
+        $mensaje = "
+        <table width='100%'>
+            <tr><td><strong>Name:</strong></td><td>{$name}</td></tr>
+            <tr><td><strong>E-mail:</strong></td><td>{$email}</td></tr>
+            <tr><td><strong>Experience:</strong></td><td>{$experience}</td></tr>
+            <tr><td><strong>Country:</strong></td><td>{$country}</td></tr>
+            <tr><td><strong>Do you work for other websites?:</strong></td><td>{$work}</td></tr>
+            <tr><td><strong>Why do you want to join DMB?:</strong></td><td>{$message}</td></tr>
+            <tr><td><strong>Works:</strong></td><td><a href='{$trabajos}' target='_blank' rel='noopener'>View</a></td></tr>
+        </table>
+    ";
 
-		$config['smtp_timeout'] = '7';
+        $this->email->clear(true);
 
-		$config['smtp_user']    = SMTP_USER;
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if(is_array($email_cfg)){
+            $this->email->initialize($email_cfg);
+        }else{
+            $this->email->initialize();
+        }
 
-		$config['smtp_pass']    = SMTP_KEY;
+        $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
+        $this->email->to('dalemasbajo@gmail.com');
+        $this->email->bcc(['sevelasquezro@gmail.com']);
+        $this->email->subject('DJ WANTS TO BECOME A MEMBER');
 
-		$config['charset']    = 'utf-8';
+        $data_mail = ['mensaje' => $mensaje];
+        $mail = $this->load->view('emails/become_member', $data_mail, true);
+        $this->email->message($mail);
 
-		$config['newline']    = "\r\n";
-		$config['mailtype'] = 'html'; // or html
-		$config['validation'] = TRUE; // bool whether to validate email or not      
-		$this->email->initialize($config);
-		$this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
-		$this->email->to("dalemasbajo@gmail.com");
-		$this->email->subject('DJ QUIERE SER MIEMBRO');
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
 
-		$data['mensaje'] = $mensaje;
+        $ok = $this->email->send(false);
 
-		$mail = $this->load->view('emails/become_member', $data, TRUE);
-		$this->email->message($mail);
+        if(!$ok){
+            log_message('error', 'ser_miembro_mail FAIL :: '.$this->email->print_debugger(['headers','subject']));
+        }
 
-		$this->email->send();
-		$jsondata['success'] = true;
-		header('Content-type: application/json; charset=utf-8');
-		echo json_encode($jsondata);
-	}
+        echo json_encode(['success' => (bool)$ok]);
+    }
 	
 
 	public function terms_conditions(){
@@ -147,7 +132,6 @@ class Pages extends CI_Controller {
     public function submit_request_remix(){
         header('Content-type: application/json; charset=utf-8');
 
-        // Debe estar logueado
         if(!$this->session->userdata('is_logued_in')){
             echo json_encode(['success' => false, 'message' => 'You must be logged in.']);
             return;
@@ -155,56 +139,59 @@ class Pages extends CI_Controller {
 
         $user_id = (int)$this->session->userdata('id_usuario');
 
-        // Debe tener plan Standard+
         if(!$this->users_model->has_standard_or_higher_plan($user_id)){
             echo json_encode(['success' => false, 'message' => 'You need an active Standard plan or higher.']);
             return;
         }
 
-        // Inputs
-        $email = $this->session->userdata('email'); // email desde sesión
-        $song_link = trim($this->input->post('song_link'));
-        $instructions = trim($this->input->post('instructions'));
+        $email = (string)$this->session->userdata('email');
+        $song_link = trim((string)$this->input->post('song_link'));
+        $instructions = trim((string)$this->input->post('instructions'));
 
-        // Validar link
-        if(empty($song_link) || !filter_var($song_link, FILTER_VALIDATE_URL)){
+        if($song_link === '' || !filter_var($song_link, FILTER_VALIDATE_URL)){
             echo json_encode(['success' => false, 'message' => 'Please provide a valid Song Link (URL).']);
             return;
         }
 
-        // Enviar email (igual estilo que tu ser_miembro_mail)
+        $safe_instructions = nl2br(htmlspecialchars($instructions, ENT_QUOTES, 'UTF-8'));
+
         $mensaje = "
         <table width='100%' cellpadding='6' cellspacing='0' style='border-collapse:collapse;'>
             <tr><td><strong>User ID:</strong></td><td>{$user_id}</td></tr>
             <tr><td><strong>Email:</strong></td><td>{$email}</td></tr>
-            <tr><td><strong>Song Link:</strong></td><td><a href='{$song_link}' target='_blank'>Open link</a></td></tr>
-            <tr><td><strong>Message:</strong></td><td>".nl2br(htmlspecialchars($instructions))."</td></tr>
+            <tr><td><strong>Song Link:</strong></td><td><a href='{$song_link}' target='_blank' rel='noopener'>Open link</a></td></tr>
+            <tr><td><strong>Message:</strong></td><td>{$safe_instructions}</td></tr>
         </table>
     ";
 
-        $config['protocol'] = 'smtp';
-        $config['smtp_host'] = SMTP_URL;
-        $config['smtp_port'] = SMTP_PORT;
-        $config['smtp_timeout'] = '7';
-        $config['smtp_user'] = SMTP_USER;
-        $config['smtp_pass'] = SMTP_KEY;
-        $config['charset'] = 'utf-8';
-        $config['newline'] = "\r\n";
-        $config['mailtype'] = 'html';
-        $config['validation'] = TRUE;
+        $this->email->clear(true);
 
-        $this->email->initialize($config);
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if(is_array($email_cfg)){
+            $this->email->initialize($email_cfg);
+        }else{
+            $this->email->initialize();
+        }
+
         $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
-        $this->email->to("dalemasbajo@gmail.com");
+        $this->email->to('dalemasbajo@gmail.com');
+        $this->email->bcc(['sevelasquezro@gmail.com']);
         $this->email->subject('CUSTOM REMIX REQUEST');
 
-        $data_mail['mensaje'] = $mensaje;
-        $mail = $this->load->view('emails/become_member', $data_mail, TRUE);
+        $data_mail = ['mensaje' => $mensaje];
+        $mail = $this->load->view('emails/become_member', $data_mail, true);
         $this->email->message($mail);
 
-        $this->email->send();
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
 
-        echo json_encode(['success' => true]);
+        $ok = $this->email->send(false);
+
+        if(!$ok){
+            log_message('error', 'submit_request_remix FAIL :: '.$this->email->print_debugger(['headers','subject']));
+        }
+
+        echo json_encode(['success' => (bool)$ok]);
     }
-
 }

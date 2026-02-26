@@ -2,7 +2,7 @@
 
     <section class="pt-10 bg-slate-50">
         <div class="container mx-auto px-4">
-            <div class="relative w-full overflow-hidden rounded-[28px] bg-[#3E6CED] shadow-xl border border-white/10">
+            <div class="relative w-full overflow-hidden rounded-[28px] bg-[#0066FF] shadow-xl border border-white/10">
 
                 <!-- contenido centrado -->
                 <div class="relative z-10 flex min-h-[320px] md:min-h-[300px] items-center justify-center text-center">
