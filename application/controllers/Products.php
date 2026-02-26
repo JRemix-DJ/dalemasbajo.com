@@ -107,7 +107,26 @@ class Products extends CI_Controller {
             $data['descargable'] = $newdescargablename;
         }
 
+        $trending_slot = $this->input->post('trending_slot');
+        if ($product_type_id === 1) {
+            $slot = (int)$trending_slot;
+            if ($slot >= 1 && $slot <= 5) {
+                $data['trending_slot'] = $slot;
+            } else {
+                $data['trending_slot'] = null;
+            }
+        } else {
+            $data['trending_slot'] = null;
+        }
+
         $this->products_model->update_product($product_id, $data);
+
+        if ($product_type_id === 1) {
+            $slot = isset($data['trending_slot']) ? (int)$data['trending_slot'] : 0;
+            $this->products_model->set_trending_slot($product_id, $slot);
+        } else {
+            $this->products_model->set_trending_slot($product_id, 0);
+        }
 
         $producto = $this->products_model->load_product_info($product_id);
         $aprobacion = ($producto && (int)$producto->approved === 0) ? "?aprobacion=1" : "";
@@ -319,8 +338,13 @@ class Products extends CI_Controller {
 							'demo'=>$newdemoname,
 							'descargable'=>$newdescargablename,
 						);
-						
-						$this->products_model->create_product($data);
+
+                        $product_id_created = $this->products_model->create_product($data);
+
+                        $trending_slot = (int)$this->input->post('trending_slot');
+                        if ((int)$product_type_id === 1 && $product_id_created > 0) {
+                            $this->products_model->set_trending_slot($product_id_created, $trending_slot);
+                        }
 
 						$data['title']="Productos";
 						$data['description']="Audios, Packs, y todos los productos dentro del sistema";

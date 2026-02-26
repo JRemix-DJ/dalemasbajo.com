@@ -26,6 +26,8 @@ class Home extends CI_Controller {
             null        // search
         );
 
+        $data['trending_audios'] = $this->products_model->get_trending_now(5);
+
         if ($data['products'] === false) $data['products'] = [];
 		$data['plans']=$this->plan_model->get_plans();
 		$this->load->view('home', $data);
@@ -36,5 +38,4 @@ class Home extends CI_Controller {
 	{
 		$this->load->view('comingsoon');
 	}
-
 }

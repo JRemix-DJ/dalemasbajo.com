@@ -73,7 +73,7 @@ class Audios extends CI_Controller {
         $data['djs'] = $this->users_model->get_djs_audios();
         $data['users'] = $this->users_model->get_all_users();
 
-        $data['trending_audios'] = array_slice($data['products'], 0, 5);
+        $data['trending_audios'] = $this->products_model->get_trending_now(5);
 
         if ($this->input->is_ajax_request()) {
             $html_rows = $this->load->view('table_products', $data, TRUE);

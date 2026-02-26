@@ -52,7 +52,25 @@ ini_set('auto_detect_line_endings',TRUE);
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mg-t-20" id="row-trending-slot" style="display:none;">
+                            <div class="col-sm-4 form-control-label">
+                                Posición de Trending
+                            </div>
+                            <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                <select id="trending_slot" class="form-control" name="trending_slot">
+                                    <option value="">None</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <small style="display:block;margin-top:6px;opacity:.75;">
+                                    Solo para Audio Normal. Si seleccionas un numero ocupado, el más nuevo lo reemplazará.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row mg-t-20">
                             <div class="col-sm-4 form-control-label">
                                 Nombre
                             </div>
@@ -108,7 +126,7 @@ ini_set('auto_detect_line_endings',TRUE);
                             </div>
                         </div>
 
-                        <div class="row mg-t-20" id="row-payment-link" style="display:none;">
+                        <div class="row mg-t-20 mg-b-20" id="row-payment-link" style="display:none;">
                             <div class="col-sm-4 form-control-label">
                                 Payment Link
                             </div>
@@ -168,6 +186,47 @@ ini_set('auto_detect_line_endings',TRUE);
 </div><!-- sl-pagebody -->
 
 <script>
+    (function(){
+        function el(id){ return document.getElementById(id); }
+        function toggle(show, node){ if(node) node.style.display = show ? '' : 'none'; }
+
+        function refreshUI(){
+            var setPack = el('setPack');
+            if(!setPack) return;
+
+            var type = String(setPack.value);
+            var isDrop = type === '5';
+            var isAudioNormal = type === '1';
+
+            toggle(isDrop, el('row-description'));
+            toggle(isDrop, el('row-payment-link'));
+
+            toggle(!isDrop, el('genres-title'));
+            toggle(!isDrop, el('format-wrap'));
+
+            toggle(isAudioNormal, el('row-trending-slot'));
+            if(!isAudioNormal){
+                var ts = el('trending_slot');
+                if(ts) ts.value = '';
+            }
+
+            var bpm = el('bpm');
+            if(isDrop){
+                if(bpm){
+                    bpm.value = '0';
+                    bpm.readOnly = true;
+                }
+            }else{
+                if(bpm) bpm.readOnly = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+            refreshUI();
+            var setPack = el('setPack');
+            if(setPack) setPack.addEventListener('change', refreshUI);
+        });
+    })();
     (function(){
         function el(id){ return document.getElementById(id); }
 

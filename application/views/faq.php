@@ -9,35 +9,28 @@
                         FAQ
                     </h2>
 
-                    <div class="mt-4 flex items-center justify-center gap-3">
-                        <a class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-primary hover:border-primary hover:bg-blue-50 transition"
-                           href="http://www.facebook.com/sharer/sharer.php?u=<? echo base_url(); ?>faq" target="_blank" rel="noopener">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-
-                        <a class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-600 hover:text-primary hover:border-primary hover:bg-blue-50 transition"
-                           href="http://twitter.com/intent/tweet?status=<? echo base_url(); ?>faq" target="_blank" rel="noopener">
-                            <i class="fa-brands fa-twitter"></i>
-                        </a>
-                    </div>
-
                     <p class="mt-4 text-slate-500 max-w-2xl mx-auto">
-                        Haz click en una pregunta para ver la respuesta.
+                        Click a question to view the answer.
                     </p>
                 </div>
 
                 <!-- Card -->
-                <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+                <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden" style="margin-bottom: 60px">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
 
-                        <!-- Image -->
-                        <div class="relative min-h-[240px] lg:min-h-full">
-                            <img
-                                    src="<? echo base_url(); ?>images/dj-image.jpg"
-                                    alt="FAQ"
+                        <!-- Video -->
+                        <div class="relative min-h-[240px] lg:min-h-full overflow-hidden">
+                            <video
                                     class="absolute inset-0 w-full h-full object-cover"
-                            />
-                            <div class="absolute inset-0 bg-slate-900/20"></div>
+                                    autoplay
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="metadata"
+                            >
+                                <source src="<? echo base_url('assets/bg.mp4'); ?>" type="video/mp4">
+                            </video>
+                            <div class="absolute inset-0 bg-slate-900/30"></div>
                         </div>
 
                         <!-- Accordion -->
@@ -86,7 +79,7 @@
                             </div>
 
                             <p class="mt-6 text-xs text-slate-400">
-                                <strong>Nota:</strong> Haz click en el encabezado para expandir la respuesta.
+                                <strong>Note:</strong> Click the header to expand the answer.
                             </p>
                         </div>
 
@@ -116,7 +109,6 @@
             btn.setAttribute('aria-expanded', 'false');
             setIcon(btn, false);
 
-            // Asegura que partimos de una altura "real" para animar hacia 0
             panel.hidden = false;
             panel.style.maxHeight = panel.scrollHeight + 'px';
 
@@ -131,7 +123,6 @@
 
                 panel.addEventListener('transitionend', onEnd);
 
-                // Fallback por si transitionend no dispara (casos raros)
                 setTimeout(() => {
                     if (panel.style.maxHeight === '0px') panel.hidden = true;
                     panel.removeEventListener('transitionend', onEnd);

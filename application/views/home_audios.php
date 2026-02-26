@@ -152,7 +152,7 @@
                         <th class="p-4 font-semibold text-center">Version</th>
                         <th class="p-4 font-semibold">Remixer</th>
                         <th class="p-4 font-semibold w-20">BPM</th>
-                        <th class="p-4 font-semibold w-32">Genre</th>
+                        <th class="p-4 font-semibold text-center w-40">Genre</th>
                         <th class="p-4 font-semibold w-24 text-center">Download</th>
                     </tr>
                     </thead>

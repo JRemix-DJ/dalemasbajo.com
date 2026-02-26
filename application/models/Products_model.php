@@ -351,7 +351,7 @@ class Products_model extends CI_Model {
 
     public function create_product($data){
         $this->db->insert('products',$data);
-        return true;
+        return (int)$this->db->insert_id();
     }
 
     function delete_product($id){
@@ -364,5 +364,46 @@ class Products_model extends CI_Model {
         $this->db->insert('product_downloads', $data);
         return true;
     }
+    public function clear_trending_slot($slot, $exclude_product_id = null)
+    {
+        $this->db->set('trending_slot', null);
+        $this->db->where('trending_slot', (int)$slot);
+        if ($exclude_product_id) {
+            $this->db->where('id !=', (int)$exclude_product_id);
+        }
+        $this->db->update('products');
+    }
 
+    public function set_trending_slot($product_id, $slot)
+    {
+        $slot = (int)$slot;
+        if ($slot < 1 || $slot > 5) {
+            $slot = 0;
+        }
+
+        $this->db->trans_start();
+
+        if ($slot > 0) {
+            $this->clear_trending_slot($slot, (int)$product_id);
+            $this->db->where('id', (int)$product_id);
+            $this->db->update('products', ['trending_slot' => $slot]);
+        } else {
+            $this->db->where('id', (int)$product_id);
+            $this->db->update('products', ['trending_slot' => null]);
+        }
+
+        $this->db->trans_complete();
+        return $this->db->trans_status();
+    }
+
+    public function get_trending_now($limit = 5)
+    {
+        $this->db->from('products');
+        $this->db->where('approved', 1);
+        $this->db->where('product_type_id', 1);
+        $this->db->where('trending_slot IS NOT NULL', null, false);
+        $this->db->order_by('trending_slot', 'ASC');
+        $this->db->limit((int)$limit);
+        return $this->db->get()->result();
+    }
 }

@@ -48,7 +48,7 @@ if(isset($products) && !empty($products)) {
                    data-cover="<? echo $img_cover; ?>"
                    data-title="<? echo $title; ?>"
                    data-artist="<? echo $artist; ?>">
-                    <i class="fa fa-play text-white text-xs ml-0.5"></i>
+                    <i class="fa-solid fa-play text-white text-xs ml-0.5"></i>
                 </a>
             </td>
 
@@ -80,10 +80,10 @@ if(isset($products) && !empty($products)) {
                 <? echo $bpm; ?>
             </td>
 
-            <td class="p-4">
+            <td class="p-4 text-center">
                 <a href="<? echo base_url('genero/'.$genre_id); ?>"
                    style="background-color: #0066ff1a"
-                   class="inline-flex items-center px-3 py-1 rounded-full text-[rgb(0,102,255)] text-xs font-semibold hover:bg-slate-200 hover:text-blue-700 transition-colors">
+                   class="inline-flex items-center text-center px-3 py-1 rounded-full text-[rgb(0,102,255)] text-xs font-semibold hover:bg-slate-200 hover:text-blue-700 transition-colors">
                     <? echo $genre_name; ?>
                 </a>
             </td>
