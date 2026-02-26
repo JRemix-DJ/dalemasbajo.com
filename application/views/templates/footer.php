@@ -670,6 +670,13 @@
             updateVolumeVisual(prev);
         }
     });
+    $('#skip-back-btn').click(function() {
+        audio.currentTime = Math.max(0, audio.currentTime - 10);
+    });
+
+    $('#skip-fwd-btn').click(function() {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+    });
 </script>
 </body>
 </html>

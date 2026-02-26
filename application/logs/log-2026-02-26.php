@@ -9858,3 +9858,665 @@ INFO - 2026-02-26 03:21:04 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\appl
 INFO - 2026-02-26 03:21:04 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\templates/footer.php
 INFO - 2026-02-26 03:21:04 --> Final output sent to browser
 DEBUG - 2026-02-26 03:21:04 --> Total execution time: 0.0535
+INFO - 2026-02-26 20:26:27 --> Config Class Initialized
+INFO - 2026-02-26 20:26:27 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:27 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:27 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:27 --> URI Class Initialized
+DEBUG - 2026-02-26 20:26:27 --> No URI present. Default controller set.
+INFO - 2026-02-26 20:26:27 --> Router Class Initialized
+INFO - 2026-02-26 20:26:27 --> Output Class Initialized
+INFO - 2026-02-26 20:26:27 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:27 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:27 --> Input Class Initialized
+INFO - 2026-02-26 20:26:27 --> Language Class Initialized
+INFO - 2026-02-26 20:26:27 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:27 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:27 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:27 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:27 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:27 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:27 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:27 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:27 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:26:27 --> Model "Plan_model" initialized
+DEBUG - 2026-02-26 20:26:27 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:27 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:27 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:27 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:27 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:27 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:27 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:27 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:28 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\home.php
+INFO - 2026-02-26 20:26:28 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\templates/footer.php
+INFO - 2026-02-26 20:26:28 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:28 --> Total execution time: 0.5917
+INFO - 2026-02-26 20:26:28 --> Config Class Initialized
+INFO - 2026-02-26 20:26:28 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:28 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:28 --> URI Class Initialized
+INFO - 2026-02-26 20:26:28 --> Router Class Initialized
+INFO - 2026-02-26 20:26:28 --> Output Class Initialized
+INFO - 2026-02-26 20:26:28 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:28 --> Input Class Initialized
+INFO - 2026-02-26 20:26:28 --> Language Class Initialized
+INFO - 2026-02-26 20:26:28 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:28 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:28 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:28 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:28 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:28 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:28 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:28 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:28 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:28 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:28 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:28 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:28 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:28 --> Total execution time: 0.0931
+INFO - 2026-02-26 20:26:28 --> Config Class Initialized
+INFO - 2026-02-26 20:26:28 --> Hooks Class Initialized
+INFO - 2026-02-26 20:26:28 --> Config Class Initialized
+INFO - 2026-02-26 20:26:28 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:28 --> Utf8 Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:28 --> URI Class Initialized
+INFO - 2026-02-26 20:26:28 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:28 --> Config Class Initialized
+INFO - 2026-02-26 20:26:28 --> URI Class Initialized
+INFO - 2026-02-26 20:26:28 --> Router Class Initialized
+INFO - 2026-02-26 20:26:28 --> Hooks Class Initialized
+INFO - 2026-02-26 20:26:28 --> Router Class Initialized
+INFO - 2026-02-26 20:26:28 --> Output Class Initialized
+INFO - 2026-02-26 20:26:28 --> Output Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:28 --> Security Class Initialized
+INFO - 2026-02-26 20:26:28 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:28 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:28 --> URI Class Initialized
+INFO - 2026-02-26 20:26:28 --> Input Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:28 --> Language Class Initialized
+INFO - 2026-02-26 20:26:28 --> Input Class Initialized
+INFO - 2026-02-26 20:26:28 --> Language Class Initialized
+INFO - 2026-02-26 20:26:28 --> Router Class Initialized
+INFO - 2026-02-26 20:26:28 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:28 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:28 --> Output Class Initialized
+INFO - 2026-02-26 20:26:28 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:28 --> Security Class Initialized
+INFO - 2026-02-26 20:26:28 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: form_helper
+DEBUG - 2026-02-26 20:26:28 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:28 --> Input Class Initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:28 --> Language Class Initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:28 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:28 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:28 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:28 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:28 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:28 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:28 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:28 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:26:28 --> Helper loaded: download_helper
+DEBUG - 2026-02-26 20:26:28 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:28 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:28 --> Session: Class initialized using 'files' driver.
+DEBUG - 2026-02-26 20:26:28 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:28 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:28 --> Form Validation Class Initialized
+INFO - 2026-02-26 20:26:28 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:28 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:28 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:28 --> Cart Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:28 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:28 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:28 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:28 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:28 --> Total execution time: 0.1097
+INFO - 2026-02-26 20:26:28 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:28 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:28 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:28 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:28 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:28 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:28 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:28 --> Total execution time: 0.1639
+INFO - 2026-02-26 20:26:28 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:28 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:28 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:28 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:28 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:28 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:28 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:28 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:28 --> Total execution time: 0.2849
+INFO - 2026-02-26 20:26:29 --> Config Class Initialized
+INFO - 2026-02-26 20:26:29 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:29 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:29 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:29 --> URI Class Initialized
+INFO - 2026-02-26 20:26:29 --> Router Class Initialized
+INFO - 2026-02-26 20:26:29 --> Output Class Initialized
+INFO - 2026-02-26 20:26:29 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:29 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:29 --> Input Class Initialized
+INFO - 2026-02-26 20:26:29 --> Language Class Initialized
+INFO - 2026-02-26 20:26:29 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:29 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:29 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:29 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:29 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:29 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:29 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:29 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:29 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:29 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:29 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:29 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:29 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:29 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:29 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:29 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:29 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:29 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:29 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:29 --> Total execution time: 0.0587
+INFO - 2026-02-26 20:26:30 --> Config Class Initialized
+INFO - 2026-02-26 20:26:30 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:30 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:30 --> URI Class Initialized
+INFO - 2026-02-26 20:26:30 --> Router Class Initialized
+INFO - 2026-02-26 20:26:30 --> Output Class Initialized
+INFO - 2026-02-26 20:26:30 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:30 --> Input Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language Class Initialized
+INFO - 2026-02-26 20:26:30 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:30 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:30 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:30 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:30 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:30 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:30 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:30 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:30 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:30 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:30 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\templates/header.php
+INFO - 2026-02-26 20:26:30 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\table_products.php
+INFO - 2026-02-26 20:26:30 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\home_audios.php
+INFO - 2026-02-26 20:26:30 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\templates/footer.php
+INFO - 2026-02-26 20:26:30 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:30 --> Total execution time: 0.2076
+INFO - 2026-02-26 20:26:30 --> Config Class Initialized
+INFO - 2026-02-26 20:26:30 --> Hooks Class Initialized
+INFO - 2026-02-26 20:26:30 --> Config Class Initialized
+INFO - 2026-02-26 20:26:30 --> Config Class Initialized
+INFO - 2026-02-26 20:26:30 --> Hooks Class Initialized
+INFO - 2026-02-26 20:26:30 --> Hooks Class Initialized
+INFO - 2026-02-26 20:26:30 --> Config Class Initialized
+INFO - 2026-02-26 20:26:30 --> Config Class Initialized
+INFO - 2026-02-26 20:26:30 --> Hooks Class Initialized
+INFO - 2026-02-26 20:26:30 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:30 --> Utf8 Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:30 --> Utf8 Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:30 --> URI Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:30 --> Utf8 Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:30 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:30 --> URI Class Initialized
+INFO - 2026-02-26 20:26:30 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:30 --> Router Class Initialized
+INFO - 2026-02-26 20:26:30 --> URI Class Initialized
+INFO - 2026-02-26 20:26:30 --> URI Class Initialized
+INFO - 2026-02-26 20:26:30 --> URI Class Initialized
+INFO - 2026-02-26 20:26:30 --> Router Class Initialized
+INFO - 2026-02-26 20:26:30 --> Output Class Initialized
+INFO - 2026-02-26 20:26:30 --> Router Class Initialized
+INFO - 2026-02-26 20:26:30 --> Router Class Initialized
+INFO - 2026-02-26 20:26:30 --> Router Class Initialized
+INFO - 2026-02-26 20:26:30 --> Output Class Initialized
+INFO - 2026-02-26 20:26:30 --> Security Class Initialized
+INFO - 2026-02-26 20:26:30 --> Output Class Initialized
+INFO - 2026-02-26 20:26:30 --> Output Class Initialized
+INFO - 2026-02-26 20:26:30 --> Output Class Initialized
+INFO - 2026-02-26 20:26:30 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:30 --> Security Class Initialized
+INFO - 2026-02-26 20:26:30 --> Input Class Initialized
+INFO - 2026-02-26 20:26:30 --> Security Class Initialized
+INFO - 2026-02-26 20:26:30 --> Security Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2026-02-26 20:26:30 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:30 --> Input Class Initialized
+INFO - 2026-02-26 20:26:30 --> Input Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2026-02-26 20:26:30 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:30 --> Input Class Initialized
+INFO - 2026-02-26 20:26:30 --> Input Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language Class Initialized
+INFO - 2026-02-26 20:26:30 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language Class Initialized
+INFO - 2026-02-26 20:26:30 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:30 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:30 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:30 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:30 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:30 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:30 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:30 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:30 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:30 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:30 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:30 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:30 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:30 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:30 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:30 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:30 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:30 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:30 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:30 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:30 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:30 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:30 --> Session: Class initialized using 'files' driver.
+DEBUG - 2026-02-26 20:26:30 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:30 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+DEBUG - 2026-02-26 20:26:30 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+DEBUG - 2026-02-26 20:26:30 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:30 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:30 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:30 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:30 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:30 --> Total execution time: 0.0654
+INFO - 2026-02-26 20:26:30 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:30 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:30 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:30 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:30 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:30 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:30 --> Total execution time: 0.0847
+INFO - 2026-02-26 20:26:30 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:30 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:30 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:30 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:30 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:30 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:30 --> Total execution time: 0.1052
+INFO - 2026-02-26 20:26:30 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:30 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:30 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:30 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:30 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:30 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:30 --> Total execution time: 0.1463
+INFO - 2026-02-26 20:26:30 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:30 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:30 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:30 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:30 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:30 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:30 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:30 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:30 --> Total execution time: 0.1782
+INFO - 2026-02-26 20:26:32 --> Config Class Initialized
+INFO - 2026-02-26 20:26:32 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:26:32 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:26:32 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:26:32 --> URI Class Initialized
+INFO - 2026-02-26 20:26:32 --> Router Class Initialized
+INFO - 2026-02-26 20:26:32 --> Output Class Initialized
+INFO - 2026-02-26 20:26:32 --> Security Class Initialized
+DEBUG - 2026-02-26 20:26:32 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:26:32 --> Input Class Initialized
+INFO - 2026-02-26 20:26:32 --> Language Class Initialized
+INFO - 2026-02-26 20:26:32 --> Loader Class Initialized
+INFO - 2026-02-26 20:26:32 --> Controller Class Initialized
+INFO - 2026-02-26 20:26:32 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:26:32 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:26:32 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:26:32 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:26:32 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:26:32 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:26:32 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:26:32 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:26:32 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:26:32 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:26:32 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:26:32 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:26:32 --> Cart Class Initialized
+INFO - 2026-02-26 20:26:32 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:26:32 --> Pagination Class Initialized
+INFO - 2026-02-26 20:26:32 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:26:32 --> Final output sent to browser
+DEBUG - 2026-02-26 20:26:32 --> Total execution time: 0.0628
+INFO - 2026-02-26 20:27:55 --> Config Class Initialized
+INFO - 2026-02-26 20:27:55 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:27:55 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:27:55 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:27:55 --> URI Class Initialized
+INFO - 2026-02-26 20:27:55 --> Router Class Initialized
+INFO - 2026-02-26 20:27:55 --> Output Class Initialized
+INFO - 2026-02-26 20:27:55 --> Security Class Initialized
+DEBUG - 2026-02-26 20:27:55 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:27:55 --> Input Class Initialized
+INFO - 2026-02-26 20:27:55 --> Language Class Initialized
+INFO - 2026-02-26 20:27:55 --> Loader Class Initialized
+INFO - 2026-02-26 20:27:55 --> Controller Class Initialized
+INFO - 2026-02-26 20:27:55 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:27:55 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:27:55 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:27:55 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:27:55 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:27:55 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:27:55 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:27:55 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:27:55 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:27:55 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:27:55 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:27:55 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:27:55 --> Cart Class Initialized
+INFO - 2026-02-26 20:27:55 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:27:55 --> Pagination Class Initialized
+INFO - 2026-02-26 20:27:55 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:27:55 --> Final output sent to browser
+DEBUG - 2026-02-26 20:27:55 --> Total execution time: 0.0438
+INFO - 2026-02-26 20:28:40 --> Config Class Initialized
+INFO - 2026-02-26 20:28:40 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:28:41 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:41 --> URI Class Initialized
+INFO - 2026-02-26 20:28:41 --> Router Class Initialized
+INFO - 2026-02-26 20:28:41 --> Output Class Initialized
+INFO - 2026-02-26 20:28:41 --> Security Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:28:41 --> Input Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language Class Initialized
+INFO - 2026-02-26 20:28:41 --> Loader Class Initialized
+INFO - 2026-02-26 20:28:41 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:41 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:28:41 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:28:41 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:41 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:41 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:41 --> Pagination Class Initialized
+INFO - 2026-02-26 20:28:41 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:41 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\templates/header.php
+INFO - 2026-02-26 20:28:41 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\table_products.php
+INFO - 2026-02-26 20:28:41 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\home_audios.php
+INFO - 2026-02-26 20:28:41 --> File loaded: C:\xampp\htdocs\dalemasbajo.com\application\views\templates/footer.php
+INFO - 2026-02-26 20:28:41 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:41 --> Total execution time: 0.0755
+INFO - 2026-02-26 20:28:41 --> Config Class Initialized
+INFO - 2026-02-26 20:28:41 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:28:41 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:41 --> Config Class Initialized
+INFO - 2026-02-26 20:28:41 --> Config Class Initialized
+INFO - 2026-02-26 20:28:41 --> Hooks Class Initialized
+INFO - 2026-02-26 20:28:41 --> Hooks Class Initialized
+INFO - 2026-02-26 20:28:41 --> URI Class Initialized
+INFO - 2026-02-26 20:28:41 --> Router Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> UTF-8 Support Enabled
+DEBUG - 2026-02-26 20:28:41 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:28:41 --> Config Class Initialized
+INFO - 2026-02-26 20:28:41 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:41 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:41 --> Hooks Class Initialized
+INFO - 2026-02-26 20:28:41 --> Output Class Initialized
+INFO - 2026-02-26 20:28:41 --> URI Class Initialized
+INFO - 2026-02-26 20:28:41 --> URI Class Initialized
+INFO - 2026-02-26 20:28:41 --> Security Class Initialized
+INFO - 2026-02-26 20:28:41 --> Router Class Initialized
+INFO - 2026-02-26 20:28:41 --> Router Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2026-02-26 20:28:41 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:28:41 --> Input Class Initialized
+INFO - 2026-02-26 20:28:41 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language Class Initialized
+INFO - 2026-02-26 20:28:41 --> Output Class Initialized
+INFO - 2026-02-26 20:28:41 --> Output Class Initialized
+INFO - 2026-02-26 20:28:41 --> URI Class Initialized
+INFO - 2026-02-26 20:28:41 --> Security Class Initialized
+INFO - 2026-02-26 20:28:41 --> Security Class Initialized
+INFO - 2026-02-26 20:28:41 --> Router Class Initialized
+INFO - 2026-02-26 20:28:41 --> Loader Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2026-02-26 20:28:41 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:28:41 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:41 --> Output Class Initialized
+INFO - 2026-02-26 20:28:41 --> Input Class Initialized
+INFO - 2026-02-26 20:28:41 --> Input Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:41 --> Language Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language Class Initialized
+INFO - 2026-02-26 20:28:41 --> Security Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: form_helper
+DEBUG - 2026-02-26 20:28:41 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:41 --> Input Class Initialized
+INFO - 2026-02-26 20:28:41 --> Loader Class Initialized
+INFO - 2026-02-26 20:28:41 --> Loader Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language Class Initialized
+INFO - 2026-02-26 20:28:41 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:41 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:41 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:41 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:28:41 --> Loader Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:41 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:28:41 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:28:41 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:28:41 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:28:41 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:41 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Genero_model" initialized
+DEBUG - 2026-02-26 20:28:41 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:28:41 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:41 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:41 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Faq_model" initialized
+INFO - 2026-02-26 20:28:41 --> Form Validation Class Initialized
+INFO - 2026-02-26 20:28:41 --> Model "Products_model" initialized
+DEBUG - 2026-02-26 20:28:41 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:28:41 --> Config Class Initialized
+INFO - 2026-02-26 20:28:41 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:41 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:41 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:41 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:28:41 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:28:41 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:41 --> Pagination Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+DEBUG - 2026-02-26 20:28:41 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:28:41 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:41 --> URI Class Initialized
+INFO - 2026-02-26 20:28:41 --> Router Class Initialized
+INFO - 2026-02-26 20:28:41 --> Output Class Initialized
+INFO - 2026-02-26 20:28:41 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:41 --> Security Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:28:41 --> Input Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language Class Initialized
+INFO - 2026-02-26 20:28:41 --> Loader Class Initialized
+INFO - 2026-02-26 20:28:41 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:41 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:28:41 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:41 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:41 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:28:41 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:28:41 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:41 --> Total execution time: 0.0770
+INFO - 2026-02-26 20:28:41 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:41 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:41 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:41 --> Pagination Class Initialized
+INFO - 2026-02-26 20:28:41 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:41 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:41 --> Total execution time: 0.1041
+INFO - 2026-02-26 20:28:41 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:41 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:41 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:41 --> Pagination Class Initialized
+INFO - 2026-02-26 20:28:41 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:41 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:41 --> Total execution time: 0.1184
+INFO - 2026-02-26 20:28:41 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:41 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:41 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:41 --> Pagination Class Initialized
+INFO - 2026-02-26 20:28:41 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:41 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:41 --> Total execution time: 0.1465
+INFO - 2026-02-26 20:28:41 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:41 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:28:41 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:41 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:41 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:41 --> Pagination Class Initialized
+INFO - 2026-02-26 20:28:41 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:41 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:41 --> Total execution time: 0.1298
+INFO - 2026-02-26 20:28:42 --> Config Class Initialized
+INFO - 2026-02-26 20:28:42 --> Hooks Class Initialized
+DEBUG - 2026-02-26 20:28:42 --> UTF-8 Support Enabled
+INFO - 2026-02-26 20:28:42 --> Utf8 Class Initialized
+INFO - 2026-02-26 20:28:42 --> URI Class Initialized
+INFO - 2026-02-26 20:28:42 --> Router Class Initialized
+INFO - 2026-02-26 20:28:42 --> Output Class Initialized
+INFO - 2026-02-26 20:28:42 --> Security Class Initialized
+DEBUG - 2026-02-26 20:28:42 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-02-26 20:28:42 --> Input Class Initialized
+INFO - 2026-02-26 20:28:42 --> Language Class Initialized
+INFO - 2026-02-26 20:28:42 --> Loader Class Initialized
+INFO - 2026-02-26 20:28:42 --> Controller Class Initialized
+INFO - 2026-02-26 20:28:42 --> Helper loaded: url_helper
+INFO - 2026-02-26 20:28:42 --> Helper loaded: form_helper
+INFO - 2026-02-26 20:28:42 --> Helper loaded: download_helper
+INFO - 2026-02-26 20:28:42 --> Model "Users_model" initialized
+INFO - 2026-02-26 20:28:42 --> Model "Genero_model" initialized
+INFO - 2026-02-26 20:28:42 --> Model "Products_model" initialized
+INFO - 2026-02-26 20:28:42 --> Model "Banners_model" initialized
+INFO - 2026-02-26 20:28:42 --> Model "Faq_model" initialized
+DEBUG - 2026-02-26 20:28:42 --> Session: "sess_save_path" is empty; using "session.save_path" value from php.ini.
+INFO - 2026-02-26 20:28:42 --> Session: Class initialized using 'files' driver.
+INFO - 2026-02-26 20:28:42 --> Form Validation Class Initialized
+DEBUG - 2026-02-26 20:28:42 --> Session class already loaded. Second attempt ignored.
+INFO - 2026-02-26 20:28:42 --> Cart Class Initialized
+INFO - 2026-02-26 20:28:42 --> Language file loaded: language/spanish/pagination_lang.php
+INFO - 2026-02-26 20:28:42 --> Pagination Class Initialized
+INFO - 2026-02-26 20:28:42 --> Database Driver Class Initialized
+INFO - 2026-02-26 20:28:42 --> Final output sent to browser
+DEBUG - 2026-02-26 20:28:42 --> Total execution time: 0.0546
