@@ -59,48 +59,51 @@ class Users extends CI_Controller {
 		return $ip;
 	}
 
-	public function registro(){
-			$username= $this->input->post('username');
-			$email = $this->input->post('email');
-			$role_id = 4;
-			$password=$this->input->post('password');
-			
-			$encriptedpass =  password_hash($password, PASSWORD_BCRYPT);
-			$whereemail['email']=$email;
-			$whereusername['username']=$username;
-			if(!$this->users_model->get_user_where($whereemail)){
-				if(!$this->users_model->get_user_where($whereusername)){
-					$token = $this->token();
-					$fecha_registro = date('Y-m-d');
-					$ip = $this->getUserIpAddr();
-					$data = array(
-						'username'			=>	$username,
-						'email'				=>	$email,
-						'role_id'			=>	$role_id,
-						'password'			=>	$encriptedpass,
-						'activationcode'	=>	$token,
-						'registered_on'		=>	$fecha_registro,
-						'active'			=>	1,
-						'ip_registro'		=> $ip
-					);
-					$id=$this->users_model->create_user($data);
-					$this->send_registered_mail($email, $token);
-					$jsondata['respuesta'] = "ok";
+    public function registro() {
+        $username = trim((string)$this->input->post('username', true));
+        $email    = trim((string)$this->input->post('email', true));
+        $password = (string)$this->input->post('password', true);
 
-					header('Content-type: application/json; charset=utf-8');
-					echo json_encode($jsondata);
-				}else{
-					$jsondata['respuesta']="username_existe";
-					header('Content-type: application/json; charset=utf-8');
-					echo json_encode($jsondata);
-				}
-			}else{
-				$jsondata['respuesta'] = "email_existe";
-				header('Content-type: application/json; charset=utf-8');
-				echo json_encode($jsondata);
-			}
+        header('Content-type: application/json; charset=utf-8');
 
-	}
+        if ($username === '' || $email === '' || $password === '') {
+            echo json_encode(['respuesta' => 'invalid']);
+            exit;
+        }
+
+        $whereemail = ['email' => $email];
+        $whereuser  = ['username' => $username];
+
+        if ($this->users_model->get_user_where($whereemail)) {
+            echo json_encode(['respuesta' => 'email_existe']);
+            exit;
+        }
+
+        if ($this->users_model->get_user_where($whereuser)) {
+            echo json_encode(['respuesta' => 'username_existe']);
+            exit;
+        }
+
+        $encriptedpass  = password_hash($password, PASSWORD_BCRYPT);
+        $fecha_registro = date('Y-m-d');
+        $ip             = $this->getUserIpAddr();
+
+        $data = [
+            'username'       => $username,
+            'email'          => $email,
+            'role_id'        => 4,
+            'password'       => $encriptedpass,
+            'activationcode' => null,
+            'registered_on'  => $fecha_registro,
+            'active'         => 1,
+            'ip_registro'    => $ip
+        ];
+
+        $id = $this->users_model->create_user($data);
+
+        echo json_encode(['respuesta' => $id ? 'ok' : 'error']);
+        exit;
+    }
 
 	public function print_nuevo_usuario(){
 			$data['roles']=$this->users_model->get_roles();
@@ -343,45 +346,39 @@ class Users extends CI_Controller {
 		}
 	}
 
-	public function send_registered_mail($email, $token){
+    public function send_registered_mail($email, $token)
+    {
+        $this->email->clear(true);
 
-		$config['protocol']    = 'smtp';
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if (is_array($email_cfg)) {
+            $this->email->initialize($email_cfg);
+        } else {
+            $this->email->initialize();
+        }
 
-		$config['smtp_host']    = SMTP_URL;
+        $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
+        $this->email->to((string)$email);
+        $this->email->subject('Confirm your email');
 
-		$config['smtp_port']    = SMTP_PORT;
+        $data = [
+            'token' => $token,
+            'email' => $email
+        ];
 
-		$config['smtp_timeout'] = '7';
+        $mail = $this->load->view('emails/confirmaccount', $data, true);
+        $this->email->message($mail);
 
-		$config['smtp_user']    = SMTP_USER;
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
 
-		$config['smtp_pass']    = SMTP_KEY;
+        $ok = $this->email->send(false);
 
-		$config['charset']    = 'utf-8';
+        if (!$ok) {
+            log_message('error', 'send_registered_mail FAIL :: '.$this->email->print_debugger(['headers','subject']));
+        }
 
-		$config['newline']    = "\r\n";
-
-		$config['mailtype'] = 'html'; // or html
-
-		$config['validation'] = TRUE; // bool whether to validate email or not      
-
-		$this->email->initialize($config);
-
-		$this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
-
-		$this->email->to($email);
-
-		$this->email->subject('Confirma tu Correo');
-
-		$data['token']=$token;
-		$data['email']=$email;
-
-		$mail = $this->load->view('emails/confirmaccount', $data, TRUE);
-		$this->email->message($mail);
-
-		$this->email->send();
-		return; 
-	}
-
-
+        return (bool)$ok;
+    }
 }

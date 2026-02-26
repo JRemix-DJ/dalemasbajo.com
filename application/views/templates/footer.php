@@ -455,7 +455,6 @@
                 }
             });
         });
-
     });
 
     var audio = document.getElementById('main-audio-element');
