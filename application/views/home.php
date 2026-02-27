@@ -27,6 +27,26 @@
         h1, h2, h3, .font-heading { font-family: 'Montserrat', sans-serif; }
 
         [x-cloak] { display: none !important; }
+        @media (max-width: 640px) {
+            .msg-announcement {
+                padding: 10px 12px;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                max-height: 140px;
+                overflow: auto;
+                border-radius: 12px;
+            }
+
+            .msg-announcement p {
+                font-size: 10px;
+                line-height: 1.05;
+                margin: 0 0 8px 0;
+            }
+
+            .msg-announcement p:last-child {
+                margin-bottom: 0;
+            }
+        }
     </style>
 
     <meta property="og:image" content="<? echo base_url('images/dj_new.jpg'); ?>" />
@@ -52,7 +72,7 @@
 
         <div class="pl-4 inline-block max-w-none mb-12">
             <h1 class="mt-3 pb-4 text-white font-oswald font-medium leading-[0.92] tracking-tight
-               text-[75px] sm:text-[75px] md:text-[75px] lg:text-[135px] uppercase">
+               text-[55px] sm:text-[60px] md:text-[75px] lg:text-[135px] uppercase">
                 Boost your<br>
                 DJ library<br>
                 With exclusive<br>
@@ -62,12 +82,12 @@
             <div class="mt-3 flex w-full gap-3">
                 <a target="_blank"
                    href="https://videoremixpool.com/videos/"
-                   class="btn flex-1 w-full font-bold text-center block">
+                   class="btn flex-1 w-full font-bold text-center block py-5 sm:py-3 md:py-4">
                     VIDEOS
                 </a>
 
                 <a href="<? echo base_url('audios/'); ?>"
-                   class="btn flex-1 w-full font-bold text-center block">
+                   class="btn flex-1 w-full font-bold text-center block py-5 sm:py-3 md:py-4">
                     AUDIOS
                 </a>
             </div>
@@ -349,3 +369,51 @@
         </div>
     </div>
 </section>
+<script>
+    (function () {
+        const header = document.getElementById('siteHeader');
+        const firstLink = document.getElementById('navFirstLink');
+
+        function setSplit() {
+            if (!header) return;
+
+            if (window.innerWidth < 1024) {
+                header.style.setProperty('--blue-cut', '170px');
+                return;
+            }
+
+            if (!firstLink) return;
+
+            const h = header.getBoundingClientRect();
+            const a = firstLink.getBoundingClientRect();
+            const cut = Math.max(340, Math.floor(a.left - h.left - 48));
+            header.style.setProperty('--blue-cut', cut + 'px');
+        }
+
+        let raf = 0;
+        function schedule() {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+                raf = 0;
+                setSplit();
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', schedule, { passive: true });
+        window.addEventListener('load', schedule, { passive: true });
+        window.addEventListener('resize', schedule, { passive: true });
+        window.addEventListener('orientationchange', schedule, { passive: true });
+
+        window.addEventListener('pageshow', schedule, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) schedule();
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            visualViewport.addEventListener('resize', schedule, { passive: true });
+            visualViewport.addEventListener('scroll', schedule, { passive: true });
+        }
+
+        schedule();
+    })();
+</script>

@@ -34,11 +34,11 @@ if(isset($products) && !empty($products)) {
         ?>
         <tr class="hover:bg-blue-50/50 transition-colors group border-b border-slate-50 last:border-0">
 
-            <td class="p-4 text-slate-400 whitespace-nowrap text-xs">
+            <td class="p-4 text-slate-400 whitespace-nowrap text-xs" data-label="Date">
                 <? echo ($date != '') ? date('d M', strtotime($date)) : '-'; ?>
             </td>
 
-            <td class="p-4 text-center">
+            <td class="p-4 text-center" data-label="Play">
                 <? $img_cover = base_url('audios/cover_mp3/' . $audio->id); ?>
 
                 <a href="javascript:;"
@@ -52,35 +52,35 @@ if(isset($products) && !empty($products)) {
                 </a>
             </td>
 
-            <td class="p-4 font-bold text-slate-900 text-sm">
+            <td class="p-4 font-bold text-slate-900 text-sm" data-label="Song Title">
                 <? echo $title; ?>
                 <? if(isset($audio->is_new) && $audio->is_new == 1) { ?>
                     <span class="ml-2 px-1.5 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold uppercase rounded tracking-wide">NEW</span>
                 <? } ?>
             </td>
 
-            <td class="p-4 text-slate-600 text-sm font-medium  max-w-[250px]">
+            <td class="p-4 text-slate-600 text-sm font-medium max-w-[250px]" data-label="Artist">
                 <? echo $artist; ?>
             </td>
 
-            <td class="p-4 text-center align-middle">
+            <td class="p-4 text-center align-middle" data-label="Version">
                 <span class="inline-flex items-center justify-center text-center max-w-full px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold whitespace-normal break-words leading-snug">
                     <? echo $version; ?>
                 </span>
             </td>
 
-            <td class="p-4">
+            <td class="p-4" data-label="Remixer">
                 <a href="<? echo base_url('remixers/'.$remixer_id); ?>" class="flex items-center gap-2 hover:text-blue-700 transition-colors font-semibold text-sm">
                     <i class="fa-solid fa-user-music text-xs opacity-50"></i>
                     <? echo $remixer_name; ?>
                 </a>
             </td>
 
-            <td class="p-4 text-slate-400 font-semibold text-s">
+            <td class="p-4 text-slate-400 font-semibold text-s" data-label="BPM">
                 <? echo $bpm; ?>
             </td>
 
-            <td class="p-4 text-center">
+            <td class="p-4 text-center" data-label="Genre">
                 <a href="<? echo base_url('genero/'.$genre_id); ?>"
                    style="background-color: #0066ff1a"
                    class="inline-flex items-center text-center px-3 py-1 rounded-full text-[rgb(0,102,255)] text-xs font-semibold hover:bg-slate-200 hover:text-blue-700 transition-colors">
@@ -88,7 +88,7 @@ if(isset($products) && !empty($products)) {
                 </a>
             </td>
 
-            <td class="p-4 text-center">
+            <td class="p-4 text-center" data-label="Download">
                 <?
                 $is_logged = $this->session->userdata('is_logued_in') ? 1 : 0;
 

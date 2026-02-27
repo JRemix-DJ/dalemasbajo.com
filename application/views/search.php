@@ -4,8 +4,7 @@
         <div class="container mx-auto px-4">
             <div class="relative w-full overflow-hidden rounded-[28px] bg-[#0066FF] shadow-xl border border-white/10">
 
-                <!-- contenido centrado -->
-                <div class="relative z-10 flex min-h-[320px] md:min-h-[300px] items-center justify-center text-center">
+                <div class="relative z-10 flex min-h-[240px] sm:min-h-[260px] md:min-h-[300px] items-center justify-center text-center p-[15px] md:p-0">
                     <div class="w-full max-w-3xl">
 
                         <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-sm">
@@ -18,16 +17,15 @@
 
                         <? if(isset($_GET['sname']) && !empty($_GET['sname'])) { ?>
                             <div class="mt-6 inline-flex items-center justify-center bg-white/10 backdrop-blur-xl px-5 py-2 rounded-full border border-white/20">
-              <span class="text-white text-sm md:text-base">
-                Results for:
-                <b class="text-white font-extrabold">"<? echo $_GET['sname']; ?>"</b>
-              </span>
+          <span class="text-white text-sm md:text-base">
+            Results for:
+            <b class="text-white font-extrabold">"<? echo $_GET['sname']; ?>"</b>
+          </span>
                             </div>
                         <? } ?>
 
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -46,18 +44,18 @@
             <? } else { ?>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative mt-8">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                    <div class="overflow-x-auto remix-table-wrap">
+                        <table class="w-full text-left border-collapse remix-table">
                             <thead>
                             <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
                                 <th class="p-4 font-semibold w-24">Date</th>
                                 <th class="p-4 font-semibold w-16 text-center">Play</th>
                                 <th class="p-4 font-semibold">Song Title</th>
-                                <th class="p-4 font-semibold">Version</th>
                                 <th class="p-4 font-semibold">Artist</th>
+                                <th class="p-4 font-semibold text-center">Version</th>
                                 <th class="p-4 font-semibold">Remixer</th>
                                 <th class="p-4 font-semibold w-20">BPM</th>
-                                <th class="p-4 font-semibold w-32">Genre</th>
+                                <th class="p-4 font-semibold text-center w-40">Genre</th>
                                 <th class="p-4 font-semibold w-24 text-center">Download</th>
                             </tr>
                             </thead>
@@ -72,7 +70,7 @@
                                     <td colspan="9" class="p-12 text-center text-slate-400">
                                         <div class="flex flex-col items-center justify-center">
                                             <i class="fa-solid fa-magnifying-glass text-3xl mb-2 opacity-30"></i>
-                                            <p>No se encontraron resultados para tu búsqueda.</p>
+                                            <p>No results were found for your search.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -99,29 +97,27 @@
 <div id="music-player-bar" class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 transform translate-y-full transition-transform duration-500 ease-in-out">
 
     <div class="container mx-auto px-4 py-3 h-24 md:h-20 flex items-center justify-between gap-4">
-
-        <div class="flex items-center gap-4 w-1/4 min-w-[140px] md:min-w-[200px]">
-            <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden shadow-sm flex-shrink-0 bg-slate-100">
+        <div class="flex items-center gap-3 min-w-0 w-auto md:w-1/4 md:min-w-[200px]">
+            <div class="relative w-10 h-10 md:w-14 md:h-14 rounded-lg overflow-hidden shadow-sm flex-shrink-0 bg-slate-100">
                 <img id="player-cover" src="" alt="Cover" class="w-full h-full object-cover">
             </div>
             <div class="overflow-hidden hidden sm:block">
-                <h4 id="player-title" class="font-bold text-slate-900 text-sm truncate leading-tight">Selecciona canción</h4>
+                <h4 id="player-title" class="font-bold text-slate-900 text-sm truncate leading-tight">Select a track</h4>
                 <p id="player-artist" class="text-xs text-slate-500 truncate mt-0.5">DALE MAS BAJO</p>
             </div>
         </div>
 
-        <div class="flex flex-col items-center justify-center flex-1 max-w-2xl w-full">
-
+        <div class="flex flex-col items-center justify-center flex-1 min-w-0 max-w-2xl w-full">
             <div class="flex items-center gap-6 mb-1">
-                <button id="skip-back-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="-10 segundos">
+                <button id="skip-back-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="-10 seconds" type="button">
                     <i class="fa-solid fa-rotate-left text-lg"></i>
                 </button>
 
-                <button id="player-play-btn" class="w-10 h-10 bg-primary hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 transition-all transform hover:scale-105 active:scale-95">
+                <button id="player-play-btn" class="w-10 h-10 bg-primary hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 transition-all transform hover:scale-105 active:scale-95" type="button">
                     <i class="fa fa-play pl-1"></i>
                 </button>
 
-                <button id="skip-fwd-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="+10 segundos">
+                <button id="skip-fwd-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="+10 seconds" type="button">
                     <i class="fa-solid fa-rotate-right text-lg"></i>
                 </button>
             </div>
@@ -129,7 +125,7 @@
             <div class="w-full flex items-center gap-3 text-[10px] md:text-xs font-mono text-slate-400 font-medium select-none">
                 <span id="current-time">0:00</span>
 
-                <div class="relative w-full h-1.5 group cursor-pointer py-1" id="progress-container">
+                <div class="relative w-full min-w-0 h-1.5 group cursor-pointer py-1" id="progress-container">
                     <div class="absolute top-1/2 -translate-y-1/2 left-0 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
                         <div id="progress-bar" class="h-full bg-primary w-0 rounded-full relative"></div>
                     </div>
@@ -140,21 +136,19 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-end gap-4 md:gap-6 w-1/4 min-w-[140px] md:min-w-[200px]">
-
+        <div class="flex items-center justify-end gap-2 md:gap-6 min-w-0 w-auto md:w-1/4 md:min-w-[200px]">
             <div class="hidden md:flex items-center gap-2 group relative">
-                <button id="mute-btn" class="text-slate-400 hover:text-slate-600 w-6 text-center">
+                <button id="mute-btn" class="text-slate-400 hover:text-slate-600 w-6 text-center" type="button">
                     <i class="fa fa-volume-high"></i>
                 </button>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1"
-                       class="w-20 lg:w-24 h-1 rounded-lg appearance-none cursor-pointer">
+                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1" class="w-20 lg:w-24 h-1 rounded-lg appearance-none cursor-pointer">
             </div>
 
             <div class="h-8 w-px bg-slate-200 hidden md:block"></div>
 
             <button id="player-download-btn"
-                    class="btn-smart-download w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 hover:bg-primary hover:text-white text-slate-600 transition-all shadow-sm border border-slate-200"
-                    data-id="" data-logged="" data-access="" title="Descargar Remix">
+                    class="btn-smart-download w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 hover:bg-primary hover:text-white text-slate-600 transition-all shadow-sm border border-slate-200 flex-shrink-0"
+                    data-id="" data-logged="" data-access="" title="Download" type="button">
                 <i class="fa fa-download"></i>
             </button>
         </div>
@@ -187,6 +181,92 @@
     .pagination-modern ul.pagination li a:hover { background: #f1f5f9; color: #007bff; border-color: #007bff; }
     .pagination-modern ul.pagination li.active span {
         background: #007bff !important; color: white !important; border-color: #007bff !important; pointer-events: none; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    }
+    @media (max-width: 880px) {
+        #music-player-bar .container{
+            padding-left: .75rem !important;
+            padding-right: .75rem !important;
+        }
+        #music-player-bar img#player-cover{
+            object-fit: cover;
+        }
+        .remix-table-wrap { overflow-x: visible !important; }
+
+        table.remix-table,
+        table.remix-table thead,
+        table.remix-table tbody,
+        table.remix-table th,
+        table.remix-table td,
+        table.remix-table tr {
+            display: block;
+            width: 100%;
+        }
+
+        table.remix-table thead { display: none; }
+
+        table.remix-table tbody {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 10px;
+        }
+
+        table.remix-table tr {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0 !important;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        table.remix-table td {
+            padding: 10px 12px !important;
+            border: 0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        table.remix-table td + td {
+            border-top: 1px solid #f1f5f9 !important;
+        }
+
+        table.remix-table td::before {
+            content: attr(data-label);
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+
+        table.remix-table td > * {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        table.remix-table td[data-label="Song Title"] > * {
+            text-align: right;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        table.remix-table td[data-label="Play"] a.play_btn,
+        table.remix-table td[data-label="Download"] button.btn-smart-download {
+            margin-left: auto;
+        }
+
+        table.remix-table td[data-label="Play"] a.play_btn,
+        table.remix-table td[data-label="Download"] button.btn-smart-download {
+            width: 40px !important;
+            height: 40px !important;
+        }
+        table.remix-table td[data-label="Artist"] {
+            max-width: none !important;
+        }
     }
 </style>
 

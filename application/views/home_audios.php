@@ -17,11 +17,11 @@
                 <!-- CONTENIDO -->
                 <div class="relative z-10 flex min-h-[420px] md:min-h-[520px] items-center justify-center px-6 py-12">
                     <div class="w-full max-w-3xl rounded-2xl px-6 py-10 md:px-12 md:py-12 text-center">
-                        <h1 class="text-8xl md:text-9xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                        <h1 class="text-5xl sm:text-6xl md:text-9xl font-extrabold tracking-tight text-white drop-shadow-sm text-center">
                             Welcome
                         </h1>
 
-                        <p class="mt-3 text-sm md:text-lg text-white/80 font-medium">
+                        <p class="mt-3 text-xs sm:text-sm md:text-lg text-white/80 font-medium text-center max-w-xs sm:max-w-md md:max-w-none mx-auto">
                             We’re launching Version 2.0 — Faster, clearer, more powerful
                         </p>
 
@@ -141,8 +141,8 @@
             </div>
         </form>
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+            <div class="overflow-x-auto remix-table-wrap">
+                <table class="w-full text-left border-collapse remix-table">
                     <thead>
                     <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
                         <th class="p-4 font-semibold w-24">Date</th>
@@ -213,6 +213,103 @@
     .pagination-modern ul.pagination li a:hover { background: #f1f5f9; color: #007bff; border-color: #007bff; }
     .pagination-modern ul.pagination li.active span {
         background: #007bff !important; color: white !important; border-color: #007bff !important; pointer-events: none; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    }
+    .table-responsive { width: 100%; }
+
+    @media (max-width: 880px) {
+        .remix-table-wrap { overflow-x: visible !important; }
+
+        table.remix-table,
+        table.remix-table thead,
+        table.remix-table tbody,
+        table.remix-table th,
+        table.remix-table td,
+        table.remix-table tr {
+            display: block;
+            width: 100%;
+        }
+
+        table.remix-table thead { display: none; }
+
+        table.remix-table tbody {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 10px;
+        }
+
+        table.remix-table tr {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0 !important;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        table.remix-table td {
+            padding: 10px 12px !important;
+            border: 0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        table.remix-table td + td {
+            border-top: 1px solid #f1f5f9 !important;
+        }
+
+        table.remix-table td::before {
+            content: attr(data-label);
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+
+        table.remix-table td[data-label="Artist"] {
+            max-width: none !important;
+        }
+
+        table.remix-table td > * {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        table.remix-table td[data-label="Song Title"] > * {
+            text-align: right;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        table.remix-table td[data-label="Play"] a.play_btn,
+        table.remix-table td[data-label="Download"] button.btn-smart-download {
+            margin-left: auto;
+        }
+
+        table.remix-table td[data-label="Play"],
+        table.remix-table td[data-label="Download"] {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
+
+        table.remix-table td[data-label="Play"] a.play_btn {
+            width: 40px !important;
+            height: 40px !important;
+        }
+
+        table.remix-table td[data-label="Download"] button.btn-smart-download {
+            width: 40px !important;
+            height: 40px !important;
+        }
+
+        table.remix-table td[data-label="Version"] span,
+        table.remix-table td[data-label="Genre"] a {
+            margin-left: auto;
+        }
     }
 </style>
 

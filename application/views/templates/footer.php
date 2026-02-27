@@ -3,6 +3,17 @@
     .modal-flex { display: flex !important; }
 
     .backdrop-blur-sm { backdrop-filter: blur(4px); }
+    <style>
+    @media (max-width: 767px){
+        #music-player-bar .container{
+            padding-left: .75rem !important;
+            padding-right: .75rem !important;
+        }
+        #music-player-bar img#player-cover{
+            object-fit: cover;
+        }
+    }
+</style>
 </style>
 
 <div id="modal-login" class="modal-hidden fixed inset-0 z-[9999] items-center justify-center p-4">
@@ -203,8 +214,8 @@
 
 <div id="music-player-bar" class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 transform translate-y-full transition-transform duration-500 ease-in-out">
     <div class="container mx-auto px-4 py-3 h-24 md:h-20 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 w-1/4 min-w-[140px] md:min-w-[200px]">
-            <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden shadow-sm flex-shrink-0 bg-slate-100">
+        <div class="flex items-center gap-3 min-w-0 w-auto md:w-1/4 md:min-w-[200px]">
+            <div class="relative w-10 h-10 md:w-14 md:h-14 rounded-lg overflow-hidden shadow-sm flex-shrink-0 bg-slate-100">
                 <img id="player-cover" src="" alt="Cover" class="w-full h-full object-cover">
             </div>
             <div class="overflow-hidden hidden sm:block">
@@ -213,7 +224,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col items-center justify-center flex-1 max-w-2xl w-full">
+        <div class="flex flex-col items-center justify-center flex-1 min-w-0 max-w-2xl w-full">
             <div class="flex items-center gap-6 mb-1">
                 <button id="skip-back-btn" class="text-slate-400 hover:text-slate-600 transition-colors" title="-10 seconds" type="button">
                     <i class="fa-solid fa-rotate-left text-lg"></i>
@@ -231,7 +242,7 @@
             <div class="w-full flex items-center gap-3 text-[10px] md:text-xs font-mono text-slate-400 font-medium select-none">
                 <span id="current-time">0:00</span>
 
-                <div class="relative w-full h-1.5 group cursor-pointer py-1" id="progress-container">
+                <div class="relative w-full min-w-0 h-1.5 group cursor-pointer py-1" id="progress-container">
                     <div class="absolute top-1/2 -translate-y-1/2 left-0 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
                         <div id="progress-bar" class="h-full bg-primary w-0 rounded-full relative"></div>
                     </div>
@@ -242,7 +253,7 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-end gap-4 md:gap-6 w-1/4 min-w-[140px] md:min-w-[200px]">
+        <div class="flex items-center justify-end gap-2 md:gap-6 min-w-0 w-auto md:w-1/4 md:min-w-[200px]">
             <div class="hidden md:flex items-center gap-2 group relative">
                 <button id="mute-btn" class="text-slate-400 hover:text-slate-600 w-6 text-center" type="button">
                     <i class="fa fa-volume-high"></i>
@@ -253,7 +264,7 @@
             <div class="h-8 w-px bg-slate-200 hidden md:block"></div>
 
             <button id="player-download-btn"
-                    class="btn-smart-download w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 hover:bg-primary hover:text-white text-slate-600 transition-all shadow-sm border border-slate-200"
+                    class="btn-smart-download w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 hover:bg-primary hover:text-white text-slate-600 transition-all shadow-sm border border-slate-200 flex-shrink-0"
                     data-id="" data-logged="" data-access="" title="Download" type="button">
                 <i class="fa fa-download"></i>
             </button>

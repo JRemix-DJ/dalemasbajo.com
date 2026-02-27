@@ -72,13 +72,25 @@
             padding-right: 140px;
             flex: 0 0 auto;
         }
+        @media (max-width: 1023px) {
+            #siteHeader { --blue-cut: 170px; }
+
+            #siteHeader .logo-slot{
+                width: auto;
+                flex: 1 1 auto;
+                min-width: 0;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+        }
+
     </style>
     <div class="nav-split-bg absolute inset-0 pointer-events-none"></div>
 
     <div class="w-full px-4 sm:px-6 lg:px-10 relative shadow-lg">
         <div class="flex items-center h-20">
 
-            <div class="logo-slot ">
+            <div class="logo-slot">
                 <a href="<? echo base_url(); ?>" class="flex items-center gap-2 group decoration-0">
                     <img src="<? echo base_url(); ?>images/HORIZONTAL--video.png" alt="dalemasbajo"
                          class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
@@ -337,13 +349,18 @@
             const firstLink = document.getElementById("navFirstLink");
 
             function setSplit() {
-                if (!header || !firstLink) return;
+                if (!header) return;
+
+                if (window.innerWidth < 1024) {
+                    header.style.setProperty('--blue-cut', '300px');
+                    return;
+                }
+
+                if (!firstLink) return;
+
                 const h = header.getBoundingClientRect();
                 const a = firstLink.getBoundingClientRect();
-                const cut = Math.max(
-                    340,
-                    Math.floor(a.left - h.left - 48)
-                );
+                const cut = Math.max(340, Math.floor(a.left - h.left - 48));
                 header.style.setProperty('--blue-cut', cut + 'px');
             }
 
