@@ -2,62 +2,53 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Changepass extends CI_Controller {
-	public function __construct(){
-		parent::__construct();
-		$this->load->helper(array('url', 'form')); 
-		$this->load->library(array('session','form_validation'));
-		$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-		$this->load->model(array('users_model', 'genero_model', 'products_model', 'banners_model', 'faq_model'));
-		$this->load->database('default');
-		$this->users_model->check_payment();
-	}
-	public function index(){
-		$email = $this->input->get('email');
-		$token = $this->input->get('token');
-		if($email!=null&&$token!=null){
-			$where=array(
-				'email'				=>	$email,
-				'activationcode'	=>	$token
-			);
-			//var_dump($where);
-			$user = $this->users_model->get_user_where_array($where);
-			//print_r($user);
-			if($user){
-				if($user->active==1){
-					$data['title']="Account Confirmation - Dale Más Bajo";
-					$data['description']="Confirma tu cuenta";
-					$data['confirm']=0;
-					$data['user_id'] = $user->id;
-					$data['message']="Gracias, tu cuenta ha sido confirmada, ahora puedes ingresar";
-					$this->load->view('templates/header', $data);
-					$this->load->view('changepass');
-					$this->load->view('templates/footer', $data);	
-				}else{
-					$data['title']="Cambiar Password - Dale Más Bajo";
-					$data['description']="Cambiar Password";
-					$data['confirm']=0;
-					$data['message']="Tu cuenta fue confirmada previamente, ahora puedes ingresar de manera normal.";
-					$this->load->view('templates/header', $data);
-					$this->load->view('error');
-					$this->load->view('templates/footer', $data);	
-				}
-			}else{
-				$data['title']="Account Confirmation - Dale Más Bajo";
-				$data['description']="Confirma tu cuenta";
-				$data['confirm']=0;
-				$data['message']="No hemos podido confirmar tu cuenta";
-				$this->load->view('templates/header', $data);
-				$this->load->view('error');
-				$this->load->view('templates/footer', $data);	
-			}
-		}else{
-			$data['title']="Account Confirmation - Dale Más Bajo";
-			$data['description']="Confirma tu cuenta";
-			$data['confirm']=0;
-			$data['message']="No hemos podido confirmar tu cuenta";
-			$this->load->view('templates/header', $data);
-			$this->load->view('error');
-			$this->load->view('templates/footer', $data);	
-		}
-	}
+    public function __construct(){
+        parent::__construct();
+        $this->load->helper(['url','form']);
+        $this->load->library(['session']);
+        $this->load->model('users_model');
+        $this->load->database('default');
+    }
+
+    public function index(){
+        $email = trim((string)$this->input->get('email', true));
+        $token = trim((string)$this->input->get('token', true));
+
+        if($email === '' || $token === ''){
+            return $this->show_error_page("Link inválido.");
+        }
+
+        $token_hash = hash('sha256', $token);
+
+        $row = $this->users_model->validate_password_reset_token($email, $token_hash);
+        if(!$row){
+            return $this->show_error_page("Este link ya fue usado o no es válido.");
+        }
+
+        $user = $this->users_model->get_user_by_email($email);
+        if(!$user){
+            return $this->show_error_page("No existe el usuario.");
+        }
+
+        $data['title'] = "Cambiar Password - Dale Más Bajo";
+        $data['description'] = "Cambiar Password";
+
+        // IMPORTANTE: pasa email+token para que el POST valide otra vez
+        $data['reset_email'] = $email;
+        $data['reset_token'] = $token;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('changepass', $data);
+        $this->load->view('templates/footer', $data);
+    }
+
+    private function show_error_page($msg){
+        $data['title'] = "Error - Dale Más Bajo";
+        $data['description'] = "Error";
+        $data['message'] = $msg;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('error', $data);
+        $this->load->view('templates/footer', $data);
+    }
 }

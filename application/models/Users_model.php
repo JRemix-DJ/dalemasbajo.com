@@ -396,5 +396,48 @@ class Users_model extends CI_Model {
         // Si tus planes se llaman distinto, agrega aquí
         return false;
     }
+    public function get_user_by_email($email){
+        $this->db->where('email', $email);
+        $q = $this->db->get('users');
+        return ($q->num_rows() === 1) ? $q->row() : false;
+    }
 
+    public function upsert_password_reset($user_id, $email, $token_hash){
+        // si ya existe un registro, lo actualizamos
+        $this->db->where('email', $email);
+        $q = $this->db->get('password_change');
+
+        $data = [
+            'user_id'    => (int)$user_id,
+            'email'      => $email,
+            'token_hash' => $token_hash,
+            'enviado'    => 1,
+            'cambiado'   => 0,
+            'used'       => 0
+        ];
+
+        if($q->num_rows() >= 1){
+            $row = $q->row();
+            $this->db->where('id', (int)$row->id);
+            return $this->db->update('password_change', $data);
+        }
+
+        return $this->db->insert('password_change', $data);
+    }
+
+    public function validate_password_reset_token($email, $token_hash){
+        $this->db->where('email', $email);
+        $this->db->where('token_hash', $token_hash);
+        $this->db->where('used', 0);
+        $q = $this->db->get('password_change');
+        return ($q->num_rows() >= 1) ? $q->row() : false;
+    }
+
+    public function mark_password_reset_used($id){
+        $this->db->where('id', (int)$id);
+        return $this->db->update('password_change', [
+            'used'     => 1,
+            'cambiado' => 1
+        ]);
+    }
 }

@@ -324,27 +324,30 @@ class Users extends CI_Controller {
 		return $countries;
 	}
 
-	public function changepass(){
-		$pass=$this->input->post('pass');
-		$rpass=$this->input->post('rpass');
-		$id=$this->input->post('id');
+    public function changepass(){
+        header('Content-type: application/json; charset=utf-8');
 
-		if($pass==$rpass){
-			//echo 'entro';
-			$encriptedpass =  password_hash($pass, PASSWORD_BCRYPT);
-			$data = array(
-				'password' => $encriptedpass,
-			);
-			$this->users_model->update_user($id, $data);
-			$jsondata['success'] = true;
-			header('Content-type: application/json; charset=utf-8');
-			echo json_encode($jsondata);
-		}else{
-			$jsondata['success'] = false;
-			header('Content-type: application/json; charset=utf-8');
-			echo json_encode($jsondata);
-		}
-	}
+        $pass = (string)$this->input->post('pass', true);
+        $rpass = (string)$this->input->post('rpass', true);
+        $id = (int)$this->input->post('id', true);
+
+        if($id <= 0){
+            echo json_encode(['success'=>false, 'message'=>'ID inválido']);
+            return;
+        }
+
+        if($pass !== $rpass){
+            echo json_encode(['success'=>false, 'message'=>'No coincide']);
+            return;
+        }
+
+        $encriptedpass = password_hash($pass, PASSWORD_BCRYPT);
+        $this->users_model->update_user($id, ['password'=>$encriptedpass]);
+
+        // valida que realmente existe el usuario
+        $u = $this->users_model->load_user_info($id);
+        echo json_encode(['success'=> (bool)$u ]);
+    }
 
     public function send_registered_mail($email, $token)
     {
@@ -380,5 +383,104 @@ class Users extends CI_Controller {
         }
 
         return (bool)$ok;
+    }
+    public function request_password_reset(){
+        header('Content-type: application/json; charset=utf-8');
+
+        $email = trim((string)$this->input->post('email', true));
+
+        if($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+            echo json_encode(['success' => true]); // respuesta genérica
+            exit;
+        }
+
+        $user = $this->users_model->get_user_by_email($email);
+
+        // Respuesta SIEMPRE genérica para no revelar si existe o no (seguridad)
+        if(!$user){
+            echo json_encode(['success' => true]);
+            exit;
+        }
+
+        // Token seguro (sin expiración, pero lo invalidaremos cuando se use)
+        $token = bin2hex(random_bytes(32)); // 64 chars
+        $token_hash = hash('sha256', $token);
+
+        $this->users_model->upsert_password_reset((int)$user->id, $email, $token_hash);
+
+        // enviar email
+        $ok = $this->send_change_password_mail($email, $token);
+
+        echo json_encode(['success' => true]); // genérico
+        exit;
+    }
+
+    public function send_change_password_mail($email, $token){
+        $this->email->clear(true);
+
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if (is_array($email_cfg)) $this->email->initialize($email_cfg);
+
+        $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
+        $this->email->to((string)$email);
+        $this->email->subject('Reset your password');
+
+        $data = [
+            'token' => $token,
+            'email' => $email
+        ];
+
+        $mail = $this->load->view('emails/changepassword', $data, true);
+        $this->email->message($mail);
+
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
+
+        $ok = $this->email->send(false);
+
+        if(!$ok){
+            log_message('error', 'send_change_password_mail FAIL :: '.$this->email->print_debugger(['headers','subject']));
+        }
+        return (bool)$ok;
+    }
+    public function reset_password(){
+        header('Content-type: application/json; charset=utf-8');
+
+        $email = trim((string)$this->input->post('email', true));
+        $token = trim((string)$this->input->post('token', true));
+        $pass  = (string)$this->input->post('pass', true);
+        $rpass = (string)$this->input->post('rpass', true);
+
+        if($email === '' || $token === '' || $pass === '' || $rpass === ''){
+            echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
+            exit;
+        }
+        if($pass !== $rpass){
+            echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden']);
+            exit;
+        }
+
+        $token_hash = hash('sha256', $token);
+
+        $row = $this->users_model->validate_password_reset_token($email, $token_hash);
+        if(!$row){
+            echo json_encode(['success' => false, 'message' => 'Token inválido o ya usado']);
+            exit;
+        }
+
+        $user = $this->users_model->get_user_by_email($email);
+        if(!$user){
+            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado']);
+            exit;
+        }
+
+        $encriptedpass = password_hash($pass, PASSWORD_BCRYPT);
+
+        $this->users_model->update_user((int)$user->id, ['password' => $encriptedpass]);
+        $this->users_model->mark_password_reset_used((int)$row->id);
+
+        echo json_encode(['success' => true]);
+        exit;
     }
 }

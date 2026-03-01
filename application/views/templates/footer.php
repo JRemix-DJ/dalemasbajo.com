@@ -688,6 +688,27 @@
     $('#skip-fwd-btn').click(function() {
         audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
     });
+    $('#btn-recuperar-accion').click(function() {
+        const email = $('#rec-email').val().trim();
+        if(!email){
+            alert('Ingresa tu correo.');
+            return;
+        }
+
+        $.ajax({
+            url: "<?php echo base_url('users/request_password_reset'); ?>",
+            type: "POST",
+            dataType: "json",
+            data: { email },
+            success: function(){
+                alert('Si el correo existe, te llegará un enlace para cambiar tu contraseña.');
+                $('.close-modal-btn').first().click(); // o cierra tu modal como prefieras
+            },
+            error: function(){
+                alert('Error de conexión.');
+            }
+        });
+    });
 </script>
 </body>
 </html>
