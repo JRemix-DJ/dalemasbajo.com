@@ -335,4 +335,14 @@ class Orders_model extends CI_Model {
 
         return $this->db->get()->row();
     }
+
+    public function consume_paid_order(int $order_id): bool
+    {
+        $this->db->set('status', 0);
+        $this->db->where('id', $order_id);
+        $this->db->where('status', 1);
+        $this->db->update('orders');
+
+        return ($this->db->affected_rows() === 1);
+    }
 }

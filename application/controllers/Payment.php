@@ -113,9 +113,17 @@ class Payment extends CI_Controller {
             return;
         }
 
-        $this->orders_model->update_order((int)$order->id, [
-            'status' => 1
-        ]);
+        $claimed = $this->orders_model->consume_paid_order((int)$order->id);
+
+        if (!$claimed) {
+            // webhook duplicado o ya aplicado
+            http_response_code(200);
+            echo json_encode([
+                'status' => 'already_processed',
+                'order_id' => (int)$order->id
+            ]);
+            return;
+        }
 
         $this->add_tokens_to_user((int)$order->id, NULL);
 
