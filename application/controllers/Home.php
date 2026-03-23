@@ -14,7 +14,7 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
-		$data['title']="Dale Más Bajo";
+		$data['title']="Dale Más Bajo - Audio & Video Remixes for DJs";
 		$data['description']="Música para Djs y Vjs, los mejores remixes en un solo lugar";
         $where = ['approved' => 1];
         $data['products'] = $this->products_model->get_current_page_records(

@@ -5,8 +5,8 @@
                 Exclusive Drops
             </h1>
 
-            <p class="text-[18px] md:text-[20px] text-slate-500 font-normal max-w-2xl leading-relaxed">
-                Limited edition remix packs curated by the world's top DJs
+            <p class="text-[18px] md:text-[20px] text-slate-500 font-normal max-w-4xl leading-relaxed whitespace-nowrap">
+                The best drops with our official announcer. <strong>A powerful professional voice for you</strong>
             </p>
         </div>
     </section>
@@ -71,7 +71,7 @@
 
                                 <div class="absolute bottom-4 left-4 bg-white/95 backdrop-blur px-4 py-2 rounded-full shadow flex items-center gap-2">
                                     <span class="text-primary font-bold">$</span>
-                                    <span class="font-bold text-slate-900">$<?php echo number_format((float)$producto->price, 2); ?></span>
+                                    <span class="font-bold text-slate-900"><?php echo number_format((float)$producto->price, 2); ?></span>
                                 </div>
                             </div>
 
@@ -80,11 +80,7 @@
                                     <?php echo htmlspecialchars($title, ENT_QUOTES); ?>
                                 </h3>
 
-                                <p class="text-primary text-sm font-semibold mb-3">
-                                    by <?php echo htmlspecialchars($author, ENT_QUOTES); ?>
-                                </p>
-
-                                <p class="text-sm text-slate-500 leading-relaxed mb-5">
+                                <p class="text-primary text-sm font-semibold mb-4 mt-3">
                                     <?php echo htmlspecialchars($desc, ENT_QUOTES); ?>
                                 </p>
 

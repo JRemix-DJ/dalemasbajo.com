@@ -65,7 +65,6 @@ class Pages extends CI_Controller {
 
         $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
         $this->email->to('dalemasbajo@gmail.com');
-        $this->email->bcc(['sevelasquezro@gmail.com']);
         $this->email->subject('DJ WANTS TO BECOME A MEMBER');
 
         $data_mail = ['mensaje' => $mensaje];
@@ -176,7 +175,6 @@ class Pages extends CI_Controller {
 
         $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
         $this->email->to('dalemasbajo@gmail.com');
-        $this->email->bcc(['sevelasquezro@gmail.com']);
         $this->email->subject('CUSTOM REMIX REQUEST');
 
         $data_mail = ['mensaje' => $mensaje];

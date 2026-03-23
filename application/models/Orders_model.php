@@ -25,19 +25,14 @@ class Orders_model extends CI_Model {
 	}
 
 
-	public function get_by_txn_id($txn_id){
-		$this->db->where('txn_id',$txn_id);
-		$query = $this->db->get('orders');
-		if($query->num_rows() == 1)
-		{
-			return true;
-		}else{
-			return false;
-		}
-	}
+    public function get_by_txn_id($txn_id){
+        $this->db->where('txn_id', $txn_id);
+        $q = $this->db->get('orders');
+        return ($q->num_rows() > 0);
+    }
 
 	public function get_orders($where_parameter=null){
-		$this->db->where('status', 1);
+        $this->db->where_in('status', [0, 1]);
 		$this->db->order_by('date_order', 'DESC');
 		$parametros = is_null($where_parameter)? 'nulo': $where_parameter;
         if($parametros!= 'nulo'){
@@ -319,30 +314,52 @@ class Orders_model extends CI_Model {
         if($q->num_rows() === 1) return $q->row();
         return false;
     }
-    public function find_pending_plan_order_by_user_amount($user_id, $amount)
-    {
-        $amount = (float)$amount;
-
-        $this->db->select('*');
-        $this->db->from('orders');
+    public function find_pending_plan_order_by_user_amount($user_id, $amount){
         $this->db->where('user_id', (int)$user_id);
-        $this->db->where('status', 1);
+        $this->db->where('status', 0);
         $this->db->where('is_plan', 1);
-        $this->db->where('total_price >=', $amount - 0.01);
-        $this->db->where('total_price <=', $amount + 0.01);
-        $this->db->order_by('id', 'DESC');
+        $this->db->where('total_price >=', (float)$amount - 0.01);
+        $this->db->where('total_price <=', (float)$amount + 0.01);
+        $this->db->group_start();
+        $this->db->where('txn_id IS NULL', null, false);
+        $this->db->or_where('txn_id', '');
+        $this->db->group_end();
+        $this->db->order_by('date_order', 'DESC');
         $this->db->limit(1);
 
-        return $this->db->get()->row();
+        $q = $this->db->get('orders');
+        return ($q->num_rows() === 1) ? $q->row() : false;
     }
 
-    public function consume_paid_order(int $order_id): bool
-    {
-        $this->db->set('status', 0);
-        $this->db->where('id', $order_id);
-        $this->db->where('status', 1);
-        $this->db->update('orders');
+    public function find_pending_drop_order_by_user_amount($user_id, $amount){
+        $this->db->where('user_id', (int)$user_id);
+        $this->db->where('status', 0);
+        $this->db->where('is_plan', 0);
+        $this->db->where('is_drop', 1);
+        $this->db->where('total_price >=', (float)$amount - 0.01);
+        $this->db->where('total_price <=', (float)$amount + 0.01);
+        $this->db->group_start();
+        $this->db->where('txn_id IS NULL', null, false);
+        $this->db->or_where('txn_id', '');
+        $this->db->group_end();
+        $this->db->order_by('date_order', 'DESC');
+        $this->db->limit(1);
 
-        return ($this->db->affected_rows() === 1);
+        $q = $this->db->get('orders');
+        return ($q->num_rows() === 1) ? $q->row() : false;
+    }
+
+    public function consume_paid_order($order_id, $txn_id = null){
+        $data = array('status' => 1);
+
+        if ($txn_id !== null) {
+            $data['txn_id'] = $txn_id;
+        }
+
+        $this->db->where('id', (int)$order_id);
+        $this->db->where('status', 0);
+        $this->db->update('orders', $data);
+
+        return ($this->db->affected_rows() > 0);
     }
 }

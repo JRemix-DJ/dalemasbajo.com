@@ -32,13 +32,14 @@
                     </div><!-- col-4 -->
                 </div><!-- row -->
                 <div class="row">
-                    <div class="col-md-8 hidden">
-                        <div class="form-group">
-                            <label class="form-control-label">Descripción del producto: <span class="tx-danger">*</span></label>
-                            <textarea name="description" id="" cols="30" rows="14"
-                                      class="form-control"><? echo $producto->description; ?></textarea>
+                    <?php if((int)$producto->product_type_id === 5){ ?>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="form-control-label">Descripción del drop: <span class="tx-danger">*</span></label>
+                                <textarea name="description" cols="30" rows="14" class="form-control"><?php echo $producto->description; ?></textarea>
+                            </div>
                         </div>
-                    </div>
+                    <?php } ?>
                     <input type="hidden" name="paginationnumber" value="<? echo $_GET['paginationnumber']; ?>">
                     <div class="col-md-4">
                         <div class="form-group">

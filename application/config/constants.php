@@ -90,3 +90,5 @@ define('PAYPAL_ACTIVE', false);
 define('PAYPAL_MAIL', 'i_trinidadcastillo@hotmail.com');
 
 define('PAGOLINK_ACTIVE', true);
+
+define('TUKUY_RELAY_SECRET', 'dfjih9ekmofJIUIU03uinsO+{s');

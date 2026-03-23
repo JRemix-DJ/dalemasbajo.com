@@ -206,4 +206,85 @@ class Drops extends CI_Controller {
 		$this->load->view('comingsoon');
 	}
 
+    public function save_drop_message()
+    {
+        if(!$this->session->userdata('is_logued_in')){
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ]);
+            return;
+        }
+
+        $order_id = (int)$this->input->post('order_id');
+        $dj_message = trim((string)$this->input->post('dj_message'));
+
+        if($order_id <= 0){
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid order'
+            ]);
+            return;
+        }
+
+        if(strlen($dj_message) > 180){
+            $dj_message = substr($dj_message, 0, 180);
+        }
+
+        $order = $this->orders_model->load_order_info($order_id);
+
+        if(!$order || (int)$order->user_id !== (int)$this->session->userdata('id_usuario')){
+            echo json_encode([
+                'success' => false,
+                'message' => 'Order not found'
+            ]);
+            return;
+        }
+
+        $producto = $this->products_model->load_product_info((int)$order->drop_id);
+        if(!$producto){
+            echo json_encode([
+                'success' => false,
+                'message' => 'Drop not found'
+            ]);
+            return;
+        }
+
+        if($dj_message === ''){
+            echo json_encode([
+                'success' => false,
+                'message' => 'The message is required.'
+            ]);
+            return;
+        }
+
+        $dropNameUpper = strtoupper(trim($producto->name ?? ''));
+        $maxWords = 20;
+
+        if($dropNameUpper === 'BASIC'){
+            $maxWords = 5;
+        } elseif($dropNameUpper === 'STANDARD'){
+            $maxWords = 10;
+        } elseif($dropNameUpper === 'PREMIUM'){
+            $maxWords = 20;
+        }
+
+        $wordCount = str_word_count(preg_replace('/\s+/', ' ', $dj_message));
+
+        if($wordCount > $maxWords){
+            echo json_encode([
+                'success' => false,
+                'message' => 'This drop only allows up to '.$maxWords.' words.'
+            ]);
+            return;
+        }
+
+        $this->orders_model->update_order($order_id, [
+            'dj_message' => $dj_message
+        ]);
+
+        echo json_encode([
+            'success' => true
+        ]);
+    }
 }

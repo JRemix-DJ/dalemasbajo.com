@@ -5,7 +5,7 @@ class Payment extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->helper(array('url', 'form')); 
+		$this->load->helper(array('url', 'form'));
 		$this->load->model(array('users_model', 'genero_model', 'products_model', 'banners_model', 'faq_model', 'orders_model', 'plan_model'));
 		$this->load->library(array('session','form_validation', 'email'));
 		$this->load->database('default');
@@ -77,70 +77,82 @@ class Payment extends CI_Controller {
 
     public function done_tukuy()
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         $post = file_get_contents('php://input');
         $payload = json_decode($post);
 
-        $state = isset($payload->state) ? trim((string)$payload->state) : '';
-        $client_email = isset($payload->customer->email) ? trim((string)$payload->customer->email) : '';
-        $amount_raw = isset($payload->amount) ? (string)$payload->amount : '';
-        $amount = (float)$amount_raw;
+        $state   = isset($payload->state) ? trim((string)$payload->state) : '';
+        $email   = isset($payload->customer->email) ? trim((string)$payload->customer->email) : '';
+        $amount  = isset($payload->amount) ? (float)$payload->amount : 0;
+        $tukuyId = isset($payload->id) ? (int)$payload->id : 0;
+        $txnId   = 'TUKUY-' . $tukuyId;
 
-        if ($state !== 'done' || $client_email === '' || $amount <= 0) {
-            $title = "DMB - ERROR PAGO TUKUY - Datos incompletos o estado no válido";
-            $mensaje = "State: {$state}<br>Email: {$client_email}<br>Amount: {$amount_raw}<br>JSON Completo: {$post}";
-            $this->send_received_message($title, $mensaje);
-            http_response_code(200);
+        if ($state !== 'done' || empty($email) || $amount <= 0 || $tukuyId <= 0) {
             echo json_encode(['status' => 'bad_payload']);
             return;
         }
 
-        $user = $this->users_model->get_user_where_array(['email' => $client_email]);
-
-        if (!$user) {
-            $title = "DMB - ERROR PAGO TUKUY - Usuario no encontrado";
-            $mensaje = "Email Cliente: {$client_email}<br>Monto: {$amount_raw}<br>JSON Completo: {$post}";
-            $this->send_received_message($title, $mensaje);
-            http_response_code(200);
-            echo json_encode(['status' => 'user_not_found']);
+        if ($this->orders_model->get_by_txn_id($txnId)) {
+            echo json_encode(['status' => 'already_processed_local']);
             return;
         }
 
-        $order = $this->orders_model->find_pending_plan_order_by_user_amount($user->id, $amount);
+        $user = $this->users_model->get_user_where_array(['email' => $email]);
 
-        if (!$order || empty($order->id)) {
-            http_response_code(200);
-            echo json_encode(['status' => 'no_pending_order_match']);
+        if ($user) {
+            $order = $this->orders_model->find_pending_drop_order_by_user_amount($user->id, $amount);
+            $is_drop = true;
+
+            if (!$order) {
+                $order = $this->orders_model->find_pending_plan_order_by_user_amount($user->id, $amount);
+                $is_drop = false;
+            }
+
+            if ($order) {
+                $claimed = $this->orders_model->consume_paid_order((int)$order->id, $txnId);
+
+                if ($claimed) {
+                    if ($is_drop) {
+                        $this->add_payment_to_owner((int)$order->id);
+                        $this->add_items_to_user((int)$order->id);
+                        $this->send_notification_mail((int)$order->id, 0);
+                        $this->notify_admin_drop_paid((int)$order->id);
+                    } else {
+                        $this->add_tokens_to_user((int)$order->id, null);
+                        $this->send_notification_mail((int)$order->id, 0);
+                    }
+
+                    echo json_encode([
+                        'status'   => 'applied_local',
+                        'site'     => 'dalemasbajo',
+                        'order_id' => (int)$order->id
+                    ]);
+                    return;
+                }
+            }
+        }
+
+        $relay = $this->relay_to_vrp($post);
+
+        if (is_array($relay) && in_array($relay['status'] ?? '', [
+                'applied',
+                'already_processed',
+                'already_processed_local',
+                'renewal_applied'
+            ], true)) {
+            echo json_encode($relay);
             return;
         }
 
-        $claimed = $this->orders_model->consume_paid_order((int)$order->id);
-
-        if (!$claimed) {
-            // webhook duplicado o ya aplicado
-            http_response_code(200);
-            echo json_encode([
-                'status' => 'already_processed',
-                'order_id' => (int)$order->id
-            ]);
+        $renewal = $this->try_apply_plan_renewal_local($email, $amount, $txnId);
+        if ($renewal) {
+            echo json_encode($renewal);
             return;
         }
 
-        $this->add_tokens_to_user((int)$order->id, NULL);
-
-        $mail_ok = $this->send_notification_mail((int)$order->id, 0);
-
-        if (!$mail_ok) {
-            $title = "DMB - ERROR PAGO TUKUY - Falló envío de correo";
-            $mensaje = "order_id: {$order->id}<br>Email Cliente: {$client_email}<br>Monto: {$amount_raw}<br>JSON Completo: {$post}";
-            $this->send_received_message($title, $mensaje);
-        }
-
-        http_response_code(200);
-        echo json_encode([
-            'status' => 'applied',
-            'order_id' => (int)$order->id,
-            'mail' => $mail_ok ? 'ok' : 'fail'
-        ]);
+        $relayRenewal = $this->relay_to_vrp($post, true);
+        echo json_encode($relayRenewal ?: ['status' => 'no_match']);
     }
 
     private function build_payment_view_data($order_id, $renovacion = 0){
@@ -240,19 +252,17 @@ class Payment extends CI_Controller {
         // --- EMAIL ---
         $this->email->clear(true);
 
-        // Carga config de application/config/email.php
         $this->load->config('email', true);
         $email_cfg = $this->config->item('email');
         if (is_array($email_cfg)) {
             $this->email->initialize($email_cfg);
         } else {
-            // fallback: intenta inicializar con lo que haya (no debería pasar)
             $this->email->initialize();
         }
 
         $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
         $this->email->to($user->email);
-        $this->email->bcc(['dalemasbajo@gmail.com', 'sevelasquezro@gmail.com']);
+        $this->email->bcc(['dalemasbajo@gmail.com']);
 
         $this->email->subject($subject);
         $this->email->message($html);
@@ -322,15 +332,15 @@ class Payment extends CI_Controller {
 			$header = "POST /cgi-bin/webscr HTTP/1.0\r\n";
 			$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-			
-			
+
+
 			$this->orders_model->update_order($order_id, $data);
 			$this->add_payment_to_owner($order_id);
 			$this->add_items_to_user($order_id);
 			$this->send_notification_mail($order_id, $renovacion = 0);
 		}else{
 
-		}	
+		}
 	}
 
     public function aplicar_orden()
@@ -444,7 +454,7 @@ class Payment extends CI_Controller {
 	}
 
 	public function plan_realizado(){
-		
+
 
 		if ( ! count($_POST)) {
             throw new Exception("Missing POST Data");
@@ -469,7 +479,7 @@ class Payment extends CI_Controller {
 		// $config['charset']    = 'utf-8';
 		// $config['newline']    = "\r\n";
 		// $config['mailtype'] = 'text'; // or html
-		// $config['validation'] = TRUE; // bool whether to validate email or not      
+		// $config['validation'] = TRUE; // bool whether to validate email or not
 
 		// $this->email->initialize($config);
 
@@ -488,8 +498,8 @@ class Payment extends CI_Controller {
 			$header = "POST /cgi-bin/webscr HTTP/1.0\r\n";
 			$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-			
-			
+
+
 			$this->orders_model->update_order($order_id, $data);
 			$this->add_tokens_to_user($order_id);
 			$this->send_notification_mail($order_id, $renovacion = 0);
@@ -512,7 +522,7 @@ class Payment extends CI_Controller {
 				$this->add_tokens_to_user($order_id, $renovacion);
 				$this->send_notification_mail($order_id, $renovacion = 0);
 			}
-		}	
+		}
 	}
 
 
@@ -547,7 +557,7 @@ class Payment extends CI_Controller {
 		$plus_days_string = "+".$plan->duration." days";
 		//echo $plus_days_string;
 		$expiration = date("Y-m-d", strtotime($plus_days_string));
-		
+
 		if($plan->tokens!=NULL && $plan->tokens!=0){
 			$data = array(
 				'tokens'		=>	$plan->tokens,
@@ -571,7 +581,7 @@ class Payment extends CI_Controller {
 		$plus_days_string_ilimitado = "+".$plan->ilimitado_dias." days";
 
 		$expiration_ilimitado = date("Y-m-d", strtotime($plus_days_string_ilimitado));
-		
+
 		if($renovacion==null){
 			$plus_days_string_ilimitado = "+".$plan->ilimitado_dias." days";
 			$expiration_ilimitado = date("Y-m-d", strtotime($plus_days_string_ilimitado));
@@ -624,7 +634,7 @@ class Payment extends CI_Controller {
 				$this->orders_model->add_unlimited($data_ilimitado);
 			}
 		}
-		
+
 	}
 
 
@@ -667,9 +677,9 @@ class Payment extends CI_Controller {
 	// 	$order_id=$this->input->get('order_id');
 		$order = $this->orders_model->load_order_info($order_id);
 		$items = $this->orders_model->load_items($order_id);
-		
+
 		foreach($items as $item){
-			
+
 			$data = array(
 				'product_id'		=>	$item->product_id,
 				'downloads_left'	=>	3,
@@ -699,7 +709,6 @@ class Payment extends CI_Controller {
 
         $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
         $this->email->to('dalemasbajo@gmail.com');
-        $this->email->bcc('sevelasquezro@gmail.com');
 
         $this->email->subject($title);
         $this->email->message($data);
@@ -714,4 +723,171 @@ class Payment extends CI_Controller {
         return (bool)$ok;
     }
 
+    private function notify_admin_drop_paid($order_id)
+    {
+        $orden = $this->orders_model->load_order_info($order_id);
+        if(!$orden){
+            log_message('error', 'notify_admin_drop_paid: orden no encontrada. order_id=' . $order_id);
+            return false;
+        }
+
+        $user = $this->users_model->load_user_info($orden->user_id);
+        $producto = $this->products_model->load_product_info($orden->drop_id);
+
+        $this->email->clear(true);
+
+        $this->load->config('email', true);
+        $email_cfg = $this->config->item('email');
+        if (is_array($email_cfg)) {
+            $this->email->initialize($email_cfg);
+        } else {
+            $this->email->initialize();
+        }
+
+        $fromEmail = isset($email_cfg['smtp_user']) ? $email_cfg['smtp_user'] : 'dalemasbajo@gmail.com';
+
+        $userName  = $user ? $user->username : '';
+        $userEmail = $user ? $user->email : '';
+        $dropName  = $producto ? $producto->name : '';
+        $msg = !empty($orden->dj_message) ? trim($orden->dj_message) : '(sin mensaje)';
+
+        $subject = 'DROP PAGADO #' . (int)$orden->id;
+
+        $body = '
+        <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111;">
+            <h2 style="margin:0 0 12px;">Se pagó un drop correctamente ✅</h2>
+
+            <table style="border-collapse:collapse;width:100%;max-width:700px;">
+                <tr>
+                    <td style="padding:6px 0;width:160px;"><strong>Order ID:</strong></td>
+                    <td style="padding:6px 0;">'.(int)$orden->id.'</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;"><strong>Usuario:</strong></td>
+                    <td style="padding:6px 0;">'.htmlspecialchars($userName, ENT_QUOTES, 'UTF-8').'</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;"><strong>Email:</strong></td>
+                    <td style="padding:6px 0;">'.htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8').'</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;"><strong>Drop ID:</strong></td>
+                    <td style="padding:6px 0;">'.(int)$orden->drop_id.'</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;"><strong>Drop:</strong></td>
+                    <td style="padding:6px 0;">'.htmlspecialchars($dropName, ENT_QUOTES, 'UTF-8').'</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;vertical-align:top;"><strong>Mensaje solicitado:</strong></td>
+                    <td style="padding:6px 0;">'.nl2br(htmlspecialchars($msg, ENT_QUOTES, 'UTF-8')).'</td>
+                </tr>
+            </table>
+
+            <p style="margin-top:16px;font-size:12px;color:#666;">
+                Dale Más Bajo • Notificación automática
+            </p>
+        </div>
+    ';
+
+        $this->email->from($fromEmail, 'DALE MÁS BAJO');
+        $this->email->to('dalemasbajo@gmail.com');
+        $this->email->bcc('sevelasquezro@gmail.com');
+        $this->email->subject($subject);
+        $this->email->message($body);
+        $this->email->set_newline("\r\n");
+        $this->email->set_crlf("\r\n");
+
+        $ok = $this->email->send(false);
+
+        if(!$ok){
+            log_message('error', 'notify_admin_drop_paid FAIL order_id='.$order_id.' :: '.$this->email->print_debugger(['headers','subject']));
+        }
+
+        return (bool)$ok;
+    }
+
+    private function relay_to_vrp($rawJson, $renewal = false)
+    {
+        $url = $renewal
+            ? 'https://videoremixpool.com/payment/process_tukuy_renewal_relay'
+            : 'https://videoremixpool.com/payment/process_tukuy_relay';
+
+        $ch = curl_init($url);
+
+        curl_setopt_array($ch, array(
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $rawJson,
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'X-Relay-Secret: ' . TUKUY_RELAY_SECRET
+            ),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 20,
+        ));
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlErr  = curl_error($ch);
+        curl_close($ch);
+
+        if ($curlErr) {
+            log_message('error', 'relay_to_vrp CURL ERROR: ' . $curlErr);
+            return ['status' => 'relay_error'];
+        }
+
+        $json = json_decode($response, true);
+
+        if ($httpCode !== 200 || !is_array($json)) {
+            log_message('error', 'relay_to_vrp BAD RESPONSE: ' . $response);
+            return ['status' => 'relay_bad_response'];
+        }
+
+        return $json;
+    }
+
+    private function try_apply_plan_renewal_local($email, $amount, $txnId)
+    {
+        $user = $this->users_model->get_user_where_array(['email' => $email]);
+        if (!$user) {
+            return false;
+        }
+
+        $plan = $this->plan_model->load_plan_info_by_amount($amount);
+        if (!$plan) {
+            return false;
+        }
+
+        if ($this->orders_model->get_by_txn_id($txnId)) {
+            return [
+                'status' => 'already_processed_local',
+                'site'   => 'dalemasbajo'
+            ];
+        }
+
+        $data_order = [
+            'user_id'     => (int)$user->id,
+            'date_order'  => date("Y-m-d H:i:s"),
+            'total_price' => (float)$plan->price,
+            'status'      => 1,
+            'is_plan'     => 1,
+            'plan_id'     => (int)$plan->id,
+            'txn_id'      => $txnId
+        ];
+
+        $order_id = $this->orders_model->create_order_plan($data_order);
+
+        if (!$order_id) {
+            return false;
+        }
+
+        $this->add_tokens_to_user($order_id, 1);
+        $this->send_notification_mail($order_id, 1);
+
+        return [
+            'status'   => 'renewal_applied_local',
+            'site'     => 'dalemasbajo',
+            'order_id' => (int)$order_id
+        ];
+    }
 }

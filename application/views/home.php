@@ -46,6 +46,46 @@
                 margin-bottom: 0;
             }
         }
+        .hero-line{
+            display:block;
+            will-change: transform, opacity, filter;
+            opacity: 0;
+            animation-duration: 1.8s;
+            animation-timing-function: cubic-bezier(.22,.61,.36,1);
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+
+        /* Direcciones */
+        .hero-right{ animation-name: slideInRightOnce; }
+        .hero-left { animation-name: slideInLeftOnce;  }
+
+
+        .hero-right{ animation-delay: 0s; }
+        .hero-left { animation-delay: 0.35s; }
+        .hero-delay-2{ animation-delay: 0.7s; }
+        .hero-delay-3{ animation-delay: 1s; }
+
+
+        @keyframes slideInRightOnce{
+            0%   { opacity:0; transform: translateX(-28px); filter: blur(2px); }
+            100% { opacity:1; transform: translateX(0);     filter: blur(0);  }
+        }
+
+        @keyframes slideInLeftOnce{
+            0%   { opacity:0; transform: translateX(28px);  filter: blur(2px); }
+            100% { opacity:1; transform: translateX(0);     filter: blur(0);  }
+        }
+
+        /* Accesibilidad */
+        @media (prefers-reduced-motion: reduce){
+            .hero-line{
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+        }
     </style>
 
     <meta property="og:image" content="<? echo base_url('images/dj_new.jpg'); ?>" />
@@ -72,10 +112,10 @@
         <div class="pl-4 inline-block max-w-none mb-12">
             <h1 class="mt-3 pb-4 text-white font-oswald font-medium leading-[0.92] tracking-tight
                text-[55px] sm:text-[60px] md:text-[75px] lg:text-[135px] uppercase">
-                Boost your<br>
-                DJ library<br>
-                With exclusive<br>
-                Music
+                <span class="block hero-line hero-right">Boost your</span>
+                <span class="block hero-line hero-left">DJ library</span>
+                <span class="block hero-line hero-right hero-delay-2">With exclusive</span>
+                <span class="block hero-line hero-left hero-delay-3">Music</span>
             </h1>
 
             <div class="mt-3 flex w-full gap-3">

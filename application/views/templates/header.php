@@ -139,6 +139,8 @@
                     </div>
                 </div>
 
+                <a href="<? echo base_url('drops'); ?>"
+                   class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Drops</a>
                 <a href="<? echo base_url('planes'); ?>"
                    class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Plans</a>
                 <a href="<? echo base_url('pages/become_a_member'); ?>"
@@ -271,6 +273,8 @@
                class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Home</a>
             <a href="<? echo base_url('audios'); ?>"
                class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Audios</a>
+            <a href="<? echo base_url('drops'); ?>"
+               class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Drops</a>
             <a href="<? echo base_url('planes'); ?>"
                class="block p-3 rounded-lg font-semibold text-slate-800 hover:bg-slate-50">Plans</a>
             <a href="<? echo base_url('pages/become_a_member'); ?>"

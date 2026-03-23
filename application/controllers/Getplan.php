@@ -46,7 +46,7 @@ class Getplan extends CI_Controller {
             'user_id'     => (int) $this->session->userdata('id_usuario'),
             'date_order'  => date("Y-m-d H:i:s"),
             'total_price' => (float) $plan->price,
-            'status'      => 1,
+            'status'      => 0,
             'is_plan'     => 1,
             'plan_id'     => (int) $plan->id
         );
@@ -88,7 +88,7 @@ class Getplan extends CI_Controller {
             'user_id'     => (int) $this->session->userdata('id_usuario'),
             'date_order'  => date("Y-m-d H:i:s"),
             'total_price' => (float) $plan->price,
-            'status'      => 1,
+            'status'      => 0,
             'is_plan'     => 1,
             'plan_id'     => (int) $plan->id
         );

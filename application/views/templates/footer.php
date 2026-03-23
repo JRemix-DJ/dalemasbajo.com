@@ -575,6 +575,7 @@
         var artist = btn.data('artist');
         var cover = btn.data('cover');
         var id = String(btn.data('id'));
+        var source = btn.data('source');
 
         if (currentTrackId !== null && String(currentTrackId) === id && !audio.paused) {
             stopPlayback();
@@ -595,6 +596,12 @@
 
         var playerDlBtn = $('#player-download-btn');
         playerDlBtn.data('id', id);
+
+        if (source === 'drops') {
+            playerDlBtn.hide();
+        } else {
+            playerDlBtn.show();
+        }
 
         var originalDownloadBtn = btn.closest('tr').find('.btn-smart-download');
         if (originalDownloadBtn.length) {
