@@ -1,0 +1,22 @@
+.modal-hidden { display: none !important; }
+.modal-flex { display: flex !important; }
+
+#modal-login, #modal-register, #modal-recover, #modal-upsell {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+}
+
+.backdrop-blur-sm { backdrop-filter: blur(4px); }
+
+@media (max-width: 767px){
+    #music-player-bar .container{
+        padding-left: .75rem !important;
+        padding-right: .75rem !important;
+    }
+    #music-player-bar img#player-cover{
+        object-fit: cover;
+    }
+}

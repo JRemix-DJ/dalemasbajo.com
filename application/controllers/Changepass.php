@@ -32,14 +32,13 @@ class Changepass extends CI_Controller {
 
         $data['title'] = "Cambiar Password - Dale Más Bajo";
         $data['description'] = "Cambiar Password";
-
-        // IMPORTANTE: pasa email+token para que el POST valide otra vez
         $data['reset_email'] = $email;
         $data['reset_token'] = $token;
+        $data['scripts'] = ['assets/front/js/pages/changepass.js'];
 
-        $this->load->view('templates/header', $data);
+        $this->load->view('layouts/header', $data);
         $this->load->view('changepass', $data);
-        $this->load->view('templates/footer', $data);
+        $this->load->view('layouts/footer', $data);
     }
 
     private function show_error_page($msg){
@@ -47,8 +46,8 @@ class Changepass extends CI_Controller {
         $data['description'] = "Error";
         $data['message'] = $msg;
 
-        $this->load->view('templates/header', $data);
+        $this->load->view('layouts/header', $data);
         $this->load->view('error', $data);
-        $this->load->view('templates/footer', $data);
+        $this->load->view('layouts/footer', $data);
     }
 }

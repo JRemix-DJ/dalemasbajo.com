@@ -15,9 +15,9 @@ class Getplan extends CI_Controller {
         if(!$this->session->userdata('is_logued_in')){
             $data['title'] = "Checkout - Dale Más Bajo";
             $data['description'] = "Complete your payment";
-            $this->load->view('templates/header', $data);
+            $this->load->view('layouts/header', $data);
             $this->load->view('checkout-registrate.php');
-            $this->load->view('templates/footer', $data);
+            $this->load->view('layouts/footer', $data);
             return;
         }
 
@@ -59,11 +59,13 @@ class Getplan extends CI_Controller {
 
         $order_id = $this->orders_model->create_order_plan($data_order);
         $data['order_id'] = $order_id;
+        $data['scripts'] = ['assets/front/js/pages/get_plan.js'];
 
-        $this->load->view('templates/header', $data);
+        $this->load->view('layouts/header', $data);
         $this->load->view('get_plan', $data);
-        $this->load->view('templates/footer', $data);
+        $this->load->view('layouts/footer', $data);
     }
+
 
     public function create_order()
     {
@@ -128,15 +130,15 @@ class Getplan extends CI_Controller {
 			}
 			$order_id = $this->orders_model->create_order_plan($data_order);
 			$data['order_id'] = $order_id;
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('get_plan_test');
-			$this->load->view('templates/footer', $data);
+			$this->load->view('layouts/footer', $data);
 		}else{
 			$data['title']="Checkout - Dale Más Bajo";
 			$data['description']="Finaliza tu pago";
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('checkout-registrate.php');
-			$this->load->view('templates/footer', $data);
+			$this->load->view('layouts/footer', $data);
 		}
 	}
 

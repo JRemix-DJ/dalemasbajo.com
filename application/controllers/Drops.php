@@ -73,9 +73,10 @@ class Drops extends CI_Controller {
 		}
 		$data['product_type_id'] = $where['product_type_id'];
 		$data['plans']=$this->plan_model->get_plans();
-		$this->load->view('templates/header', $data);
+		$data['scripts'] = ['assets/front/js/pages/drops.js'];
+		$this->load->view('layouts/header', $data);
 		$this->load->view('drops');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 	public function drop_text(){
@@ -117,17 +118,17 @@ class Drops extends CI_Controller {
 			$this->orders_model->add_items_to_order_drop($data_items);
 			$data['order_id'] = $order_id;
 			
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('get_drop');
-			$this->load->view('templates/footer', $data);
+			$this->load->view('layouts/footer', $data);
 		}else{
 			$data['title']="Checkout - LAMEGAMEZCLADJS.COM";
 			$data['description']="Finaliza tu pago";
 			$data['generos']=$this->genero_model->get_generos();
 			$data['djs']=$this->users_model->get_djs();
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('get_drop.php');
-			$this->load->view('templates/footer', $data);
+			$this->load->view('layouts/footer', $data);
 		}
 	}
 
@@ -158,9 +159,9 @@ class Drops extends CI_Controller {
         if(empty($producto->payment_link)){
             $data['error'] = "This drop does not have a payment link configured.";
             $data['producto'] = $producto;
-            $this->load->view('templates/header', $data);
+            $this->load->view('layouts/header', $data);
             $this->load->view('checkout', $data);
-            $this->load->view('templates/footer', $data);
+            $this->load->view('layouts/footer', $data);
             return;
         }
 
@@ -195,10 +196,11 @@ class Drops extends CI_Controller {
 
         $data['producto'] = $producto;
         $data['orden'] = $order;
+        $data['scripts'] = ['assets/front/js/pages/checkout.js'];
 
-        $this->load->view('templates/header', $data);
+        $this->load->view('layouts/header', $data);
         $this->load->view('checkout', $data);
-        $this->load->view('templates/footer', $data);
+        $this->load->view('layouts/footer', $data);
     }
 
 	public function test()

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Response extends CI_Controller {
@@ -18,9 +18,9 @@ class Response extends CI_Controller {
 				$data['generos']=$this->genero_model->get_generos();
 				$data['users']=$this->users_model->get_all_users();
 				$data['cart_total'] = $this->totalCarrito();
-				$this->load->view('templates/header', $data);
+				$this->load->view('layouts/header', $data);
 				$this->load->view('response');
-				$this->load->view('templates/footer', $data);
+				$this->load->view('layouts/footer', $data);
 	}
 
 	public function totalCarrito(){

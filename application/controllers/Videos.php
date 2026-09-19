@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class __Videos extends CI_Controller {
@@ -78,9 +78,9 @@ class __Videos extends CI_Controller {
             $data["links"] = $this->pagination->create_links();
         }
 		$data['plans']=$this->plan_model->get_plans();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('home_videos');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 	public function comingsoon()

@@ -4,7 +4,7 @@
 					<h5><? echo $title; ?></h5>
 					<p><? echo $description; ?></p>
 				</div><!-- sl-page-title -->
-				<div class="top_btn"><a href="http://localhost/dalemasbajo.com/admin/nuevo_producto/" class="btn btn-success">Añadir Nuevo</a></div>
+				<div class="top_btn"><a href="<?= base_url('admin/nuevo_producto/'); ?>" class="btn btn-success">Añadir Nuevo</a></div>
 				<div class="card pd-20 pd-sm-40">
 					<div class="table-wrapper">
 						<div class="row">
@@ -90,7 +90,7 @@
 												?>
 												</td>
 												<td class="align-middle">
-													<div class="video_demo" data-mp4="<? echo base_url().'assets/products/demos/videos/'.$producto->demo; ?>" id="player<? echo $i; ?>"></div>
+													<div class="video_demo" data-mp4="<? echo base_url().'assets/uploads/demos/videos/'.$producto->demo; ?>" id="player<? echo $i; ?>"></div>
 												<div class="playit controls jp-controls-holder">
 				                                    <i class=" fa fa-play-circle-o jp-play pc-play"></i> 
 				                                    <i class=" fa fa-pause-circle-o jp-pause pc-pause"></i>

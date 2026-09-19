@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Payment extends CI_Controller {
@@ -19,9 +19,9 @@ class Payment extends CI_Controller {
 		$data['generos']=$this->genero_model->get_generos();
 		$data['users']=$this->users_model->get_all_users();
 		$data['djs']=$this->users_model->get_djs();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('payment');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 	public function cancelar(){
@@ -31,9 +31,9 @@ class Payment extends CI_Controller {
 		$data['generos']=$this->genero_model->get_generos();
 		$data['users']=$this->users_model->get_all_users();
 		$data['djs']=$this->users_model->get_djs();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('cancelado');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 	public function plan_cancelar(){
@@ -43,9 +43,9 @@ class Payment extends CI_Controller {
 		$data['generos']=$this->genero_model->get_generos();
 		$data['users']=$this->users_model->get_all_users();
 		$data['djs']=$this->users_model->get_djs();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('cancelado');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 
@@ -57,9 +57,9 @@ class Payment extends CI_Controller {
 		$data['generos']=$this->genero_model->get_generos();
 		$data['users']=$this->users_model->get_all_users();
 		$data['djs']=$this->users_model->get_djs();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('finalizado');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 	public function plan_finalizado(){
@@ -70,9 +70,9 @@ class Payment extends CI_Controller {
 		$data['generos']=$this->genero_model->get_generos();
 		$data['users']=$this->users_model->get_all_users();
 		$data['djs']=$this->users_model->get_djs();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('finalizado');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
     public function done_tukuy()
@@ -261,7 +261,7 @@ class Payment extends CI_Controller {
         }
 
         $this->email->from('dalemasbajo@gmail.com', 'DALE MÁS BAJO');
-        $this->email->to($user->email);
+        $this->email->to('dalemasbajo@gmail.com');
         $this->email->bcc(['dalemasbajo@gmail.com']);
 
         $this->email->subject($subject);

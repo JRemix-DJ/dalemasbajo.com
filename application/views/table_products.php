@@ -1,6 +1,13 @@
 <?php
 if(isset($products) && !empty($products)) {
-    $downloaded_ids = isset($downloaded_ids) && is_array($downloaded_ids) ? $downloaded_ids : [];
+    $user_products = isset($user_products) && is_array($user_products) 
+        ? $user_products 
+        : ($this->session->userdata('user_products') ?: []);
+
+    $downloaded_ids = [];
+    foreach ($user_products as $up_item) {
+        $downloaded_ids[] = (string)(is_object($up_item) && isset($up_item->product_id) ? $up_item->product_id : $up_item);
+    }
     foreach($products as $audio) {
         $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
         $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
@@ -44,10 +51,11 @@ if(isset($products) && !empty($products)) {
                 <a href="javascript:;"
                    class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white hover:bg-blue-700 transition-colors duration-150"
                    data-id="<? echo $audio->id; ?>"
-                   data-demo="<? echo base_url().'assets/products/demos/'.$preview; ?>"
+                   data-preview="<? echo base_url('assets/uploads/demos/' . $preview); ?>"
+                   data-demo="<? echo base_url('assets/uploads/demos/' . $preview); ?>"
                    data-cover="<? echo $img_cover; ?>"
-                   data-title="<? echo $title; ?>"
-                   data-artist="<? echo $artist; ?>">
+                   data-title="<? echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>"
+                   data-artist="<? echo htmlspecialchars($artist, ENT_QUOTES, 'UTF-8'); ?>">
                     <i class="fa-solid fa-play text-white text-xs ml-0.5"></i>
                 </a>
             </td>
@@ -98,23 +106,22 @@ if(isset($products) && !empty($products)) {
                 ?>
 
                 <?php
-                $is_downloaded = in_array((int)$audio->id, $downloaded_ids, true);
+                $is_downloaded = in_array((string)$audio->id, $downloaded_ids, true);
 
-                $btn_base = "btn-smart-download inline-flex items-center justify-center w-8 h-8 rounded-full transition-all focus:outline-none";
-
+                $btn_base = "btn-smart-download inline-flex items-center justify-center w-9 h-9 rounded-full transition-all focus:outline-none";
                 $btn_not_downloaded = "text-slate-500 hover:border-primary hover:text-primary hover:bg-blue-50";
-
-                $btn_downloaded = "bg-[rgb(0,102,255)] text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700";
+                $btn_downloaded = "btn-downloaded bg-primary text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700";
                 ?>
 
                 <button
-                        class="<?php echo $btn_base.' '.($is_downloaded ? $btn_downloaded : $btn_not_downloaded); ?>"
-                        data-logged="<? echo $is_logged; ?>"
-                        data-access="<? echo $has_access; ?>"
-                        data-id="<? echo $audio->id; ?>"
+                        class="<?php echo $btn_base . ' ' . ($is_downloaded ? $btn_downloaded : $btn_not_downloaded); ?>"
+                        data-logged="<?php echo $is_logged; ?>"
+                        data-access="<?php echo $has_access; ?>"
+                        data-id="<?php echo $audio->id; ?>"
+                        data-downloaded="<?php echo $is_downloaded ? 'true' : 'false'; ?>"
                         title="<?php echo $is_downloaded ? 'Downloaded' : 'Download'; ?>"
                 >
-                    <i class="fa-solid fa-download text-xl"></i>
+                    <i class="fa-solid fa-download text-sm"></i>
                 </button>
             </td>
         </tr>

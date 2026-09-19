@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cart extends CI_Controller {
@@ -27,9 +27,9 @@ class Cart extends CI_Controller {
 		}
 		$data['djs']=$this->users_model->get_djs();
 		$data['cart_total'] = $this->totalCarrito();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('carrito');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 

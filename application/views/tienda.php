@@ -28,7 +28,7 @@
                             $i++;
                             ?>
                             <li id="singleSongPlayer-<? echo $i; ?>" class="song-unit singleSongPlayer clearfix" data-before="<? echo $i; ?>">
-                                <div id="singleSong-jplayer-<? echo $i; ?>" class="singleSong-jplayer" data-title="<? echo $producto->name; ?>" data-mp3="<? echo base_url(); ?>assets/products/demos/<? echo $producto->demo; ?>"></div>
+                                <div id="singleSong-jplayer-<? echo $i; ?>" class="singleSong-jplayer" data-title="<? echo $producto->name; ?>" data-mp3="<? echo base_url(); ?>assets/uploads/demos/<? echo $producto->demo; ?>"></div>
                                 <span class="playit controls jp-controls-holder">
                                     <i class="jp-play pc-play"></i> 
                                     <i class="jp-pause pc-pause"></i>

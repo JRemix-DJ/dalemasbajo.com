@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Confirmaccount extends CI_Controller {
@@ -33,9 +33,9 @@ class Confirmaccount extends CI_Controller {
 					$data['generos']=$this->genero_model->get_generos();
 					$data['djs']=$this->users_model->get_djs();
 					$data['message']="Gracias, tu cuenta ha sido confirmada, ahora puedes ingresar";
-					$this->load->view('templates/header', $data);
+					$this->load->view('layouts/header', $data);
 					$this->load->view('confirmacion');
-					$this->load->view('templates/footer', $data);	
+					$this->load->view('layouts/footer', $data);	
 				}else{
 					$data['title']="Account Confirmation - Dale Más Bajo";
 					$data['description']="Confirma tu cuenta";
@@ -43,9 +43,9 @@ class Confirmaccount extends CI_Controller {
 					$data['generos']=$this->genero_model->get_generos();
 					$data['djs']=$this->users_model->get_djs();
 					$data['message']="Tu cuenta fue confirmada previamente, ahora puedes ingresar de manera normal.";
-					$this->load->view('templates/header', $data);
+					$this->load->view('layouts/header', $data);
 					$this->load->view('confirmacion');
-					$this->load->view('templates/footer', $data);	
+					$this->load->view('layouts/footer', $data);	
 				}
 			}else{
 				$data['title']="Account Confirmation - Dale Más Bajo";
@@ -54,9 +54,9 @@ class Confirmaccount extends CI_Controller {
 				$data['generos']=$this->genero_model->get_generos();
 				$data['djs']=$this->users_model->get_djs();
 				$data['message']="No hemos podido confirmar tu cuenta";
-				$this->load->view('templates/header', $data);
+				$this->load->view('layouts/header', $data);
 				$this->load->view('confirmacion');
-				$this->load->view('templates/footer', $data);	
+				$this->load->view('layouts/footer', $data);	
 			}
 		}else{
 			$data['title']="Account Confirmation - Dale Más Bajo";
@@ -65,9 +65,9 @@ class Confirmaccount extends CI_Controller {
 			$data['generos']=$this->genero_model->get_generos();
 			$data['djs']=$this->users_model->get_djs();
 			$data['message']="No hemos podido confirmar tu cuenta";
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('confirmacion');
-			$this->load->view('templates/footer', $data);	
+			$this->load->view('layouts/footer', $data);	
 		}
 	}
 }

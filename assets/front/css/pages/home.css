@@ -1,0 +1,60 @@
+a { text-decoration: none; }
+.btn { display: inline-block; font-weight: 400; text-align: center; vertical-align: middle; }
+
+body { font-family: 'Inter', sans-serif; }
+h1, h2, h3, .font-heading { font-family: 'Montserrat', sans-serif; }
+
+[x-cloak] { display: none !important; }
+@media (max-width: 640px) {
+    .msg-announcement {
+        padding: 10px 12px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        max-height: 140px;
+        overflow: auto;
+        border-radius: 12px;
+    }
+
+    .msg-announcement p {
+        font-size: 10px;
+        line-height: 1.05;
+        margin: 0 0 8px 0;
+    }
+
+    .msg-announcement p:last-child {
+        margin-bottom: 0;
+    }
+}
+.hero-line{
+    display:block;
+    will-change: transform, opacity, filter;
+    opacity: 0;
+    animation-duration: 1.8s;
+    animation-timing-function: cubic-bezier(.22,.61,.36,1);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.hero-right{ animation-name: slideInRightOnce; animation-delay: 0s; }
+.hero-left { animation-name: slideInLeftOnce; animation-delay: 0.35s; }
+.hero-delay-2{ animation-delay: 0.7s; }
+.hero-delay-3{ animation-delay: 1s; }
+
+@keyframes slideInRightOnce{
+    0%   { opacity:0; transform: translateX(-28px); filter: blur(2px); }
+    100% { opacity:1; transform: translateX(0);     filter: blur(0);  }
+}
+
+@keyframes slideInLeftOnce{
+    0%   { opacity:0; transform: translateX(28px);  filter: blur(2px); }
+    100% { opacity:1; transform: translateX(0);     filter: blur(0);  }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .hero-line{
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+    }
+}

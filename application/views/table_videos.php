@@ -41,8 +41,8 @@
                             ?>
                             <tr id="singleVideoPlayer-<? echo $i; ?>" data-product="<? echo $producto->id; ?>"class="song-unit singleVideoPlayer player-<? echo $producto->id; ?>" data-before="<? echo $i; ?>">
                                 <td class="">
-                                    <div class="thumb_container"  id="singleVideo-jplayer-<? echo $i; ?>" data-mp3="<? echo base_url(); ?>assets/products/demos/videos/<? echo $producto->demo; ?>" data-title="<? echo $producto->name; ?>">
-                                        <img src="<? echo base_url('/images/television.png'); ?>" alt="" class="video_thumb">
+                                    <div class="thumb_container"  id="singleVideo-jplayer-<? echo $i; ?>" data-mp3="<? echo base_url(); ?>assets/uploads/demos/videos/<? echo $producto->demo; ?>" data-title="<? echo $producto->name; ?>">
+                                        <img src="<? echo base_url('assets/front/img/television.png'); ?>" alt="" class="video_thumb">
                                     </div>
                                 </td>
                                 <? if($producto->gender_id!=45){ ?>

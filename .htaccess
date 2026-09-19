@@ -6,9 +6,36 @@ Deny From 69.142
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase /dalemasbajo.com/
+
+	RewriteRule ^images/banners/(.*)$ assets/uploads/banners/$1 [L,QSA]
+	RewriteRule ^images/products/featured_image/(.*)$ assets/uploads/covers/$1 [L,QSA]
+	RewriteRule ^images/products/(.*)$ assets/uploads/covers/$1 [L,QSA]
+	RewriteRule ^images/(.*)$ assets/front/img/$1 [L,QSA]
+	RewriteRule ^img/(.*)$ assets/front/img/$1 [L,QSA]
+	RewriteRule ^uploads/covers/(.*)$ assets/uploads/covers/$1 [L,QSA]
+	RewriteRule ^uploads/previews/(.*)$ assets/uploads/demos/$1 [L,QSA]
+	RewriteRule ^assets/products/covers/(.*)$ assets/uploads/covers/$1 [L,QSA]
+	RewriteRule ^assets/products/demos/(.*)$ assets/uploads/demos/$1 [L,QSA]
+	RewriteRule ^assets/products/descargables/(.*)$ assets/uploads/descargables/$1 [L,QSA]
+	RewriteRule ^assets/banners/(.*)$ assets/uploads/video_banners/$1 [L,QSA]
+	RewriteRule ^assets/tailwind/(.*)$ assets/build/$1 [L,QSA]
+
+	RewriteRule ^admin_assets/lib/(.*)$ assets/admin/vendor/$1 [L,QSA]
+	RewriteRule ^admin_assets/css/(.*)$ assets/admin/css/$1 [L,QSA]
+	RewriteRule ^admin_assets/js/(.*)$ assets/admin/js/$1 [L,QSA]
+	RewriteRule ^admin_assets/(.*)$ assets/admin/$1 [L,QSA]
+
+	RewriteRule ^css/(.*)$ assets/front/css/$1 [L,QSA]
+	RewriteRule ^assets/css/(.*)$ assets/front/css/$1 [L,QSA]
+	RewriteRule ^assets/js/(.*)$ assets/front/js/$1 [L,QSA]
+	RewriteRule ^js/(.*)$ assets/front/vendor/$1 [L,QSA]
+	RewriteRule ^fonts/(.*)$ assets/front/fonts/$1 [L,QSA]
+	RewriteRule ^webfonts/(.*)$ assets/front/fonts/$1 [L,QSA]
+
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+
 	RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 	RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 </IfModule>

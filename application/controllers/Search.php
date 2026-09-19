@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Search extends CI_Controller {
+class Search extends Base_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->helper(array('url', 'form')); 
@@ -88,10 +88,13 @@ class Search extends CI_Controller {
 				$data['generos']=$this->genero_model->get_generos();
 				$data['users']=$this->users_model->get_all_users();
 				$data['djs']=$this->users_model->get_djs();
+				$data['user_products'] = $this->session->userdata('user_products') ?: [];
+				$data['downloaded_ids'] = $data['user_products'];
+				$data['styles'] = ['assets/front/css/modules/remix-table.css', 'assets/front/css/modules/volume-slider.css'];
+				$data['scripts'] = ['assets/front/js/pages/search.js'];
 
-				$this->load->view('templates/header', $data);
-				$this->load->view('search');
-				$this->load->view('templates/footer', $data);
+				$this->load->view('layouts/header', $data);
+				$this->load->view('search', $data);
+				$this->load->view('layouts/footer', $data);
 	}
 }
-?>

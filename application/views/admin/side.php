@@ -1,7 +1,7 @@
 
     <? $user_role=$this->session->userdata('role');?>
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="sl-logo"><a href=""><img src="<? echo site_url(); ?>images/logo.png" alt=""></a></div>
+    <div class="sl-logo"><a href=""><img src="<?= base_url('assets/front/img/logo.png'); ?>" alt=""></a></div>
     <div class="sl-sideleft">
       <label class="sidebar-label">Menú</label>
       <div class="sl-sideleft-menu">

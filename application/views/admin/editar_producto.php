@@ -120,11 +120,11 @@
                             </div>
                             <? if($producto->product_type_id == 3){ ?>
                             <video class="col-md-8"
-                                   src="<? echo base_url() . 'assets/products/descargables/videos/' . $producto->descargable; ?>"
+                                   src="<? echo base_url() . 'assets/uploads/descargables/videos/' . $producto->descargable; ?>"
                                    controls></video>
                             <? }else{ ?>
                             <audio class="col-md-8"
-                                   src="<? echo base_url() . 'assets/products/descargables/' . $producto->descargable; ?>"
+                                   src="<? echo base_url() . 'assets/uploads/descargables/' . $producto->descargable; ?>"
                                    controls></audio>
                             <? } ?>
                         </div>
@@ -141,11 +141,11 @@
                             </div>
                             <? if($producto->product_type_id == 3){ ?>
                             <video class="col-md-8"
-                                   src="<? echo base_url() . 'assets/products/demos/videos/' . $producto->descargable; ?>"
+                                   src="<? echo base_url() . 'assets/uploads/demos/videos/' . $producto->descargable; ?>"
                                    controls></video>
                             <? }else{ ?>
                             <audio class="col-md-8"
-                                   src="<? echo base_url() . 'assets/products/demos/' . $producto->demo; ?>"
+                                   src="<? echo base_url() . 'assets/uploads/demos/' . $producto->demo; ?>"
                                    controls></audio>
                             <? } ?>
                         </div>
@@ -209,26 +209,3 @@
 
 
 </div><!-- sl-pagebody -->
-<script>
-    (function(){
-        function el(id){ return document.getElementById(id); }
-        function toggle(show, node){ if(node) node.style.display = show ? '' : 'none'; }
-
-        function refreshTrending(){
-            var pt = el('product_type_id');
-            var row = el('row-trending-slot-edit');
-            var sel = el('trending_slot_edit');
-            if(!pt || !row) return;
-
-            var isAudioNormal = String(pt.value) === '1';
-            toggle(isAudioNormal, row);
-            if(!isAudioNormal && sel) sel.value = '';
-        }
-
-        document.addEventListener('DOMContentLoaded', function(){
-            refreshTrending();
-            var pt = el('product_type_id');
-            if(pt) pt.addEventListener('change', refreshTrending);
-        });
-    })();
-</script>

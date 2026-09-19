@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Planes extends CI_Controller {
@@ -18,9 +18,9 @@ class Planes extends CI_Controller {
 		$data['djs']=$this->users_model->get_djs();
 		$data['generos']=$this->genero_model->get_generos();
 		$data['plans']=$this->plan_model->get_plans();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('planes_new');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 	public function test()
@@ -30,9 +30,9 @@ class Planes extends CI_Controller {
 		$data['djs']=$this->users_model->get_djs();
 		$data['generos']=$this->genero_model->get_generos();
 		$data['plans']=$this->plan_model->get_plans();
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('planes_new');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 
 }

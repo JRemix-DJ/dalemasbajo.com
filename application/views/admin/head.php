@@ -31,16 +31,13 @@
 
     <title><? echo $title; ?></title>
 
-    <link rel="shortcut icon" sizes="196x196" href="<? echo site_url(); ?>images/favicon.png">
-    <!-- vendor css -->
-    <link href="<? echo site_url(); ?>admin_assets/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<? echo site_url(); ?>admin_assets/lib/Ionicons/css/ionicons.css" rel="stylesheet">
-    <link href="<? echo site_url(); ?>admin_assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
-    <link href="<? echo site_url(); ?>admin_assets/lib/rickshaw/rickshaw.min.css" rel="stylesheet">
-    
-    <link href="<? echo site_url(); ?>admin_assets/lib/select2/css/select2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<? echo site_url(); ?>css/font-awesome.min.css">
-    <!-- aditional css -->
+    <link rel="shortcut icon" sizes="196x196" href="<?= base_url('assets/front/img/favicon.png'); ?>">
+    <link href="<?= base_url('assets/admin/vendor/font-awesome/css/font-awesome.css'); ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/admin/vendor/Ionicons/css/ionicons.css'); ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/admin/vendor/perfect-scrollbar/css/perfect-scrollbar.css'); ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/admin/vendor/rickshaw/rickshaw.min.css'); ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/admin/vendor/select2/css/select2.min.css'); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('assets/front/css/font-awesome.min.css'); ?>">
     <? if(isset($aditional_stylesheets)){ ?>
         <? echo $aditional_stylesheets; ?>
     <? } ?>
@@ -51,8 +48,13 @@
         }
      } ?>
 
-    <!-- Starlight CSS -->
-    <link rel="stylesheet" href="<? echo site_url(); ?>admin_assets/css/starlight.css">
+    <link rel="stylesheet" href="<?= base_url('assets/admin/css/starlight.css'); ?>">
+
+    <?php if (isset($styles) && is_array($styles)): ?>
+        <?php foreach ($styles as $s): ?>
+            <link rel="stylesheet" href="<?= base_url($s); ?>?v=<?= file_exists(FCPATH . $s) ? filemtime(FCPATH . $s) : '1.0'; ?>">
+        <?php endforeach; ?>
+    <?php endif; ?>
   </head>
 
   <body>

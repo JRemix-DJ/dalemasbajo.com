@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Checkout extends CI_Controller {
@@ -37,15 +37,15 @@ class Checkout extends CI_Controller {
 			$data['order_id'] = $order_id;
 
 			$data['djs']=$this->users_model->get_djs();
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('checkout');
-			$this->load->view('templates/footer', $data);
+			$this->load->view('layouts/footer', $data);
 		}else{
 			$data['title']="Checkout - Dale Más Bajo";
 			$data['description']="Finaliza tu pago";
-			$this->load->view('templates/header', $data);
+			$this->load->view('layouts/header', $data);
 			$this->load->view('checkout-registrate.php');
-			$this->load->view('templates/footer', $data);
+			$this->load->view('layouts/footer', $data);
 		}
 	}
 

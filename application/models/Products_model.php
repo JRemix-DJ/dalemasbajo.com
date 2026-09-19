@@ -1,40 +1,20 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * */
+
 class Products_model extends CI_Model {
 
-    public function __construct() {
-        parent::__construct();
-    }
-
-    // --- FUNCIÓN AGREGADA PARA LA DESCARGA ---
-    public function get_product_by_id($id){
-        $this->db->where('id',$id);
-        $query = $this->db->get('products');
-        if($query->num_rows() == 1)
-        {
-            return $query->row();
-        }else{
-            return false;
-        }
-    }
-    // ----------------------------------------
-
     public function load_product_info($id){
-        $this->db->where('id',$id);
+        $this->db->where('id', $id);
         $query = $this->db->get('products');
         if($query->num_rows() == 1)
         {
             return $query->row();
-        }else{
-            return false;
         }
+        return false;
     }
 
     public function get_cupons(){
         $query = $this->db->get('cupons');
-        $data = $query->result();
-        return $data;
+        return $query->result();
     }
 
     public function get_cupon_by_code($code){
@@ -46,22 +26,19 @@ class Products_model extends CI_Model {
     public function get_cupon($code){
         $this->db->where('code', $code);
         $query = $this->db->get('cupons');
-        $data = $query->row();
-        return $data;
+        return $query->row();
     }
 
     public function get_cupon_by_id($cupon_id){
         $this->db->where('id', $cupon_id);
         $query = $this->db->get('cupons');
-        $data = $query->row();
-        return $data;
+        return $query->row();
     }
 
-    public function get_total_products_approved($where_parameter=NULL)
+    public function get_total_products_approved($where_parameter = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
@@ -71,18 +48,16 @@ class Products_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function get_total_products_por_aprobar($where_parameter=NULL, $search=NULL)
+    public function get_total_products_por_aprobar($where_parameter = NULL, $search = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $search_data = is_null($search)? 'nulo': $search;
-        if($search_data!= 'nulo'){
+        if(!is_null($search)){
             $this->db->group_start();
-            $this->db->like('name', $search_data);
+            $this->db->like('name', $search);
             $this->db->group_end();
         }
 
@@ -92,132 +67,116 @@ class Products_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function get_total_products($where_parameter=NULL, $search=NULL)
+    public function get_total_products($where_parameter = NULL, $search = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $search_data = is_null($search)? 'nulo': $search;
-        if($search_data!= 'nulo'){
+        if(!is_null($search)){
             $this->db->group_start();
-            $this->db->like('name', $search_data);
+            $this->db->like('name', $search);
             $this->db->group_end();
         }
         $this->db->from("products");
         return $this->db->count_all_results();
     }
 
-    public function get_total_products_by_gender($gender_id, $where_parameter=NULL)
+    public function get_total_products_by_gender($gender_id, $where_parameter = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $this->db->where('gender_id',$gender_id);
-        $this->db->where('approved',1);
+        $this->db->where('gender_id', $gender_id);
+        $this->db->where('approved', 1);
         $this->db->from("products");
         return $this->db->count_all_results();
     }
 
-    public function get_total_products_searched($gender_id=NULL, $dj_id=NULL, $name=NULL, $where_parameter=NULL)
+    public function get_total_products_searched($gender_id = NULL, $dj_id = NULL, $name = NULL, $where_parameter = NULL)
     {
-        if($gender_id!=NULL){
-            $this->db->where('gender_id',$gender_id);
+        if($gender_id != NULL){
+            $this->db->where('gender_id', $gender_id);
         }
-        if($dj_id!=NULL){
-            $this->db->where('owner_id',$dj_id);
+        if($dj_id != NULL){
+            $this->db->where('owner_id', $dj_id);
         }
-        if($name!=NULL){
-            $this->db->like('name',$name);
-            $this->db->or_like('artist',$name);
+        if($name != NULL){
+            $this->db->like('name', $name);
+            $this->db->or_like('artist', $name);
         }
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $this->db->where('approved',1);
+        $this->db->where('approved', 1);
         $this->db->from("products");
         return $this->db->count_all_results();
     }
 
-
-    public function get_current_page_records_searched($limit, $start, $gender_id=NULL, $dj_id=NULL, $name=NULL, $where_parameter=NULL)
+    public function get_current_page_records_searched($limit, $start, $gender_id = NULL, $dj_id = NULL, $name = NULL, $where_parameter = NULL)
     {
         $this->db->limit($limit, $start);
-        if($gender_id!=NULL||$dj_id!=NULL||$name!=NULL){
+        if($gender_id != NULL || $dj_id != NULL || $name != NULL){
             $this->db->group_start();
-            if($gender_id!=NULL){
-                $this->db->where('gender_id',$gender_id);
+            if($gender_id != NULL){
+                $this->db->where('gender_id', $gender_id);
             }
-            if($dj_id!=NULL){
-                $this->db->where('owner_id',$dj_id);
+            if($dj_id != NULL){
+                $this->db->where('owner_id', $dj_id);
             }
-            if($name!=NULL){
-                $this->db->like('name',$name);
-                $this->db->or_like('artist',$name);
+            if($name != NULL){
+                $this->db->like('name', $name);
+                $this->db->or_like('artist', $name);
             }
             $this->db->group_end();
         }
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $this->db->where('approved',1);
+        $this->db->where('approved', 1);
         $this->db->order_by('time_approved', 'desc');
         $query = $this->db->get("products");
 
-
         if ($query->num_rows() > 0)
         {
-            foreach ($query->result() as $row)
-            {
-                $data[] = $row;
-            }
-
-            return $data;
+            return $query->result();
         }
-
         return false;
     }
 
-    public function get_total_products_by_dj($dj_id, $where_parameter=NULL)
+    public function get_total_products_by_dj($dj_id, $where_parameter = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $this->db->where('owner_id',$dj_id);
-        $this->db->where('approved',1);
+        $this->db->where('owner_id', $dj_id);
+        $this->db->where('approved', 1);
         $this->db->from("products");
         return $this->db->count_all_results();
     }
 
-    public function get_current_page_records($limit, $start, $where_parameter=NULL, $no_parameter=NULL, $not_in=NULL, $search=NULL)
+    public function get_current_page_records($limit, $start, $where_parameter = NULL, $no_parameter = NULL, $not_in = NULL, $search = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        if(!is_null($not_in)&&!is_null($no_parameter)){
-            $this->db->where_not_in($no_parameter,$not_in);
+        if(!is_null($not_in) && !is_null($no_parameter)){
+            $this->db->where_not_in($no_parameter, $not_in);
         }
-        $search_data = is_null($search)? 'nulo': $search;
-        if($search_data!= 'nulo'){
+        if(!is_null($search)){
             $this->db->group_start();
-            $this->db->like('name', $search_data);
+            $this->db->like('name', $search);
             $this->db->group_end();
         }
         $this->db->order_by('time_approved', 'desc');
@@ -226,33 +185,25 @@ class Products_model extends CI_Model {
 
         if ($query->num_rows() > 0)
         {
-            foreach ($query->result() as $row)
-            {
-                $data[] = $row;
-            }
-
-            return $data;
+            return $query->result();
         }
-
         return false;
     }
 
-    public function get_current_page_records_order_created($limit, $start, $where_parameter=NULL, $no_parameter=NULL, $not_in=NULL, $search=NULL)
+    public function get_current_page_records_order_created($limit, $start, $where_parameter = NULL, $no_parameter = NULL, $not_in = NULL, $search = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
-        $search_data = is_null($search)? 'nulo': $search;
-        if($search_data!= 'nulo'){
+        if(!is_null($search)){
             $this->db->group_start();
-            $this->db->like('name', $search_data);
+            $this->db->like('name', $search);
             $this->db->group_end();
         }
-        if(!is_null($not_in)&&!is_null($no_parameter)){
-            $this->db->where_not_in($no_parameter,$not_in);
+        if(!is_null($not_in) && !is_null($no_parameter)){
+            $this->db->where_not_in($no_parameter, $not_in);
         }
         $this->db->order_by('created_on', 'desc');
         $this->db->limit($limit, $start);
@@ -260,88 +211,65 @@ class Products_model extends CI_Model {
 
         if ($query->num_rows() > 0)
         {
-            foreach ($query->result() as $row)
-            {
-                $data[] = $row;
-            }
-
-            return $data;
+            return $query->result();
         }
-
         return false;
     }
 
-    public function get_current_page_records_by_gender($limit, $start, $gender_id, $where_parameter=NULL)
+    public function get_current_page_records_by_gender($limit, $start, $gender_id, $where_parameter = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
         $this->db->limit($limit, $start);
         $this->db->where('gender_id', $gender_id);
-        $this->db->where('approved',1);
+        $this->db->where('approved', 1);
         $this->db->order_by('time_approved', 'DESC');
         $query = $this->db->get("products");
 
         if ($query->num_rows() > 0)
         {
-            foreach ($query->result() as $row)
-            {
-                $data[] = $row;
-            }
-
-            return $data;
+            return $query->result();
         }
-
         return false;
     }
 
-    public function get_current_page_records_by_dj($limit, $start, $dj_id, $where_parameter=NULL)
+    public function get_current_page_records_by_dj($limit, $start, $dj_id, $where_parameter = NULL)
     {
-        $parametros = is_null($where_parameter)? 'nulo': $where_parameter;
-        if($parametros!= 'nulo'){
-            foreach($parametros as $clave => $valor){
+        if(!is_null($where_parameter)){
+            foreach($where_parameter as $clave => $valor){
                 $this->db->where($clave, $valor);
             }
         }
         $this->db->limit($limit, $start);
         $this->db->where('owner_id', $dj_id);
-        $this->db->where('approved',1);
+        $this->db->where('approved', 1);
         $this->db->order_by('time_approved', 'DESC');
         $query = $this->db->get("products");
 
         if ($query->num_rows() > 0)
         {
-            foreach ($query->result() as $row)
-            {
-                $data[] = $row;
-            }
-
-            return $data;
+            return $query->result();
         }
-
         return false;
     }
 
     public function get_products(){
         $query = $this->db->get('products');
-        $data = $query->result();
-        return $data;
+        return $query->result();
     }
 
     public function get_product_types(){
         $query = $this->db->get('product_types');
-        $data = $query->result();
-        return $data;
+        return $query->result();
     }
 
     public function get_products_by_gender($gender_id){
         $this->db->where('gender_id', $gender_id);
         $query = $this->db->get('products');
-        $data = $query->result();
-        return $data;
+        return $query->result();
     }
 
     public function update_product($id, $data){
@@ -350,12 +278,12 @@ class Products_model extends CI_Model {
     }
 
     public function create_product($data){
-        $this->db->insert('products',$data);
+        $this->db->insert('products', $data);
         return (int)$this->db->insert_id();
     }
 
-    function delete_product($id){
-        $this->db->where('id',$id);
+    public function delete_product($id){
+        $this->db->where('id', $id);
         $this->db->delete('products');
         return true;
     }
@@ -364,6 +292,7 @@ class Products_model extends CI_Model {
         $this->db->insert('product_downloads', $data);
         return true;
     }
+
     public function clear_trending_slot($slot, $exclude_product_id = null)
     {
         $this->db->set('trending_slot', null);
@@ -382,7 +311,6 @@ class Products_model extends CI_Model {
         }
 
         $this->db->trans_start();
-
         if ($slot > 0) {
             $this->clear_trending_slot($slot, (int)$product_id);
             $this->db->where('id', (int)$product_id);
@@ -391,7 +319,6 @@ class Products_model extends CI_Model {
             $this->db->where('id', (int)$product_id);
             $this->db->update('products', ['trending_slot' => null]);
         }
-
         $this->db->trans_complete();
         return $this->db->trans_status();
     }

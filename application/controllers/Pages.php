@@ -16,10 +16,11 @@ class Pages extends CI_Controller {
 		$data['description']="Música para Djs y Vjs, los mejores remixes en un solo lugar";
 		$data['paises']=$this->get_countries();
 		$data['generos']=$this->genero_model->get_generos();
+		$data['scripts'] = ['assets/front/js/pages/become_a_member.js'];
 
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('become_a_member');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 	public function get_countries(){
 		$countries = $this->location_model->get_countries(); 
@@ -91,9 +92,9 @@ class Pages extends CI_Controller {
 		$data['paises']=$this->get_countries();
 		$data['generos']=$this->genero_model->get_generos();
 
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('terms_conditions');
-		$this->load->view('templates/footer', $data);
+		$this->load->view('layouts/footer', $data);
 		
 	}
 
@@ -111,10 +112,11 @@ class Pages extends CI_Controller {
         // 1) Si no está logueado => mostrar modal login
         if(!$this->session->userdata('is_logued_in')){
             $data['force_login_modal'] = true;
+            $data['scripts'] = ['assets/front/js/pages/request_remix_guest.js'];
 
-            $this->load->view('templates/header', $data);
+            $this->load->view('layouts/header', $data);
             $this->load->view('request_remix', $data);
-            $this->load->view('templates/footer', $data);
+            $this->load->view('layouts/footer', $data);
             return;
         }
 
@@ -122,10 +124,11 @@ class Pages extends CI_Controller {
         $data['eligible'] = $this->users_model->has_standard_or_higher_plan($user_id);
 
         $data['user_email'] = $this->session->userdata('email');
+        $data['scripts'] = ['assets/front/js/pages/request_remix.js'];
 
-        $this->load->view('templates/header', $data);
+        $this->load->view('layouts/header', $data);
         $this->load->view('request_remix', $data);
-        $this->load->view('templates/footer', $data);
+        $this->load->view('layouts/footer', $data);
     }
 
     public function submit_request_remix(){

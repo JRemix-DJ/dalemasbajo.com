@@ -24,10 +24,11 @@ class Faq extends CI_Controller {
 		$data['generos']=$this->genero_model->get_generos();
 		$data['users']=$this->users_model->get_all_users();
 		$data['faqs']=$this->faq_model->get_faq();
+		$data['scripts'] = ['assets/front/js/pages/faq.js'];
 
-		$this->load->view('templates/header', $data);
+		$this->load->view('layouts/header', $data);
 		$this->load->view('faq');
-		$this->load->view('templates/footer', $data);		
+		$this->load->view('layouts/footer', $data);		
 	}
 
 }

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Remixers extends CI_Controller {
+class Remixers extends Base_Controller {
 
     public function __construct(){
         parent::__construct();
@@ -23,7 +23,9 @@ class Remixers extends CI_Controller {
             $data['generos'] = $this->genero_model->get_generos();
             $data['users'] = $this->users_model->get_all_users();
             $data['djs'] = $this->users_model->get_djs();
-            $data['user'] = $this->users_model->load_user_info($dj_id); // Info del DJ actual
+            $data['user'] = $this->users_model->load_user_info($dj_id);
+            $data['user_products'] = $this->session->userdata('user_products') ?: [];
+            $data['downloaded_ids'] = $data['user_products'];
 
             $data['title'] = $data['user']->username . " - Remixes";
             $data['description'] = "Remixes exclusivos de " . $data['user']->username;
@@ -91,9 +93,11 @@ class Remixers extends CI_Controller {
                 exit;
             }
 
-            $this->load->view('templates/header', $data);
-            $this->load->view('remixer', $data); // Vista principal
-            $this->load->view('templates/footer', $data);
+            $data['styles'] = ['assets/front/css/modules/remix-table.css'];
+            $data['scripts'] = ['assets/front/js/pages/remixer.js'];
+            $this->load->view('layouts/header', $data);
+            $this->load->view('remixer', $data);
+            $this->load->view('layouts/footer', $data);
 
         }else{
             redirect('audios');

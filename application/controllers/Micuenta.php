@@ -37,9 +37,9 @@ class Micuenta extends CI_Controller {
             $data['djs']=$this->users_model->get_djs();
             $data['descargas']=$this->orders_model->load_descargas($this->session->userdata('id_usuario'));
 
-            $this->load->view('templates/header', $data);
+            $this->load->view('layouts/header', $data);
             $this->load->view('micuenta');
-            $this->load->view('templates/footer', $data);
+            $this->load->view('layouts/footer', $data);
         }
     }
 
@@ -55,9 +55,9 @@ class Micuenta extends CI_Controller {
             $data['djs']=$this->users_model->get_djs();
             $data['descargas']=$this->orders_model->load_descargas_id($this->session->userdata('id_usuario'), $order_id);
 
-            $this->load->view('templates/header', $data);
+            $this->load->view('layouts/header', $data);
             $this->load->view('compra');
-            $this->load->view('templates/footer', $data);
+            $this->load->view('layouts/footer', $data);
         }
     }
 
@@ -195,12 +195,11 @@ class Micuenta extends CI_Controller {
                     // 4. Actualizar Sesión CodeIgniter
                     $this->session->set_userdata('tokens', $new_total);
 
-                    // Actualizar array de productos en sesión
-                    if(!isset($_SESSION['user_products']) || !is_array($_SESSION['user_products'])){
-                        $_SESSION['user_products'] = array();
-                    }
-                    if (!in_array($product_id, $_SESSION['user_products'])){
-                        $_SESSION['user_products'][] = $product_id;
+                    $curr_prods = $this->session->userdata('user_products') ?: [];
+                    $curr_prods = array_map('strval', $curr_prods);
+                    if (!in_array((string)$product_id, $curr_prods, true)) {
+                        $curr_prods[] = (string)$product_id;
+                        $this->session->set_userdata('user_products', $curr_prods);
                     }
 
                     // 5. Enviar Respuesta JSON
@@ -294,8 +293,11 @@ class Micuenta extends CI_Controller {
 
                     $this->session->set_userdata('tokens_video', $new_total);
 
-                    if (!isset($_SESSION['user_products']) || !in_array($product_id, $_SESSION['user_products'])){
-                        $_SESSION['user_products'][] = $product_id;
+                    $curr_prods2 = $this->session->userdata('user_products') ?: [];
+                    $curr_prods2 = array_map('strval', $curr_prods2);
+                    if (!in_array((string)$product_id, $curr_prods2, true)) {
+                        $curr_prods2[] = (string)$product_id;
+                        $this->session->set_userdata('user_products', $curr_prods2);
                     }
 
                     $jsondata['success'] = true;

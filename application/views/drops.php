@@ -1,4 +1,4 @@
-<div id="ajaxArea" class="bg-white min-h-screen">
+﻿<div id="ajaxArea" class="bg-white min-h-screen">
     <section class="album-header relative w-full overflow-hidden flex items-center justify-center text-center bg-white py-16">
         <div class="container relative z-10 flex flex-col items-center px-4">
             <h1 class="font-heading font-light text-slate-900 leading-tight tracking-normal text-[44px] md:text-[64px] mb-3">
@@ -23,7 +23,7 @@
                                 : base_url().'images/default_cover.jpg';
 
                         $demo_url = !empty($producto->demo)
-                                ? base_url().'assets/products/demos/'.$producto->demo
+                                ? base_url().'assets/uploads/demos/'.$producto->demo
                                 : '';
 
                         $title = !empty($producto->name) ? $producto->name : 'Exclusive Drop';
@@ -121,33 +121,3 @@
         </div>
     </section>
 </div>
-
-<script>
-    window.addEventListener('load', function() {
-        $(document).on('click', '#pagination-container a', function(e) {
-            e.preventDefault();
-
-            var url = $(this).attr('href');
-            if(!url || url === '#' || url === '') return;
-
-            $('#table-body-content').addClass('opacity-50 pointer-events-none');
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    if(response && response.status === 'success') {
-                        $('#table-body-content').html(response.html_table);
-                        $('#pagination-container').html(response.html_pagination);
-                        window.history.pushState({path: url}, '', url);
-                        $('html, body').animate({ scrollTop: $("#table-body-content").offset().top - 150 }, 500);
-                    }
-                },
-                complete: function() {
-                    $('#table-body-content').removeClass('opacity-50 pointer-events-none');
-                }
-            });
-        });
-    });
-</script>

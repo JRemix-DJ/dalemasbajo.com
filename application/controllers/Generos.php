@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Generos extends CI_Controller {
+class Generos extends Base_Controller {
 
     public function __construct(){
         parent::__construct();
@@ -22,10 +22,12 @@ class Generos extends CI_Controller {
         $data['generos']=$this->genero_model->get_generos();
         $data['users']=$this->users_model->get_all_users();
         $data['djs']=$this->users_model->get_djs();
+        $data['user_products'] = $this->session->userdata('user_products') ?: [];
+        $data['downloaded_ids'] = $data['user_products'];
 
-        $this->load->view('templates/header', $data);
+        $this->load->view('layouts/header', $data);
         $this->load->view('generos');
-        $this->load->view('templates/footer', $data);
+        $this->load->view('layouts/footer', $data);
     }
 
     public function genero(){
@@ -92,6 +94,8 @@ class Generos extends CI_Controller {
             $data['users'] = $this->users_model->get_all_users();
             $data['genero'] = $this->genero_model->load_genero_info($gender_id);
             $data['djs'] = $this->users_model->get_djs();
+            $data['user_products'] = $this->session->userdata('user_products') ?: [];
+            $data['downloaded_ids'] = $data['user_products'];
 
             if ($this->input->is_ajax_request()) {
                 $html_rows = $this->load->view('table_products', $data, TRUE);
@@ -106,10 +110,11 @@ class Generos extends CI_Controller {
 
             $data['title'] = $data['genero']->name . " - Dale Más Bajo";
             $data['description'] = "Géneros de los remixes en Dale Más Bajo";
+            $data['styles'] = ['assets/front/css/modules/remix-table.css'];
 
-            $this->load->view('templates/header', $data);
+            $this->load->view('layouts/header', $data);
             $this->load->view('genero', $data);
-            $this->load->view('templates/footer', $data);
+            $this->load->view('layouts/footer', $data);
 
         } else {
             show_404();
