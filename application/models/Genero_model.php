@@ -16,10 +16,10 @@ class Genero_model extends CI_Model {
 	}
 
 	public function get_generos(){
+		$this->db->select('id, name');
 		$this->db->order_by('name', 'ASC');
 		$query = $this->db->get('generos');
-		$data = $query->result();
-		return $data;
+		return $query->result();
 	}
 
 	public function update_genero($id, $data){

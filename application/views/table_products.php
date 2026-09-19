@@ -46,16 +46,16 @@ if(isset($products) && !empty($products)) {
             </td>
 
             <td class="p-4 text-center" data-label="Play">
-                <? $img_cover = base_url('audios/cover_mp3/' . $audio->id); ?>
+                <?php $img_cover = get_cover_url($audio->featured_image ?? $audio->portada ?? $audio->img ?? null, $audio->id); ?>
 
                 <a href="javascript:;"
                    class="play_btn inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white hover:bg-blue-700 transition-colors duration-150"
-                   data-id="<? echo $audio->id; ?>"
-                   data-preview="<? echo base_url('assets/uploads/demos/' . $preview); ?>"
-                   data-demo="<? echo base_url('assets/uploads/demos/' . $preview); ?>"
-                   data-cover="<? echo $img_cover; ?>"
-                   data-title="<? echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>"
-                   data-artist="<? echo htmlspecialchars($artist, ENT_QUOTES, 'UTF-8'); ?>">
+                   data-id="<?= $audio->id; ?>"
+                   data-preview="<?= base_url('assets/uploads/demos/' . $preview); ?>"
+                   data-demo="<?= base_url('assets/uploads/demos/' . $preview); ?>"
+                   data-cover="<?= $img_cover; ?>"
+                   data-title="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>"
+                   data-artist="<?= htmlspecialchars($artist, ENT_QUOTES, 'UTF-8'); ?>">
                     <i class="fa-solid fa-play text-white text-xs ml-0.5"></i>
                 </a>
             </td>

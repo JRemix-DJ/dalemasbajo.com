@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
@@ -14,6 +14,8 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
+		session_write_close();
+
 		$data['title'] = "Dale Más Bajo - Audio & Video Remixes for DJs";
 		$data['description'] = "Música para Djs y Vjs, los mejores remixes en un solo lugar";
 		$data['styles'] = ['assets/front/css/pages/home.css'];

@@ -96,7 +96,7 @@
 
             if(!empty($loop_trending)) {
                 foreach($loop_trending as $audio) {
-                    $img = base_url('audios/cover_mp3/' . $audio->id);
+                    $cover_url = get_cover_url($audio->featured_image ?? $audio->portada ?? $audio->img ?? null, $audio->id);
                     $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
                     $artist = isset($audio->artist) ? $audio->artist : 'Unknown Artist';
                     $audiosUrl = base_url('audios').'#trending';
@@ -104,10 +104,11 @@
                     <a href="<?= $audiosUrl; ?>"
                        class="block bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border-2 border-slate-100 group">
                         <div class="relative aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100">
-                            <img src="<?= $img; ?>"
+                            <img src="<?= $cover_url; ?>"
                                  alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>"
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                 onerror="this.onerror=null;this.src='<?= base_url(); ?>images/default_cover.jpg';">
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='<?= base_url('assets/front/img/default-image.jpg'); ?>';">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary">
                                     <i class="fa fa-play pl-1"></i>

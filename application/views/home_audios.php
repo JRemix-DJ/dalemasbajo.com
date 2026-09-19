@@ -49,24 +49,21 @@
 
                 if(!empty($loop_trending)) {
                     foreach($loop_trending as $audio) {
-                        $img = base_url('audios/cover_mp3/' . $audio->id);
+                        $cover_url = get_cover_url($audio->featured_image ?? $audio->portada ?? $audio->img ?? null, $audio->id);
                         $title = isset($audio->name) ? $audio->name : (isset($audio->title) ? $audio->title : 'Unknown');
                         $artist = isset($audio->artist) ? $audio->artist : 'Unknown Artist';
                         $preview = isset($audio->demo) ? $audio->demo : (isset($audio->preview) ? $audio->preview : '');
                         ?>
                         <div class="bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-all border-2 border-slate-100 group">
                             <div class="relative aspect-square rounded-xl overflow-hidden mb-3 bg-gray-100">
-                                <img src="<?= $img; ?>"
-                                     alt="<?= $title; ?>"
-                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                     onerror="this.onerror=null;this.src='<?= base_url(); ?>images/default_cover.jpg';">
+                                <img src="<?= $cover_url; ?>" alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
 
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                                     <a href="javascript:;" class="play_btn w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform"
                                        data-id="<?= $audio->id; ?>"
                                        data-preview="<?= base_url('assets/uploads/demos/' . $preview); ?>"
                                        data-demo="<?= base_url('assets/uploads/demos/' . $preview); ?>"
-                                       data-cover="<?= $img; ?>"
+                                       data-cover="<?= $cover_url; ?>"
                                        data-title="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>"
                                        data-artist="<?= htmlspecialchars($artist, ENT_QUOTES, 'UTF-8'); ?>">
                                         <i class="fa fa-play pl-1"></i>
@@ -78,6 +75,7 @@
                         </div>
                     <?php }
                 } else { echo '<p class="col-span-full text-center text-gray-400">No trendings now</p>'; } ?>
+
             </div>
         </div>
 

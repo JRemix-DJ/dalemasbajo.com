@@ -17,6 +17,9 @@ Deny From 69.142
 	RewriteRule ^assets/products/covers/(.*)$ assets/uploads/covers/$1 [L,QSA]
 	RewriteRule ^assets/products/demos/(.*)$ assets/uploads/demos/$1 [L,QSA]
 	RewriteRule ^assets/products/descargables/(.*)$ assets/uploads/descargables/$1 [L,QSA]
+	RewriteRule ^new_video\.mp4$ assets/uploads/video_banners/new_video.mp4 [L,QSA]
+	RewriteRule ^assets/new_video\.mp4$ assets/uploads/video_banners/new_video.mp4 [L,QSA]
+	RewriteRule ^assets/banners/new_video\.mp4$ assets/uploads/video_banners/new_video.mp4 [L,QSA]
 	RewriteRule ^assets/banners/(.*)$ assets/uploads/video_banners/$1 [L,QSA]
 	RewriteRule ^assets/tailwind/(.*)$ assets/build/$1 [L,QSA]
 

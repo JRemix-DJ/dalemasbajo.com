@@ -16,6 +16,25 @@ class Audios extends Base_Controller {
 
     public function index($start_index = 0)
     {
+        $data['user_products'] = $this->session->userdata('user_products') ?: [];
+
+        if($this->session->userdata('is_logued_in') && empty($data['user_products'])){
+            $user_id = (int)$this->session->userdata('id_usuario');
+            $user_products = $this->users_model->get_user_products($user_id);
+            $ids = [];
+            if(!empty($user_products)){
+                foreach($user_products as $up){
+                    $ids[] = (string)(is_object($up) && isset($up->product_id) ? $up->product_id : $up);
+                }
+            }
+            $this->session->set_userdata('user_products', $ids);
+            $data['user_products'] = $ids;
+        }
+
+        session_write_close();
+
+        $data['downloaded_ids'] = $data['user_products'];
+
         if ($start_index === 0 && $this->uri->segment(2) && is_numeric($this->uri->segment(2))) {
             $start_index = (int) $this->uri->segment(2);
         } else {
@@ -34,23 +53,6 @@ class Audios extends Base_Controller {
         } else {
             $data["products"] = [];
         }
-
-        $data['user_products'] = $this->session->userdata('user_products') ?: [];
-
-        if($this->session->userdata('is_logued_in') && empty($data['user_products'])){
-            $user_id = (int)$this->session->userdata('id_usuario');
-            $user_products = $this->users_model->get_user_products($user_id);
-            $ids = [];
-            if(!empty($user_products)){
-                foreach($user_products as $up){
-                    $ids[] = (string)(is_object($up) && isset($up->product_id) ? $up->product_id : $up);
-                }
-            }
-            $this->session->set_userdata('user_products', $ids);
-            $data['user_products'] = $ids;
-        }
-
-        $data['downloaded_ids'] = $data['user_products'];
 
         $config['base_url']          = base_url('audios/');
         $config['first_url']         = base_url('audios');
@@ -84,7 +86,6 @@ class Audios extends Base_Controller {
         $data['generos'] = $this->genero_model->get_generos();
         $data['banners'] = $this->banners_model->get_banners();
         $data['djs']     = $this->users_model->get_djs_audios();
-        $data['users']   = $this->users_model->get_all_users();
         $data['trending_audios'] = $this->products_model->get_trending_now(5);
 
         if ($this->input->is_ajax_request()) {
@@ -223,6 +224,8 @@ class Audios extends Base_Controller {
     }
 
     public function cover_mp3($id = null){
+        session_write_close();
+
         if ($id == null) {
             $this->_output_default_image();
             return;

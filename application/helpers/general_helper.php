@@ -1,12 +1,31 @@
-<? if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-if (!function_exists('funcion'))
-{
-	function funcion($id_user)
-	{
-		return;
+if (!function_exists('get_cover_url')) {
+    function get_cover_url($cover_field = null, $product_id = null) {
+        $covers_dir = FCPATH . 'assets/uploads/covers/';
 
-	}
+        if (!empty($cover_field)) {
+            $filename = basename($cover_field);
+            if (file_exists($covers_dir . $filename)) {
+                return base_url('assets/uploads/covers/' . $filename);
+            }
+        }
+
+        if (!empty($product_id) && is_numeric($product_id)) {
+            $extensions = ['png', 'jpg', 'jpeg', 'webp'];
+            foreach ($extensions as $ext) {
+                if (file_exists($covers_dir . 'cover_' . $product_id . '.' . $ext)) {
+                    return base_url('assets/uploads/covers/' . 'cover_' . $product_id . '.' . $ext);
+                }
+                if (file_exists($covers_dir . 'mp3_art_' . $product_id . '.' . $ext)) {
+                    return base_url('assets/uploads/covers/' . 'mp3_art_' . $product_id . '.' . $ext);
+                }
+            }
+        }
+
+        return base_url('assets/front/img/default-image.jpg');
+    }
 }
 
 if (!function_exists('audio'))
